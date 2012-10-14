@@ -1,6 +1,3 @@
-CALL build-images.bat
-CALL build-css.bat
-CALL build-html.bat
 git add -A
 git commit -m "Automated commit"
 git push

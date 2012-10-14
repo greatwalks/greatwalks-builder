@@ -2,11 +2,7 @@ var fs = require('fs');
 var path = require('path');
 var mustache = require("./mustache.js");
 
-String.prototype.endsWith = function(suffix) {
-    return this.indexOf(suffix, this.length - suffix.length) !== -1;
-};
-
-template = fs.readFileSync("html/template.html").toString(); 
+template = fs.readFileSync("html/template.html").toString().replace(/<!--.*?-->/g, "");
 htmlf_paths = fs.readdirSync("html");
 
 for(var i = 0; i < htmlf_paths.length; i++){
@@ -45,3 +41,7 @@ for(var i = 0; i < htmlf_paths.length; i++){
 	}
 	html_page = null;
 }
+
+String.prototype.endsWith = function(suffix) {
+    return this.indexOf(suffix, this.length - suffix.length) !== -1;
+};
