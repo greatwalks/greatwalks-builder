@@ -1,2 +1,2 @@
-@ECHO "This depends on https://github.com/duncansmart/less.js-windows "
 cscript //nologo lessc.wsf css/bootstrap.less ../greatwalks/css/bootstrap.css
+cscript //nologo lessc.wsf css/responsive.less ../greatwalks/css/bootstrap-responsive.css
