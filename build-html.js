@@ -33,7 +33,9 @@ for(var i = 0; i < htmlf_paths.length; i++){
 				case "walks.mustache":
 					break;
 			}
-			mustache.to_html(htmlf_data, json_data)
+			html_page = template
+				.replace(/{{body}}/, mustache.to_html(htmlf_data, json_data))
+				.replace(/{{title}}/, htmlf_path);
 			json_data = {};
 			break;
 	}

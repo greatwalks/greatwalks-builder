@@ -1,11 +1,3 @@
-@ECHO "Images..."
-inkscape images/great-walks-logo.svg -z --export-png=../greatwalks/img/touch/apple-touch-icon-144x144-precomposed.png --export-width=144
-inkscape images/great-walks-logo.svg -z --export-png=../greatwalks/img/touch/apple-touch-icon-57x57-precomposed.png --export-width=57
-inkscape images/great-walks-logo.svg -z --export-png=../greatwalks/img/touch/apple-touch-icon-72x72-precomposed.png --export-width=72
-inkscape images/great-walks-logo.svg -z --export-png=../greatwalks/img/touch/apple-touch-icon-114x114-precomposed.png --export-width=114
-inkscape images/great-walks-logo.svg -z --export-png=../greatwalks/img/touch/apple-touch-icon.png --export-width=57
-inkscape images/great-walks-logo.svg -z --export-png=../greatwalks/img/touch/apple-touch-icon-precomposed.png --export-width=57
-inkscape images/great-walks-logo.svg -z --export-png=../greatwalks/img/touch/apple-touch-icon-precomposed.png --export-width=57
 inkscape images/great-walks-logo.svg -z --export-png=../greatwalks/img/logo-large.png --export-width=600
 inkscape images/great-walks-logo.svg -z --export-png=../greatwalks/img/logo-large@2x.png --export-width=1200
 
