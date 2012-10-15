@@ -1,0 +1,15 @@
+ <div class="navbar navbar-fixed-top">
+   <div class="navbar-inner">
+     <div class="container">
+       <a class="brand" href="/index.html">Great Walks</a>
+     </div>
+   </div>
+ </div>
+ <div class="container">
+ <div class="btn-group btn-group-vertical">
+  <button type="button" class="btn">what</button>
+  <button type="button" class="btn">who</button>
+  <button type="button" class="btn">when</button>
+  <button type="button" class="btn">wfhffy</button>
+ </div>
+</div>
