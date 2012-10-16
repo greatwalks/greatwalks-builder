@@ -1,3 +1,25 @@
+mkdir "..\greatwalks\img"
+mkdir "..\greatwalks\img\walks"
+mkdir "..\greatwalks\img\walks\abel-tasman-coast-track"
+copy /Y "walks\Abel Tasman Coast Track\map.png" "..\greatwalks\img\walks\abel-tasman-coast-track\map.png"
+mkdir "..\greatwalks\img\walks\heaphy-track"
+copy /Y "walks\Heaphy Track\map.png" "..\greatwalks\img\walks\heaphy-track\map.png"
+mkdir "..\greatwalks\img\walks\kepler-track"
+copy /Y "walks\Kepler Track\map.png" "..\greatwalks\img\walks\kepler-track\map.png"
+mkdir "..\greatwalks\img\walks\lake-waikaremoana-track"
+copy /Y "walks\Lake Waikaremoana Track\map.png" "..\greatwalks\img\walks\lake-waikaremoana-track\map.png"
+mkdir "..\greatwalks\img\walks\milford-track"
+copy /Y "walks\Milford Track\map.png" "..\greatwalks\img\walks\milford-track\map.png"
+mkdir "..\greatwalks\img\walks\rakiura-track---stewart-island"
+copy /Y "walks\Rakiura Track - Stewart Island\map.png" "..\greatwalks\img\walks\rakiura-track---stewart-island\map.png"
+mkdir "..\greatwalks\img\walks\routeburn-track"
+copy /Y "walks\Routeburn Track\map.png" "..\greatwalks\img\walks\routeburn-track\map.png"
+mkdir "..\greatwalks\img\walks\tongariro-northern-circuit"
+copy /Y "walks\Tongariro Northern Circuit\map.png" "..\greatwalks\img\walks\tongariro-northern-circuit\map.png"
+mkdir "..\greatwalks\img\walks\whanganui-journey"
+copy /Y "walks\Whanganui Journey\map.png" "..\greatwalks\img\walks\whanganui-journey\map.png"
+
+
 inkscape images/great-walks-logo.svg -z --export-png=../greatwalks/img/logo-large.png --export-width=600
 inkscape images/great-walks-logo.svg -z --export-png=../greatwalks/img/logo-large@2x.png --export-width=1200
 
