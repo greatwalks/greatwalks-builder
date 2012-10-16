@@ -4,7 +4,51 @@ var mustache = require("./mustache.js");
 
 var template = fs.readFileSync("html/template.html").toString(),
 	htmlf_paths = fs.readdirSync("html"),
-	include_directory = path.join(path.resolve("html"), "includes");
+	include_directory = path.join(path.resolve("html"), "includes"),
+	walks_paths = fs.readdirSync("walks"),
+	walks_template_path = path.resolve("walks/template.mustache"),
+	great_walks = {"walks":[]};
+
+for(var i = 0; i < walks_paths.length; i++){
+	var walk_name = walks_paths[i],
+		walk_sanitised_name = walk_name.toLowerCase().replace(/ /g, "-"),
+		walk_fullpath = path.resolve("walks/" + walk_name),
+		map_path = path.join("walks", walk_name, "map.png"),
+		map_fullpath = path.resolve(map_path),
+		locations_path = path.join(walk_fullpath, "locations.csv"),
+		tfw_path = path.join(walk_fullpath, "map.tfw"),
+		html_page = undefined,
+		mustache_data = {},
+		new_path,
+		new_filename,
+		map_dimensions_json_string;
+
+	if(fs.statSync(walk_fullpath).isDirectory()) {
+		mustache_data = {
+			map_id: walk_sanitised_name,
+			map_pixel_width: 100,
+			map_pixel_height: 100
+		}
+		map_dimensions_json_string = execSync("imdim \"{\\\"width\\\":%w, \\\"height\\\":%h}\" \"" + map_fullpath + "\"");
+		if(map_dimensions_json_string.indexOf("{\"width") >= 0) {
+			var map_dimensions_json = JSON.parse(map_dimensions_json_string);
+			mustache_data.map_pixel_width = map_dimensions_json.width;
+			mustache_data.map_pixel_height = map_dimensions_json.height;
+		}
+		html_page = process_page(walks_template_path, walk_name, mustache_data);
+	}
+
+	if(html_page !== undefined) {
+		new_filename = "walk-" + walk_sanitised_name + ".html";
+		new_path = path.resolve("../greatwalks/" + new_filename);
+		great_walks.walks.push({"id": walk_sanitised_name, "name": walk_name, "filename":new_filename})
+		fs.writeFileSync(new_path, html_page);
+		process.stdout.write("Building walk: " + new_filename + "\n");
+	}
+
+	html_page = undefined;
+}
+
 
 for(var i = 0; i < htmlf_paths.length; i++){
 	var htmlf_path = htmlf_paths[i],
@@ -22,58 +66,11 @@ for(var i = 0; i < htmlf_paths.length; i++){
 	html_page = undefined;
 }
 
-walks_paths = fs.readdirSync("walks");
-walks_template_path = path.resolve("walks/template.mustache");
-great_walks = [];
-
-//fs.readFileSync("walks/template.mustache").toString();
-
-for(var i = 0; i < walks_paths.length; i++){
-	var walk_name = walks_paths[i],
-		walk_sanitised_name = walk_name.toLowerCase().replace(/ /g, "-"),
-		walk_fullpath = path.resolve("walks/" + walk_name),
-		map_path = path.join("walks", walk_name, "map.png"),
-		map_fullpath = path.resolve(map_path),
-		locations_path = path.join(walk_fullpath, "locations.csv"),
-		tfw_path = path.join(walk_fullpath, "map.tfw"),
-		html_page = undefined,
-		mustache_data = {},
-		new_path,
-		new_filename,
-		map_dimensions_json_string;
-	if(fs.statSync(walk_fullpath).isDirectory()) {
-		
-		mustache_data = {
-			map_id: walk_sanitised_name,
-			map_pixel_width: 100,
-			map_pixel_height: 100
-		}
-
-		map_dimensions_json_string = execSync("imdim \"{\\\"width\\\":%w, \\\"height\\\":%h}\" \"" + map_fullpath + "\"");
-		if(map_dimensions_json_string.indexOf("{\"width") >= 0) {
-			var map_dimensions_json = JSON.parse(map_dimensions_json_string);
-			mustache_data.map_pixel_width = map_dimensions_json.width;
-			mustache_data.map_pixel_height = map_dimensions_json.height;
-		} else {
-			//process.stdout.write(map_dimensions_json_string);
-		}
-		html_page = process_page(walks_template_path, walk_name, mustache_data);
-	}
-
-	if(html_page !== undefined) {
-		new_filename = "walk-" + walk_sanitised_name + ".html";
-		new_path = path.resolve("../greatwalks/" + new_filename);
-		great_walks.push({"id": walk_sanitised_name, "name": walk_name, "filename":new_filename})
-		fs.writeFileSync(new_path, html_page);
-		process.stdout.write("Building: " + new_filename + "\n");
-	}
-
-	html_page = undefined;
-}
 
 function process_page(htmlf_path, page_title, mustache_data){
 	var htmlf_data = fs.readFileSync(htmlf_path).toString(),
 		htmlf_path_extension = htmlf_path.substr(htmlf_path.lastIndexOf(".") + 1),
+		htmlf_filename = path.basename(htmlf_path),
 		html_page,
 
 	htmlf_data = htmlf_data.replace(/<\!--#include(.*?)-->/g,
@@ -86,6 +83,7 @@ function process_page(htmlf_path, page_title, mustache_data){
 					return fs.readFileSync(include_path).toString();
 				});
 	page_title = page_title || htmlf_path;
+
 	switch(htmlf_path_extension){
 		case "htmlf": //straight copy
 			html_page = template
@@ -94,13 +92,16 @@ function process_page(htmlf_path, page_title, mustache_data){
 			break;
 		case "mustache": //mustache template - see http://mustache.github.com/
 			var json_data = mustache_data || {},
-				json_path = path.resolve("../greatwalks/" + htmlf_path.replace("." + htmlf_path_extension, ".json"));
+				json_path = path.join("html", htmlf_path.replace("." + htmlf_path_extension, ".json"));
 			if(fs.exists(json_path)) { //check for a .json file to use
+				//NOTE THIS IS PROBABLY BROKEN. NEVER TESTED JUST AN IDEA
+				process.stdout.write("Found a JSON file for " + json_path + "\n")
 				json_data = JSON.parse(fs.readFileSync("html/" + json_path).toString());
-
 			}
-			switch(htmlf_path) { //add any custom JSON data here
+			switch(htmlf_filename) { //add any custom JSON data here
 				case "walks.mustache":
+					json_data = great_walks;
+					//process.stdout.write("great_walks: " + JSON.stringify(great_walks) + "\n");
 					break;
 			}
 			html_page = template

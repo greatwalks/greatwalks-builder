@@ -22,6 +22,7 @@ copy /Y "walks\Whanganui Journey\map.png" "..\greatwalks\img\walks\whanganui-jou
 
 inkscape images/great-walks-logo.svg -z --export-png=../greatwalks/img/logo-large.png --export-width=600
 inkscape images/great-walks-logo.svg -z --export-png=../greatwalks/img/logo-large@2x.png --export-width=1200
+inkscape images/great-walks-logo.svg -z --export-png=../greatwalks/img/logo-tiny.png --export-width=95
 
 resize -i"images/tongariro-home.jpg" -o"../greatwalks/img/tongariro-home.jpg" -s640x430
 copy /Y images\tongariro-home.jpg ..\greatwalks\img\tongariro-home@2x.jpg
