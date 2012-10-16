@@ -114,16 +114,17 @@ function process_page(htmlf_path, page_title, mustache_data){
 }
 
 function execSync(cmd) {
-	// nodeJS doesn't have a synchronous exec.
-	// full credit for this function goes to http://stackoverflow.com/questions/4443597/node-js-execute-system-command-synchronously/9051718#9051718
+	// nodeJS doesn't have a synchronous exec (e.g. execSync()).
+	// full credit and blame for this function goes to
+	// http://stackoverflow.com/questions/4443597/node-js-execute-system-command-synchronously/9051718#9051718
+
+
     var exec  = require('child_process').exec;
     var fs = require('fs');
-
     //for linux use ; instead of &&
     //execute your command followed by a simple echo 
     //to file to indicate process is finished
     exec(cmd + " > c:\\stdout.txt && echo done > c:\\sync.txt");
-
     while (true) {
         //consider a timeout option to prevent infinite loop
         //NOTE: this will max out your cpu too!
