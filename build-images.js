@@ -1,7 +1,7 @@
 var fs = require('fs');
 var path = require('path');
-
 var	walks_paths = fs.readdirSync("walks");
+var scale_by = 0.5;
 
 for(var i = 0; i < walks_paths.length; i++){
 	var walk_name = walks_paths[i],
@@ -16,8 +16,8 @@ for(var i = 0; i < walks_paths.length; i++){
 
 	if(map_dimensions_json_string.indexOf("{\"width") >= 0) {
 		var map_dimensions_json = JSON.parse(map_dimensions_json_string);
-		width = map_dimensions_json.width;
-		height = map_dimensions_json.height;
+		width = parseInt(map_dimensions_json.width * scale_by);
+		height = parseInt(map_dimensions_json.height * scale_by);
 	}
 
     var exec  = require('child_process').exec;

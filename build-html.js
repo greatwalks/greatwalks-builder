@@ -2,6 +2,8 @@ var fs = require('fs');
 var path = require('path');
 var mustache = require("./mustache.js");
 
+var scale_by = 0.5;
+
 var template = fs.readFileSync("html/template.html").toString(),
 	htmlf_paths = fs.readdirSync("html"),
 	include_directory = path.join(path.resolve("html"), "includes"),
@@ -16,7 +18,11 @@ for(var i = 0; i < walks_paths.length; i++){
 		map_path = path.join("walks", walk_name, "map.png"),
 		map_fullpath = path.resolve(map_path),
 		locations_path = path.join(walk_fullpath, "locations.csv"),
+		pgw_path = path.join(walk_fullpath, "map.pgw"),
 		tfw_path = path.join(walk_fullpath, "map.tfw"),
+		map_data = undefined,
+		map_data_array = undefined,
+		map_details = undefined,
 		html_page = undefined,
 		mustache_data = {},
 		new_path,
@@ -29,13 +35,34 @@ for(var i = 0; i < walks_paths.length; i++){
 			map_pixel_width: 100,
 			map_pixel_height: 100
 		}
+		//map
 		map_dimensions_json_string = execSync("imdim \"{\\\"width\\\":%w, \\\"height\\\":%h}\" \"" + map_fullpath + "\"");
 		if(map_dimensions_json_string.indexOf("{\"width") >= 0) {
 			var map_dimensions_json = JSON.parse(map_dimensions_json_string);
-			mustache_data.map_pixel_width = map_dimensions_json.width;
-			mustache_data.map_pixel_height = map_dimensions_json.height;
+			mustache_data.map_pixel_width = map_dimensions_json.width * scale_by;
+			mustache_data.map_pixel_height = map_dimensions_json.height * scale_by;
+		}
+		//offset
+		try {
+			map_data = fs.readFileSync(pgw_path).toString();
+		} catch(exception) {
+			try {
+				map_data = fs.readFileSync(tfw_path).toString();
+			} catch (exception) {
+				process.stdout.write("Unable to find a tfw/pgw file. Unable to proceed")
+			}
+		}
+		if(map_data !== undefined) {
+			map_data_array = map_data.split("\n");
+			map_details = {};
+			map_details.latitude = extract_value_between(map_data_array, -60, -30);
+			map_details.longitude = extract_value_between(map_data_array, 150, 180);
+			map_details.pixel_degrees = extract_value_between(map_data_array, 0, 2) * scale_by
+			mustache_data.map_details = JSON.stringify(map_details);
+			//process.stdout.write(JSON.stringify(map_details) + " " + JSON.stringify(map_data_array));
 		}
 		html_page = process_page(walks_template_path, walk_name, mustache_data);
+
 	}
 
 	if(html_page !== undefined) {
@@ -47,6 +74,7 @@ for(var i = 0; i < walks_paths.length; i++){
 	}
 
 	html_page = undefined;
+	map_data = undefined;
 }
 
 
@@ -113,11 +141,20 @@ function process_page(htmlf_path, page_title, mustache_data){
 	return html_page;
 }
 
+function extract_value_between(map_data_array, greater_than, less_than) {
+	for(var i = 0; i < map_data_array.length; i++){
+		var item = parseFloat(map_data_array[i]);
+		if(!isNaN(item) && item > greater_than && item < less_than) {
+			return item;
+		}
+	}
+	return undefined;
+}
+
 function execSync(cmd) {
 	// nodeJS doesn't have a synchronous exec (e.g. execSync()).
 	// full credit and blame for this function goes to
 	// http://stackoverflow.com/questions/4443597/node-js-execute-system-command-synchronously/9051718#9051718
-
 
     var exec  = require('child_process').exec;
     var fs = require('fs');
