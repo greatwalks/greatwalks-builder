@@ -9,6 +9,7 @@ mkdir "..\greatwalks\img\walks\rakiura-track---stewart-island"
 mkdir "..\greatwalks\img\walks\routeburn-track"
 mkdir "..\greatwalks\img\walks\tongariro-northern-circuit"
 mkdir "..\greatwalks\img\walks\whanganui-journey"
+mkdir "..\greatwalks\img\walks\wellington"
 
 node build-images.js
 

@@ -2,8 +2,8 @@
 <script type="text/javascript">
 	var map_details = {{{map_details}}};
 </script>
-<div style="background: url(img/walks/{{map_id}}/map.jpg); width:{{map_pixel_width}}px; height:{{map_pixel_height}}px; position:relative">
+<div style="background: url(img/walks/{{map_id}}/map.jpg); width:{{map_pixel_width}}px; height:{{map_pixel_height}}px; position:relative" class="map">
 	{{#locations}}
-		<div class="location_{{type}}" style="position:absolute; top:{{pixel_top}}px; left: {{pixel_left}}px"></div>
+		<div class="location_{{Point}}" style="position:absolute; top:{{pixel_top}}px; left: {{pixel_left}}px">{{DESCRIPTIO}}</div>
 	{{/locations}}
 </div>

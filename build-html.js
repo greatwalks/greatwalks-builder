@@ -11,6 +11,53 @@ var template = fs.readFileSync("html/template.html").toString(),
 	walks_template_path = path.resolve("walks/template.mustache"),
 	great_walks = {"walks":[]};
 
+//via http://www.greywyvern.com/?post=258
+String.prototype.CSV = function(strDelimiter) {
+	 //via http://stackoverflow.com/questions/1293147/javascript-code-to-parse-csv-data
+     strDelimiter = (strDelimiter || ",");
+     var objPattern = new RegExp(
+     (
+     "(\\" + strDelimiter + "|\\r?\\n|\\r|^)" +
+     "(?:\"([^\"]*(?:\"\"[^\"]*)*)\"|" +
+     "([^\"\\" + strDelimiter + "\\r\\n]*))"), "gi");
+     var arrData = [
+         []
+     ];
+     var arrMatches = null;
+     while (arrMatches = objPattern.exec(this)) {
+         var strMatchedDelimiter = arrMatches[1];
+         if(strMatchedDelimiter.length && (strMatchedDelimiter != strDelimiter)) {
+             arrData.push([]);
+         }
+         if (arrMatches[2]) {
+             var strMatchedValue = arrMatches[2].replace(
+             new RegExp("\"\"", "g"), "\"");
+         } else {
+             var strMatchedValue = arrMatches[3];
+         }
+         arrData[arrData.length - 1].push(strMatchedValue);
+     }
+     return (arrData);
+ }
+
+ String.prototype.CSVMap = function(strDelimiter) {
+ 	//presumes that first line is are the keys
+ 	var csv_array = this.CSV(strDelimiter),
+ 		first_row = csv_array[0],
+ 		keyed_map = [],
+ 		keyed_row,
+ 		row;
+ 	for(var i = 1; i < csv_array.length; i++){ //start from row 1 not 0
+ 		row = csv_array[i];
+ 		keyed_row = {}
+ 		for(var x = 0; x < row.length; x++){
+			keyed_row[first_row[x]] = row[x];
+ 		}
+ 		keyed_map.push(keyed_row);
+ 	}
+ 	return keyed_map;
+ }
+
 for(var i = 0; i < walks_paths.length; i++){
 	var walk_name = walks_paths[i],
 		walk_sanitised_name = walk_name.toLowerCase().replace(/ /g, "-"),
@@ -18,6 +65,8 @@ for(var i = 0; i < walks_paths.length; i++){
 		map_path = path.join("walks", walk_name, "map.png"),
 		map_fullpath = path.resolve(map_path),
 		locations_path = path.join(walk_fullpath, "locations.csv"),
+		locations_data = undefined,
+		location = undefined,
 		pgw_path = path.join(walk_fullpath, "map.pgw"),
 		tfw_path = path.join(walk_fullpath, "map.tfw"),
 		map_data = undefined,
@@ -57,12 +106,26 @@ for(var i = 0; i < walks_paths.length; i++){
 			map_details = {};
 			map_details.latitude = extract_value_between(map_data_array, -60, -30);
 			map_details.longitude = extract_value_between(map_data_array, 150, 180);
-			map_details.pixel_degrees = extract_value_between(map_data_array, 0, 2) * scale_by
+			map_details.pixel_degrees = extract_value_between(map_data_array, 0, 2) * scale_by;
 			mustache_data.map_details = JSON.stringify(map_details);
 			//process.stdout.write(JSON.stringify(map_details) + " " + JSON.stringify(map_data_array));
 		}
+		//locations
+		try {
+			locations_data = fs.readFileSync(locations_path).toString();
+		} catch(exception) {
+		}
+		if(locations_data !== undefined){
+			locations = locations_data.CSVMap("\t");
+			for(var location_index = 0; location_index < locations.length; location_index++){
+				location = locations[location_index];
+				location.pixel_top = -parseInt((parseFloat(location.Lat) - parseFloat(map_details.latitude)) / parseFloat(map_details.pixel_degrees) * scale_by, 10);
+				location.pixel_left = parseInt((parseFloat(location.Long) - parseFloat(map_details.longitude)) / parseFloat(map_details.pixel_degrees) * scale_by, 10);
+			}
+			mustache_data.locations = locations;
+		}
+		//generate page
 		html_page = process_page(walks_template_path, walk_name, mustache_data);
-
 	}
 
 	if(html_page !== undefined) {
@@ -75,6 +138,7 @@ for(var i = 0; i < walks_paths.length; i++){
 
 	html_page = undefined;
 	map_data = undefined;
+	locations_data = undefined;
 }
 
 
@@ -177,6 +241,3 @@ function execSync(cmd) {
     }
 };
 
-String.prototype.endsWith = function(suffix) {
-    return this.indexOf(suffix, this.length - suffix.length) !== -1;
-};
