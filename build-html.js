@@ -95,18 +95,14 @@ for(var i = 0; i < walks_paths.length; i++){
 		try {
 			map_data = fs.readFileSync(pgw_path).toString();
 		} catch(exception) {
-			try {
-				map_data = fs.readFileSync(tfw_path).toString();
-			} catch (exception) {
-				process.stdout.write("Unable to find a tfw/pgw file. Unable to proceed")
-			}
+			process.stdout.write("Unable to find a pgw file. Unable to proceed")
 		}
 		if(map_data !== undefined) {
 			map_data_array = map_data.split("\n");
 			map_details = {};
-			map_details.latitude = extract_value_between(map_data_array, -60, -30);
-			map_details.longitude = extract_value_between(map_data_array, 150, 180);
-			map_details.pixel_degrees = extract_value_between(map_data_array, 0, 2) * scale_by;
+			map_details.latitude = parseFloat(extract_value_between(map_data_array, -60, -30));
+			map_details.longitude = parseFloat(extract_value_between(map_data_array, 150, 180));
+			map_details.degrees_per_pixel = parseFloat(extract_value_between(map_data_array, 0, 2) / scale_by);
 			mustache_data.map_details = JSON.stringify(map_details);
 			//process.stdout.write(JSON.stringify(map_details) + " " + JSON.stringify(map_data_array));
 		}
@@ -119,9 +115,41 @@ for(var i = 0; i < walks_paths.length; i++){
 			locations = locations_data.CSVMap("\t");
 			for(var location_index = 0; location_index < locations.length; location_index++){
 				location = locations[location_index];
-				location.pixel_top = -parseInt((parseFloat(location.Lat) - parseFloat(map_details.latitude)) / parseFloat(map_details.pixel_degrees) * scale_by, 10);
-				location.pixel_left = parseInt((parseFloat(location.Long) - parseFloat(map_details.longitude)) / parseFloat(map_details.pixel_degrees) * scale_by, 10);
+				location.pixel = pixel_location(map_details.latitude, map_details.longitude, mustache_data.map_pixel_width, mustache_data.map_pixel_height, map_details.degrees_per_pixel, location.Lat, location.Long, walk_name, location.DESCRIPTIO);
 			}
+			/*
+			location = {
+				"pixel": pixel_location(
+					map_details.latitude,
+					map_details.longitude,
+					mustache_data.map_pixel_width,
+					mustache_data.map_pixel_height,
+					map_details.degrees_per_pixel,
+					map_details.latitude,
+					map_details.longitude,
+					"SOMETHING",
+					"TOP LEFT"),
+				"DESCRIPTIO": "TOP LEFT",
+				"Point": "Hut"
+			};
+			locations.push(location);
+			process.stdout.write(mustache_data.map_pixel_width.toString() + " | " + mustache_data.map_pixel_width + " * " + map_details.degrees_per_pixel + "\n");
+			location = {
+				"pixel": pixel_location(
+					map_details.latitude,
+					map_details.longitude,
+					mustache_data.map_pixel_width,
+					mustache_data.map_pixel_height,
+					map_details.degrees_per_pixel,
+					map_details.latitude - (mustache_data.map_pixel_height * map_details.degrees_per_pixel),
+					map_details.longitude + (mustache_data.map_pixel_width * map_details.degrees_per_pixel),
+					"SOMETHING",
+					"BOTTOM RIGHT"),
+				"DESCRIPTIO": "BOTTOM RIGHT",
+				"Point": "Hut"
+			};
+			locations.push(location);
+			*/
 			mustache_data.locations = locations;
 		}
 		//generate page
@@ -213,6 +241,21 @@ function extract_value_between(map_data_array, greater_than, less_than) {
 		}
 	}
 	return undefined;
+}
+
+function pixel_location(map_latitude, map_longitude, map_pixel_width, map_pixel_height, degrees_per_pixel_scaled_by, location_latitude, location_longitude, map_name, location_name){
+	var pixel = {
+		"latitude": location_latitude,
+		"longitude": location_longitude,
+		"latitude_offset": location_latitude - map_latitude,
+		"longitude_offset": location_longitude - map_longitude
+	}
+	pixel.left = Math.round(pixel.longitude_offset / degrees_per_pixel_scaled_by);
+	pixel.top = -Math.round(pixel.latitude_offset / degrees_per_pixel_scaled_by);
+	if(pixel.left > map_pixel_width || pixel.top > map_pixel_height) {
+		process.stdout.write(" - WARNING location out of bounds " + map_name + ": " + location_name + "\n")
+	}
+	return pixel;
 }
 
 function execSync(cmd) {
