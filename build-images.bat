@@ -15,7 +15,7 @@ node build-images.js
 
 inkscape images/great-walks-logo.svg -z --export-png=../greatwalks/img/logo-large.png --export-width=600
 inkscape images/great-walks-logo.svg -z --export-png=../greatwalks/img/logo-large@2x.png --export-width=1200
-inkscape images/great-walks-logo.svg -z --export-png=../greatwalks/img/logo-tiny.png --export-width=95
+inkscape images/great-walks-logo.svg -z --export-png=../greatwalks/img/logo-tiny.png --export-width=150
 
 resize -i"images/tongariro-home.jpg" -o"../greatwalks/img/tongariro-home.jpg" -s640x430
 resize -i"images/Abel-NEW-home.jpg" -o"../greatwalks/img/Abel-NEW-home.jpg" -s640x430
@@ -26,6 +26,9 @@ resize -i"images/rakiura-home.jpg" -o"../greatwalks/img/rakiura-home.jpg" -s640x
 resize -i"images/Routeburn-home.jpg" -o"../greatwalks/img/Routeburn-home.jpg" -s640x430
 resize -i"images/Waikaremoana-NEW-home.jpg" -o"../greatwalks/img/Waikaremoana-NEW-home.jpg" -s640x430
 resize -i"images/Whanganui-Journey-home.jpg" -o"../greatwalks/img/Whanganui-Journey-home.jpg" -s640x430
+
+resize -i"images/icons.png" -o"../greatwalks/img/icons.png" -s20x750
+copy /Y images\icons.png ..\greatwalks\img\icons@2x.png
 
 copy /Y images\tongariro-home.jpg ..\greatwalks\img\tongariro-home@2x.jpg
 copy /Y images\Abel-NEW-home.jpg ..\greatwalks\img\Abel-NEW-home@2x.jpg

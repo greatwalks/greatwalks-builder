@@ -11,7 +11,7 @@ var template = fs.readFileSync("html/template.html").toString(),
 	walks_template_path = path.resolve("walks/template.mustache"),
 	great_walks = {"walks":[]};
 
-//via http://www.greywyvern.com/?post=258
+
 String.prototype.CSV = function(strDelimiter) {
 	 //via http://stackoverflow.com/questions/1293147/javascript-code-to-parse-csv-data
      strDelimiter = (strDelimiter || ",");
@@ -35,12 +35,22 @@ String.prototype.CSV = function(strDelimiter) {
          } else {
              var strMatchedValue = arrMatches[3];
          }
-         arrData[arrData.length - 1].push(strMatchedValue);
+         if(strMatchedValue.length !== 0){
+         	arrData[arrData.length - 1].push(strMatchedValue);
+         } else {
+         	//process.stdout.write("There was an empty row\n");
+         }
      }
-     return (arrData);
- }
 
- String.prototype.CSVMap = function(strDelimiter) {
+     //process.stdout.write(JSON.stringify(arrData) + "\n\n\n");
+     if(arrData[arrData.length - 1].length === 0 ) {
+     	arrData[arrData.length - 1].pop();
+     }
+     //process.stdout.write(JSON.stringify(arrData) + "\n\n\n");
+     return (arrData);
+}
+
+String.prototype.CSVMap = function(strDelimiter) {
  	//presumes that first line is are the keys
  	var csv_array = this.CSV(strDelimiter),
  		first_row = csv_array[0],
@@ -56,7 +66,72 @@ String.prototype.CSV = function(strDelimiter) {
  		keyed_map.push(keyed_row);
  	}
  	return keyed_map;
- }
+}
+
+
+
+String.prototype.endsWith = function(suffix) {
+    return this.indexOf(suffix, this.length - suffix.length) !== -1;
+};
+
+for(var i = 0; i < walks_paths.length; i++){
+	var walk_name = walks_paths[i],
+		walk_fullpath = path.resolve("walks/" + walk_name),
+		walk_csv_path;
+	if(fs.statSync(walk_fullpath).isDirectory()) {
+		walk_csv_path = path.join(walk_fullpath, "locations.csv");
+		try {
+			fs.unlinkSync(walk_csv_path);
+		} catch (exception) {
+
+		}
+		fs.writeFileSync(walk_csv_path, "DESCRIPTIO,Point,GreatWalk,Long,Lat\n");
+	}
+}
+
+
+for(var i = 0; i < walks_paths.length; i++){
+	var walk_file = walks_paths[i],
+		walk_fullpath = path.resolve("walks/" + walk_file),
+		location_id_mapping = {
+			"LakeWaikaremoana":"Lake Waikaremoana Track",
+			"WellingtonWaterfront":"Wellington",
+			"TongariroNorthernCircuit":"Tongariro Northern Circuit",
+			"WhanganuiJourney":"Whanganui Journey",
+			"AbelTasmanCoastTrack":"Abel Tasman Coast Track",
+			"HeaphyTrack":"Heaphy Track",
+			"RouteburnTrack":"Routeburn Track",
+			"MilfordTrack":"Milford Track",
+			"KeplerTrack":"Kepler Track",
+			"RakiuraTrack":"Rakiura Track - Stewart Island",
+		},
+		walk_csv_path,
+		row,
+		location_data_by_location = {},
+		serialized_row = "";
+	if(!fs.statSync(walk_fullpath).isDirectory() && walk_file.endsWith(".csv")){
+		locations_data = fs.readFileSync(walk_fullpath).toString().CSVMap();
+		for(var y = 0; y < locations_data.length; y++){
+			row = locations_data[y];
+			if(row.Long !== undefined) { //'Long' (longitude) is arbitrary field chosen to see if it's present in the data, to test whether this this infact a row of data or a blank line
+				if(location_data_by_location[row.GreatWalk] === undefined) {
+					location_data_by_location[row.GreatWalk] = [];
+				}
+				row.GreatWalkId = location_id_mapping[row.GreatWalk];
+				if(row.GreatWalkId === undefined) {
+					throw "Unable to find GreatWalkId for " + row.GreatWalk;
+				}
+				walk_csv_path = path.resolve(path.join("walks", row.GreatWalkId, "locations.csv"));
+				serialized_row = row.DESCRIPTIO + "," + row.Point + "," + row.GreatWalk + "," + row.Long + "," + row.Lat + "\n";
+				//process.stdout.write(walk_csv_path + " | " + serialized_row + "\n");
+				fs.appendFileSync(walk_csv_path, serialized_row);
+				location_data_by_location[row.GreatWalk].push(row);
+			}
+		}
+	}
+}
+
+
 
 for(var i = 0; i < walks_paths.length; i++){
 	var walk_name = walks_paths[i],
@@ -104,53 +179,23 @@ for(var i = 0; i < walks_paths.length; i++){
 			map_details.longitude = parseFloat(extract_value_between(map_data_array, 150, 180));
 			map_details.degrees_per_pixel = parseFloat(extract_value_between(map_data_array, 0, 2) / scale_by);
 			mustache_data.map_details = JSON.stringify(map_details);
-			//process.stdout.write(JSON.stringify(map_details) + " " + JSON.stringify(map_data_array));
 		}
 		//locations
 		try {
 			locations_data = fs.readFileSync(locations_path).toString();
 		} catch(exception) {
 		}
+		mustache_data.locations = [];
 		if(locations_data !== undefined){
-			locations = locations_data.CSVMap("\t");
+			locations = locations_data.CSVMap(",");
+			mustache_data.locations = []
 			for(var location_index = 0; location_index < locations.length; location_index++){
 				location = locations[location_index];
-				location.pixel = pixel_location(map_details.latitude, map_details.longitude, mustache_data.map_pixel_width, mustache_data.map_pixel_height, map_details.degrees_per_pixel, location.Lat, location.Long, walk_name, location.DESCRIPTIO);
+				if(location.Long !== undefined) {  //'Long' (longitude) is arbitrary field chosen to see if it's present in the data, to test whether this this infact a row of data or a blank line
+					location.pixel = pixel_location(map_details.latitude, map_details.longitude, mustache_data.map_pixel_width, mustache_data.map_pixel_height, map_details.degrees_per_pixel, location.Lat, location.Long, walk_name, location.DESCRIPTIO);
+					mustache_data.locations.push(location);
+				}
 			}
-			/*
-			location = {
-				"pixel": pixel_location(
-					map_details.latitude,
-					map_details.longitude,
-					mustache_data.map_pixel_width,
-					mustache_data.map_pixel_height,
-					map_details.degrees_per_pixel,
-					map_details.latitude,
-					map_details.longitude,
-					"SOMETHING",
-					"TOP LEFT"),
-				"DESCRIPTIO": "TOP LEFT",
-				"Point": "Hut"
-			};
-			locations.push(location);
-			process.stdout.write(mustache_data.map_pixel_width.toString() + " | " + mustache_data.map_pixel_width + " * " + map_details.degrees_per_pixel + "\n");
-			location = {
-				"pixel": pixel_location(
-					map_details.latitude,
-					map_details.longitude,
-					mustache_data.map_pixel_width,
-					mustache_data.map_pixel_height,
-					map_details.degrees_per_pixel,
-					map_details.latitude - (mustache_data.map_pixel_height * map_details.degrees_per_pixel),
-					map_details.longitude + (mustache_data.map_pixel_width * map_details.degrees_per_pixel),
-					"SOMETHING",
-					"BOTTOM RIGHT"),
-				"DESCRIPTIO": "BOTTOM RIGHT",
-				"Point": "Hut"
-			};
-			locations.push(location);
-			*/
-			mustache_data.locations = locations;
 		}
 		//generate page
 		html_page = process_page(walks_template_path, walk_name, mustache_data);
@@ -253,8 +298,11 @@ function pixel_location(map_latitude, map_longitude, map_pixel_width, map_pixel_
 	pixel.left = Math.round(pixel.longitude_offset / degrees_per_pixel_scaled_by);
 	pixel.top = -Math.round(pixel.latitude_offset / degrees_per_pixel_scaled_by);
 	if(pixel.left > map_pixel_width || pixel.top > map_pixel_height) {
-		process.stdout.write(" - WARNING location out of bounds " + map_name + ": " + location_name + "\n")
+		process.stdout.write(" - WARNING location out of bounds " + map_name + ": " + location_name + "\n");
+	} else if (pixel.left.toString() === "NaN" || pixel.top.toString() === "NaN") {
+		process.stdout.write(" - WARNING location not parseable " + map_name + ": " + location_name + "\n");
 	}
+	//process.stdout.write("[" + pixel.left.toString() + "]");
 	return pixel;
 }
 

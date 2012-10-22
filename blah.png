@@ -1,0 +1,287 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- saved from url=(0041)http://timc.idv.tw/canvas-css-sprites/en/ -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Canvas: CSS Sprites Generator</title>
+<link rel="stylesheet" href="./blah_files/reset.css" type="text/css">
+<link rel="stylesheet" href="./blah_files/varied960.css" type="text/css">
+<link rel="stylesheet" href="./blah_files/text.css" type="text/css">
+<link rel="stylesheet" href="./blah_files/jquery-ui-1.7.1.custom.css" type="text/css">
+<link rel="stylesheet" href="./blah_files/style.css" type="text/css">
+<!--[if IE]><script src="../excanvas.js"></script><![endif]-->
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(
+ ['_setAccount', 'UA-401106-1'],
+ ['_setDomainName', 'timc.idv.tw'],
+ ['_trackPageview']
+);
+
+(function() {
+ var ga = document.createElement('script');
+ ga.src = 'http://www.google-analytics.com/ga.js';
+ ga.setAttribute('async', 'true');
+ document.documentElement.firstChild.appendChild(ga);
+})();
+
+</script><script src="./blah_files/ga.js" async="true"></script>
+</head>
+<body style="cursor: auto; ">
+<div id="content">
+	<h1>Canvas: CSS Sprites Generator</h1>
+	<ul class="langsel">
+		<li lang="en">English</li>
+		<li lang="zh-tw"><a href="http://timc.idv.tw/canvas-css-sprites/zh-tw/">正體中文</a></li>
+	</ul>
+	<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+		<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+			<li class="ui-state-default ui-corner-top"><a href="http://timc.idv.tw/canvas-css-sprites/en/#welcome">Welcome</a></li>
+			<li class="ui-state-default ui-corner-top"><a href="http://timc.idv.tw/canvas-css-sprites/en/#options">Options</a></li>
+			<li class="ui-corner-top ui-state-default"><a href="http://timc.idv.tw/canvas-css-sprites/en/#addimage">Add Images</a></li>
+			<li class="ui-corner-top ui-state-default"><a href="http://timc.idv.tw/canvas-css-sprites/en/#preview">Preview</a></li>
+			<li class="ui-corner-top ui-state-highlight ui-tabs-selected ui-state-active"><a href="http://timc.idv.tw/canvas-css-sprites/en/#result">Result</a></li>
+		</ul>
+		<div id="welcome" class="container_10 ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+			<div class="grid_7">
+				<h2>Build your own CSS Sprites with <code>&lt;canvas&gt;</code>.</h2>
+				<noscript>
+					&lt;p class="no-image ui-widget ui-state-error ui-corner-all"&gt;&lt;span class="ui-icon ui-icon-alert"&gt;[Alert]&lt;/span&gt; You have to turn on Javascript in order to use this tool.&lt;/p&gt;
+				</noscript>
+				<p class="ui-widget ui-state-highlight ui-corner-all">
+					<span class="ui-icon ui-icon-info">[Info]</span>
+					<strong>To Opera and Webkit users:</strong> Depend on your browser version, you might not be able to save the canvas image since there are no <strong>"Save As..."</strong> command in the context menu.
+				</p>
+				<p>This tool can help you make CSS Sprites with <code>&lt;canvas&gt;</code> support in browsers.
+				As a web designer/developer, your browser <em>should</em> support canvas. Consider quit your job if it doesn't.</p>
+				<p>For more information about CSS Sprites, please read <a href="http://css-tricks.com/css-sprites/">this article from CSS tricks</a>.</p>
+				<p><strong>The tool generates result on the fly.</strong> Feel free to switch between tabs when making your sprite image.</p>
+			</div>
+			<div class="grid_3">
+				<p><small>This tool is made by Tim Chien. You can <a href="http://timc.idv.tw/">contact me</a> or <a href="http://blog.timc.idv.tw/posts/canvas-css-sprites-generator/">leave your comments</a>.</small></p>
+				<p>More stuff:</p>
+				<ul>
+					<li><a href="http://timc.idv.tw/wordcloud/">HTML5 Word Cloud</a></li>
+					<li><a href="https://github.com/timdream/citationNeeded.js">citationNeeded.js</a></li>
+					<li><a href="http://blog.timc.idv.tw/posts/ie9-hackathon/">IE9 toss game made for hackathon</a></li>
+				</ul>
+			</div>
+		</div>
+		<div id="options" class="container_10 ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+			<h2 class="grid_10">Spacing</h2>
+			<p class="grid_2 col">
+				<label for="config-hspacing">Horizontal Image Spacing</label>
+			</p>
+			<p class="grid_8 col">
+				<span class="alpha omega grid_8"><input type="number" size="5" id="config-hspacing" value="2"> px</span>
+				<span class="alpha omega grid_8">Make sure horiontal spacing is large enough to aviod Safari image repeating bug, if you wish to use the sprite image for CSSes other than privided.</span>
+			</p>
+			<hr class="clear">
+			<p class="grid_2 col">
+				<label for="config-vspacing">Vertial Image Spacing</label>
+			</p>
+			<p class="grid_8 col">
+				<span class="alpha omega grid_8"><input type="number" size="5" id="config-vspacing" value="2"> px</span>
+			</p>
+			<h2 class="grid_10">Colors</h2>
+			<p class="grid_2 col">
+				<label for="config-bgcolor">Background color</label>
+			</p>
+			<p class="grid_8 col">
+				<span class="alpha omega grid_8"><input type="color" size="10" id="config-bgcolor" value="#ffffff" disabled=""></span>
+				<label class="alpha omega grid_8"><input type="checkbox" id="config-bgcolor-transparent" checked="checked"> Transparent</label>
+			</p>
+			<hr class="clear">
+			<p class="grid_2 col">
+				<label for="config-spacingcolor">Spacing color</label>
+			</p>
+			<p class="grid_8 col">
+				<span class="alpha omega grid_8"><input type="color" size="10" id="config-spacingcolor" value="#ffffff"></span>
+				<label class="alpha omega grid_8"><input type="checkbox" id="config-spacingcolor-transparent"> Transparent</label>
+			</p>
+			<hr class="clear">
+		</div>
+		<div id="addimage" class="container_10 ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+ 			<p class="no-file grid_10 ui-widget ui-state-highlight ui-corner-all" style="display: none; "><span class="ui-icon ui-icon-info">[Info]</span> Your browser doesn't support reading local files.</p>
+			<div class="grid_5">
+				<h2>One at a time</h2>
+				<p>Copy and paste URL of the image, one at a time.</p>
+				<form action="http://timc.idv.tw/canvas-css-sprites/en/#" method="get" id="image-new">
+					<p>
+						<label class="alpha grid_1" for="url">URL</label>
+						<span class="omega grid_4"><input type="url" value="" id="url" size="40"></span>
+					</p>
+					<p>
+						<label class="alpha grid_1" for="class-name">className</label>
+						<span class="omega grid_4"><input type="text" value="" id="class-name" size="20"></span>
+					</p>
+					<p class="alpha omega grid_4 prefix_1"><input type="submit" value="Add Image"> <span class="image-new-ok">OK!</span></p>
+				</form>
+			</div>
+			<div class="grid_5">
+				<h2>Be greedy</h2>
+				<p>Paste URLs on the textbox below, in the form of <br><code>my-class: http://.../</code>.</p>
+				<form action="http://timc.idv.tw/canvas-css-sprites/en/#" method="get" id="image-bulknew">
+					<p>
+						<textarea id="urls" rows="4" cols="40"></textarea>
+					</p>
+					<p><input type="submit" value="Add Images"> <span class="image-new-ok">OK!</span></p><p></p>
+				</form>
+			</div>
+ 			<div class="grid_5" id="local-image">
+ 				<h2>Local image</h2>
+ 				<p>Select file from below and it will be converted into a Data URL and inserted above.</p>
+ 				<form action="http://timc.idv.tw/canvas-css-sprites/en/#" method="get" id="image-file">
+ 					<input type="hidden" id="file-error" value="Cannot read this file.">
+ 					<p>
+ 						<label class="alpha grid_1" for="file">File</label>
+ 						<span class="omega grid_4"><input type="file" value="" id="file" size="20"></span>
+ 					</p>
+ 				</form>
+ 			</div>
+ 			<div class="grid_5" id="demo-set">
+				<h2>Predefined sets</h2>
+				<ul>
+					<li>
+						<strong>favicons</strong> - favicons from various websites.
+						<textarea>wordpress: http://www.wordpress.org/favicon.ico
+wordpress-com: http://www.wordpress.com/favicon.ico
+facebook: http://www.facebook.com/favicon.ico
+twitter: http://twitter.com/favicon.ico
+anobii: http://www.anobii.com/favicon.ico
+flickr: http://www.flickr.com/favicon.ico
+netvibes: http://www.netvibes.com/favicon.ico
+plurk: http://www.plurk.com/favicon.ico
+</textarea>
+						<input type="button" value="Add">
+					</li>
+					<li>
+						<strong>Mozilla zoo</strong> - Logos from Mozilla applications.
+						<textarea>firefox: http://www.mozilla.org/images/product-firefox-50.png
+thunderbird: http://www.mozilla.org/images/product-thunderbird-50.png
+sunbird: http://www.mozilla.org/images/sunbird_logo-50.png
+camino: http://www.mozilla.org/images/product-camino.png
+fennec: http://www.mozilla.org/images/fennec.png
+</textarea>
+						<input type="button" value="Add">
+					</li>
+					<li>
+						<strong>Data URL</strong> - Add an image using <code>data:</code> url.
+						<textarea>red-dot: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9YGARc5KB0XV+IAAAAddEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIFRoZSBHSU1Q72QlbgAAAF1JREFUGNO9zL0NglAAxPEfdLTs4BZM4DIO4C7OwQg2JoQ9LE1exdlYvBBeZ7jqch9//q1uH4TLzw4d6+ErXMMcXuHWxId3KOETnnXXV6MJpcq2MLaI97CER3N0vr4MkhoXe0rZigAAAABJRU5ErkJggg==
+check: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAABlBMVEUAAAD///+l2Z/dAAAAM0lEQVR4nGP4/5/h/1+G/58ZDrAz3D/McH8yw83NDDeNGe4Ug9C9zwz3gVLMDA/A6P9/AFGGFyjOXZtQAAAAAElFTkSuQmCC
+</textarea>
+						<input type="button" value="Add">
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="preview" class="container_10 ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide">
+			<p class="no-image grid_10 ui-widget ui-state-error ui-corner-all" style="display: none; "><span class="ui-icon ui-icon-alert">[Alert]</span> You have not yet add any image.</p>
+			<div class="grid_10">
+				<ul>
+					<li>Drag the images to sort, double click to delete.</li>
+					<li>You may also resize the sprite image. Width is restricted to 2042px to avoid Opera bug.</li>
+				</ul>
+			</div>
+			<div id="images-container" class="grid_10">
+			</div>
+		</div>
+		<div id="result" class="container_10 ui-tabs-panel ui-widget-content ui-corner-bottom">
+			<p class="no-image grid_10 ui-widget ui-state-error ui-corner-all" style="display: none; "><span class="ui-icon ui-icon-alert">[Alert]</span> You have not yet add any image.</p>
+			<div class="grid_6 col">
+				<h2>Sprite Image</h2>
+				<!--<p>Save this image with help from <a href="http://www.nihilogic.dk/labs/canvas2image/">Jacob Seidelin's canvas2image</a>: <input id="save-canvas" type="button" value="Save Image" />.</p>-->
+				<p>Please right click the <code>&lt;canvas&gt;</code> element on the right to save the image.</p>
+			</div>
+			<div class="grid_4 col box" id="sprite-container">
+				<canvas class="transparent-checker" id="sprites" style="width: 40px; height: 1258px; background-color: rgb(255, 255, 255); " width="40" height="1258">?</canvas>
+			</div>
+			<div class="grid_6 col">
+				<h2>CSS</h2>
+				<p>You should now be able to use any class as images, like <code>&lt;span class="sprite my-class"&gt;my icon&lt;/span&gt;</code></p>
+			</div>
+			<div class="grid_4 col box">
+				<pre id="sprites-css">.sprite {display: block; background: transparent url('...') no-repeat; text-indent: -10000px; }
+.http { background-position: 0 0; width: 40px; height: 40px}
+.http { background-position: 0 -42px; width: 40px; height: 40px}
+.http { background-position: 0 -84px; width: 40px; height: 40px}
+.http { background-position: 0 -126px; width: 40px; height: 40px}
+.http { background-position: 0 -168px; width: 40px; height: 40px}
+.http { background-position: 0 -210px; width: 40px; height: 40px}
+.http { background-position: 0 -252px; width: 40px; height: 40px}
+.http { background-position: 0 -294px; width: 40px; height: 40px}
+.http { background-position: 0 -336px; width: 40px; height: 40px}
+.http { background-position: 0 -378px; width: 40px; height: 40px}
+.http { background-position: 0 -420px; width: 40px; height: 40px}
+.http { background-position: 0 -462px; width: 40px; height: 40px}
+.http { background-position: 0 -504px; width: 40px; height: 40px}
+.http { background-position: 0 -546px; width: 40px; height: 40px}
+.http { background-position: 0 -588px; width: 40px; height: 40px}
+.http { background-position: 0 -630px; width: 40px; height: 40px}
+.http { background-position: 0 -672px; width: 40px; height: 40px}
+.http { background-position: 0 -714px; width: 40px; height: 40px}
+.http { background-position: 0 -756px; width: 40px; height: 40px}
+.http { background-position: 0 -798px; width: 40px; height: 40px}
+.http { background-position: 0 -840px; width: 40px; height: 40px}
+.http { background-position: 0 -882px; width: 40px; height: 40px}
+.http { background-position: 0 -924px; width: 40px; height: 40px}
+.http { background-position: 0 -966px; width: 40px; height: 40px}
+.http { background-position: 0 -1008px; width: 40px; height: 40px}
+.http { background-position: 0 -1050px; width: 40px; height: 40px}
+.http { background-position: 0 -1092px; width: 40px; height: 40px}
+.http { background-position: 0 -1134px; width: 40px; height: 40px}
+.http { background-position: 0 -1176px; width: 40px; height: 40px}
+.http { background-position: 0 -1218px; width: 40px; height: 40px}
+</pre>
+			</div>
+			<div class="grid_6 col">
+				<h2>Data</h2>
+				<p>Save this text chunk to re-use image list with this tool (paste it into "Be greedy" section).</p>
+			</div>
+			<div class="grid_4 col box">
+				<pre id="sprites-data">http: //www.doc.govt.nz/images/pg/activitiesicons/Adventure-activities.gif
+http: //www.doc.govt.nz/images/pg/activitiesicons/Bird-watching.gif
+http: //www.doc.govt.nz/images/pg/activitiesicons/Motor-boating.gif
+http: //www.doc.govt.nz/images/pg/activitiesicons/Camping.gif
+http: //www.doc.govt.nz/images/pg/activitiesicons/Caving.gif
+http: //www.doc.govt.nz/images/pg/activitiesicons/Activities-with-children.gif
+http: //www.doc.govt.nz/images/pg/activitiesicons/Climbing.gif
+http: //www.doc.govt.nz/images/pg/activitiesicons/Diving-Snorkelling.gif
+http: //www.doc.govt.nz/images/pg/activitiesicons/Dog-walking.gif
+http: //www.doc.govt.nz/images/pg/activitiesicons/Dolphin-swim.gif
+http: //www.doc.govt.nz/images/pg/activitiesicons/Fishing.gif
+http: //www.doc.govt.nz/images/pg/activitiesicons/Four-wheel-driving.gif
+http: //www.doc.govt.nz/images/pg/activitiesicons/Guided-walks.gif
+http: //www.doc.govt.nz/images/pg/activitiesicons/Historic-sites.gif
+http: //www.doc.govt.nz/images/pg/activitiesicons/Horse-riding.gif
+http: //www.doc.govt.nz/images/pg/activitiesicons/Hot-pools.gif
+http: //www.doc.govt.nz/images/pg/activitiesicons/Hunting.gif
+http: //www.doc.govt.nz/images/pg/activitiesicons/Kayaking-canoeing.gif
+http: //www.doc.govt.nz/images/pg/activitiesicons/Mountain-biking.gif
+http: //www.doc.govt.nz/images/pg/activitiesicons/Paragliding-Hanggliding.gif
+http: //www.doc.govt.nz/images/pg/activitiesicons/Trail-biking.gif
+http: //www.doc.govt.nz/images/pg/activitiesicons/Rafting.gif
+http: //www.doc.govt.nz/images/pg/activitiesicons/Scenic-Nature-tours.gif
+http: //www.doc.govt.nz/images/pg/activitiesicons/Aerial-activities.gif
+http: //www.doc.govt.nz/images/pg/activitiesicons/Skiing.gif
+http: //www.doc.govt.nz/images/pg/activitiesicons/Specialist-activities.gif
+http: //www.doc.govt.nz/images/pg/activitiesicons/Surfing.gif
+http: //www.doc.govt.nz/images/pg/activitiesicons/Trail-biking.gif
+http: //www.doc.govt.nz/images/pg/activitiesicons/Walking-Tramping.gif
+http: //www.doc.govt.nz/images/pg/activitiesicons/Whale-watching.gif
+</pre>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="visible-hack">
+	
+<ul id="images" class="ui-resizable ui-sortable" style="width: 40px; height: 1258px; background-color: rgb(255, 255, 255); top: 0px; left: 0px; ">
+	<div class="ui-resizable-handle ui-resizable-e" style="" unselectable="on"></div><div class="ui-resizable-handle ui-resizable-s" style="" unselectable="on"></div><div class="ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se" style="z-index: 1001; " unselectable="on"></div><li style="margin-right: 2px; margin-bottom: 2px; " class="transparent-checker"><img title="http" alt="http" src="./blah_files/Adventure-activities.gif"></li><li style="margin-right: 2px; margin-bottom: 2px; " class="transparent-checker"><img title="http" alt="http" src="./blah_files/Bird-watching.gif"></li><li style="margin-right: 2px; margin-bottom: 2px; " class="transparent-checker"><img title="http" alt="http" src="./blah_files/Motor-boating.gif"></li><li style="margin-right: 2px; margin-bottom: 2px; " class="transparent-checker"><img title="http" alt="http" src="./blah_files/Camping.gif"></li><li style="margin-right: 2px; margin-bottom: 2px; " class="transparent-checker"><img title="http" alt="http" src="./blah_files/Caving.gif"></li><li style="margin-right: 2px; margin-bottom: 2px; " class="transparent-checker"><img title="http" alt="http" src="./blah_files/Activities-with-children.gif"></li><li style="margin-right: 2px; margin-bottom: 2px; " class="transparent-checker"><img title="http" alt="http" src="./blah_files/Climbing.gif"></li><li style="margin-right: 2px; margin-bottom: 2px; " class="transparent-checker"><img title="http" alt="http" src="./blah_files/Diving-Snorkelling.gif"></li><li style="margin-right: 2px; margin-bottom: 2px; " class="transparent-checker"><img title="http" alt="http" src="./blah_files/Dog-walking.gif"></li><li style="margin-right: 2px; margin-bottom: 2px; " class="transparent-checker"><img title="http" alt="http" src="./blah_files/Dolphin-swim.gif"></li><li style="margin-right: 2px; margin-bottom: 2px; " class="transparent-checker"><img title="http" alt="http" src="./blah_files/Fishing.gif"></li><li style="margin-right: 2px; margin-bottom: 2px; " class="transparent-checker"><img title="http" alt="http" src="./blah_files/Four-wheel-driving.gif"></li><li style="margin-right: 2px; margin-bottom: 2px; " class="transparent-checker"><img title="http" alt="http" src="./blah_files/Guided-walks.gif"></li><li style="margin-right: 2px; margin-bottom: 2px; " class="transparent-checker"><img title="http" alt="http" src="./blah_files/Historic-sites.gif"></li><li style="margin-right: 2px; margin-bottom: 2px; " class="transparent-checker"><img title="http" alt="http" src="./blah_files/Horse-riding.gif"></li><li style="margin-right: 2px; margin-bottom: 2px; " class="transparent-checker"><img title="http" alt="http" src="./blah_files/Hot-pools.gif"></li><li style="margin-right: 2px; margin-bottom: 2px; " class="transparent-checker"><img title="http" alt="http" src="./blah_files/Hunting.gif"></li><li style="margin-right: 2px; margin-bottom: 2px; " class="transparent-checker"><img title="http" alt="http" src="./blah_files/Kayaking-canoeing.gif"></li><li style="margin-right: 2px; margin-bottom: 2px; " class="transparent-checker"><img title="http" alt="http" src="./blah_files/Mountain-biking.gif"></li><li style="margin-right: 2px; margin-bottom: 2px; " class="transparent-checker"><img title="http" alt="http" src="./blah_files/Paragliding-Hanggliding.gif"></li><li style="margin-right: 2px; margin-bottom: 2px; " class="transparent-checker"><img title="http" alt="http" src="./blah_files/Trail-biking.gif"></li><li style="margin-right: 2px; margin-bottom: 2px; " class="transparent-checker"><img title="http" alt="http" src="./blah_files/Rafting.gif"></li><li style="margin-right: 2px; margin-bottom: 2px; " class="transparent-checker"><img title="http" alt="http" src="./blah_files/Scenic-Nature-tours.gif"></li><li style="margin-right: 2px; margin-bottom: 2px; " class="transparent-checker"><img title="http" alt="http" src="./blah_files/Aerial-activities.gif"></li><li style="margin-right: 2px; margin-bottom: 2px; " class="transparent-checker"><img title="http" alt="http" src="./blah_files/Skiing.gif"></li><li style="margin-right: 2px; margin-bottom: 2px; " class="transparent-checker"><img title="http" alt="http" src="./blah_files/Specialist-activities.gif"></li><li style="margin-right: 2px; margin-bottom: 2px; " class="transparent-checker"><img title="http" alt="http" src="./blah_files/Surfing.gif"></li><li style="margin-right: 2px; margin-bottom: 2px; " class="transparent-checker"><img title="http" alt="http" src="./blah_files/Trail-biking.gif"></li><li style="margin-right: 2px; margin-bottom: 2px; " class="transparent-checker"><img title="http" alt="http" src="./blah_files/Walking-Tramping.gif"></li><li style="margin-right: 2px; margin-bottom: 2px; " class="transparent-checker"><img title="http" alt="http" src="./blah_files/Whale-watching.gif"></li></ul></div>
+<script type="text/javascript" src="./blah_files/jquery.min.js"></script>
+<script type="text/javascript" src="./blah_files/jquery-ui.min.js"></script>
+<script type="text/javascript" src="./blah_files/script.js"></script>
+<!--<script type="text/javascript" src="../canvas2image.js" defer="defer"></script>
+<script type="text/javascript" src="../base64.js" defer="defer"></script>-->
+
+
+</body></html>
