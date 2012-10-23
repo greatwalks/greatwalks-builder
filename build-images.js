@@ -1,7 +1,9 @@
 var fs = require('fs');
 var path = require('path');
 var	walks_paths = fs.readdirSync("walks");
-var scale_by = 1;
+var scale_by = 1; // the build-html.js has a scale_by=0.5 but this has scale_by=1.
+                  // The reason for the difference is that build-html.js will display the images at 0.5
+                  // but we still want the source images to be large for high DPI displays (e.g. 'retina display')
 
 for(var i = 0; i < walks_paths.length; i++){
 	var walk_name = walks_paths[i],

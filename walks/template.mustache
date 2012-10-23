@@ -4,8 +4,7 @@
 </script>
 <div style="background-image: url(img/walks/{{map_id}}/map.jpg); background-size: 100%; width:{{map_pixel_width}}px; height:{{map_pixel_height}}px; position:relative" class="map">
 	{{#locations}}
-		<!-- <div style="position:absolute; top:{{pixel.top}}px; left: {{pixel.left}}px" class="location" data-longitude="{{Long}}" data-latitude="{{Lat}}"> -->
-		<div style="position:absolute; top:{{percentage.top}}%; left: {{percentage.left}}%" class="location" data-longitude="{{Long}}" data-latitude="{{Lat}}">
+		<div style="position:absolute;  left: {{percentage.left}}%; top:{{percentage.top}}%;" class="location" data-longitude="{{Long}}" data-latitude="{{Lat}}">
 			<a class="location-sprite location-{{Point}}"></a>
 			<div class="description">
 				<h3>{{DESCRIPTIO}}</h3>

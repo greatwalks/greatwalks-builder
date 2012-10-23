@@ -2,7 +2,9 @@ var fs = require('fs');
 var path = require('path');
 var mustache = require("./mustache.js");
 
-var scale_by = 0.5;
+var scale_by = 0.5; // the build-images.js has a scale_by=1 but this has scale_by=0.5.
+                    // The reason for the difference is that build-images.js should render images at full resolution
+                    // but the html should display these at half-size for high DPI displays (e.g. 'retina display')
 
 var template = fs.readFileSync("html/template.html").toString(),
 	htmlf_paths = fs.readdirSync("html"),
