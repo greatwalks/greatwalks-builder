@@ -4,8 +4,14 @@
 </script>
 <div style="background: url(img/walks/{{map_id}}/map.jpg); width:{{map_pixel_width}}px; height:{{map_pixel_height}}px; position:relative" class="map">
 	{{#locations}}
-		<div style="position:absolute; top:{{pixel.top}}px; left: {{pixel.left}}px" class="location"><span class="location-sprite location-{{Point}}"></span><h3>{{DESCRIPTIO}}</h3></div>		
-	</div>
+		<div style="position:absolute; top:{{pixel.top}}px; left: {{pixel.left}}px" class="location" data-longitude="{{Long}}" data-latitude="{{Lat}}">
+			<a class="location-sprite location-{{Point}}"></a>
+			<div class="description">
+				<h3>{{DESCRIPTIO}}</h3>
+				<p class="distance"></p>
+			</div>
+		</div>
 	{{/locations}}
-	<div id="youarehere"></div>
+	<div id="youarehere"><div class="offmap">offmap</div></div>
 </div>
+<div id="no_gps">Current location unavailable</div>

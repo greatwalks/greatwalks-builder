@@ -177,7 +177,11 @@ for(var i = 0; i < walks_paths.length; i++){
 			map_details = {};
 			map_details.latitude = parseFloat(extract_value_between(map_data_array, -60, -30));
 			map_details.longitude = parseFloat(extract_value_between(map_data_array, 150, 180));
+			map_details.map_pixel_width = mustache_data.map_pixel_width;
+			map_details.map_pixel_height = mustache_data.map_pixel_height;
 			map_details.degrees_per_pixel = parseFloat(extract_value_between(map_data_array, 0, 2) / scale_by);
+			map_details.extent_latitude = map_details.latitude - (mustache_data.map_pixel_height * map_details.degrees_per_pixel);
+			map_details.extent_longitude = map_details.longitude + (mustache_data.map_pixel_width * map_details.degrees_per_pixel);
 			mustache_data.map_details = JSON.stringify(map_details);
 		}
 		//locations
