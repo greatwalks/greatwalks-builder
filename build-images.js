@@ -1,7 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 var	walks_paths = fs.readdirSync("walks");
-var scale_by = 0.5;
+var scale_by = 1;
 
 for(var i = 0; i < walks_paths.length; i++){
 	var walk_name = walks_paths[i],
