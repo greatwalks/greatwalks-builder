@@ -13,9 +13,11 @@ mkdir "..\greatwalks\img\walks\wellington"
 
 node build-images.js
 
-inkscape images/great-walks-logo.svg -z --export-png=../greatwalks/img/logo-large.png --export-width=600
-inkscape images/great-walks-logo.svg -z --export-png=../greatwalks/img/logo-large@2x.png --export-width=1200
-inkscape images/great-walks-logo.svg -z --export-png=../greatwalks/img/logo-tiny.png --export-width=150
+inkscape images/great-walks-logo.svg -z --export-png=../greatwalks/img/logo-x150.png --export-width=150
+inkscape images/great-walks-logo.svg -z --export-png=../greatwalks/img/logo-x225.png --export-width=225
+inkscape images/great-walks-logo.svg -z --export-png=../greatwalks/img/logo-x300.png --export-width=300
+inkscape images/great-walks-logo.svg -z --export-png=../greatwalks/img/logo-x600.png --export-width=600
+inkscape images/great-walks-logo.svg -z --export-png=../greatwalks/img/logo-x1200.png --export-width=1200
 
 resize -i"images/tongariro-home.jpg" -o"../greatwalks/img/tongariro-home.jpg" -s640x430
 resize -i"images/Abel-NEW-home.jpg" -o"../greatwalks/img/Abel-NEW-home.jpg" -s640x430
