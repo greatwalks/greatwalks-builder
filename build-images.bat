@@ -39,3 +39,5 @@ copy /Y images\rakiura-home.jpg ..\greatwalks\img\rakiura-home@2x.jpg
 copy /Y images\Routeburn-home.jpg ..\greatwalks\img\Routeburn-home@2x.jpg
 copy /Y images\Waikaremoana-NEW-home.jpg ..\greatwalks\img\Waikaremoana-NEW-home@2x.jpg
 copy /Y images\Whanganui-Journey-home.jpg ..\greatwalks\img\Whanganui-Journey-home@2x.jpg
+
+copy /Y images\header-icons.png ..\greatwalks\img\header-icons.png

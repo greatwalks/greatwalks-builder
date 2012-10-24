@@ -1,21 +1,21 @@
-var fs = require('fs');
-var path = require('path');
-var mustache = require("./mustache.js");
-
-var scale_by = 0.5; // the build-images.js has a scale_by=1 but this has scale_by=0.5.
+var fs = require('fs'),
+    path = require('path'),
+    mustache = require("./mustache.js"),
+    scale_by = 0.5; // the build-images.js has a scale_by=1 but this has scale_by=0.5.
                     // The reason for the difference is that build-images.js should render images at full resolution
                     // but the html should display these at half-size for high DPI displays (e.g. 'retina display')
-
-var template = fs.readFileSync("html/template.html").toString(),
+    template = fs.readFileSync("html/template.html").toString(),
 	htmlf_paths = fs.readdirSync("html"),
 	include_directory = path.join(path.resolve("html"), "includes"),
 	walks_paths = fs.readdirSync("walks"),
 	walks_template_path = path.resolve("walks/template.mustache"),
 	great_walks = {"walks":[]};
 
-
 String.prototype.CSV = function(strDelimiter) {
-	 //via http://stackoverflow.com/questions/1293147/javascript-code-to-parse-csv-data
+	//I wouldn't extend a prototype in a browser but
+	// in a short-lived build script it's harmless
+
+	//via http://stackoverflow.com/questions/1293147/javascript-code-to-parse-csv-data
      strDelimiter = (strDelimiter || ",");
      var objPattern = new RegExp(
      (
@@ -53,6 +53,9 @@ String.prototype.CSV = function(strDelimiter) {
 }
 
 String.prototype.CSVMap = function(strDelimiter) {
+	//I wouldn't extend a prototype in a browser but
+	// in a short-lived build script it's harmless
+	
  	//presumes that first line is are the keys
  	var csv_array = this.CSV(strDelimiter),
  		first_row = csv_array[0],
@@ -239,7 +242,7 @@ for(var i = 0; i < htmlf_paths.length; i++){
 }
 
 
-function process_page(htmlf_path, page_title, mustache_data){
+function process_page(htmlf_path, page_title, mustache_data, page_id){
 	var htmlf_data = fs.readFileSync(htmlf_path).toString(),
 		htmlf_path_extension = htmlf_path.substr(htmlf_path.lastIndexOf(".") + 1),
 		htmlf_filename = path.basename(htmlf_path),
@@ -260,7 +263,8 @@ function process_page(htmlf_path, page_title, mustache_data){
 		case "htmlf": //straight copy
 			html_page = template
 				.replace(/{{body}}/, htmlf_data)
-				.replace(/{{title}}/, page_title);
+				.replace(/{{title}}/, page_title)
+				.replace(/{{pageid}}/, page_id);
 			break;
 		case "mustache": //mustache template - see http://mustache.github.com/
 			var json_data = mustache_data || {},
