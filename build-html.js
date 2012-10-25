@@ -208,7 +208,7 @@ for(var i = 0; i < walks_paths.length; i++){
 			}
 		}
 		//generate page
-		html_page = process_page(walks_template_path, walk_name, mustache_data);
+		html_page = process_page(walks_template_path, walk_name, mustache_data, "map");
 	}
 
 	if(html_page !== undefined) {
@@ -282,7 +282,8 @@ function process_page(htmlf_path, page_title, mustache_data, page_id){
 			}
 			html_page = template
 				.replace(/{{body}}/, mustache.to_html(htmlf_data, json_data))
-				.replace(/{{title}}/, page_title);
+				.replace(/{{title}}/, page_title)
+				.replace(/{{pageid}}/, page_id);
 			json_data = {};
 			break;
 	}

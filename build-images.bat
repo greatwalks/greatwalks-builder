@@ -31,6 +31,7 @@ resize -i"images/Whanganui-Journey-home.jpg" -o"../greatwalks/img/Whanganui-Jour
 
 resize -i"images/icons.png" -o"../greatwalks/img/icons.png" -s20x750
 copy /Y images\icons.png ..\greatwalks\img\icons@2x.png
+copy /Y images\map-background.png ..\greatwalks\img\map-background.png
 
 copy /Y images\tongariro-home.jpg ..\greatwalks\img\tongariro-home@2x.jpg
 copy /Y images\Abel-NEW-home.jpg ..\greatwalks\img\Abel-NEW-home@2x.jpg
