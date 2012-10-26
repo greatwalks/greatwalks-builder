@@ -5,7 +5,9 @@
 <div style="background-image: url(img/walks/{{map_id}}/map.jpg); background-size: 100%; width:{{map_pixel_width}}px; height:{{map_pixel_height}}px; position:relative" id="map">
 	{{#locations}}
 		<div style="position:absolute;  left: {{percentage.left}}%; top:{{percentage.top}}%;" class="location" data-longitude="{{Long}}" data-latitude="{{Lat}}">
-			<a class="location-sprite location-{{Point}}"></a>
+			<a class=""></a>
+            <a class="location-sprite location-{{Point}}" rel="popover" data-content="And here's some amazing content. It's very engaging. right?" data-original-title="A Title">Click to toggle popover</a>
+        
 			<div class="description">
 				<h3>{{DESCRIPTIO}}</h3>
 				<p class="distance"></p>
