@@ -2,9 +2,11 @@
 <script type="text/javascript">
 	var map_details = {{{map_details}}};
 </script>
-<div style="background-image: url(img/walks/{{map_id}}/map.jpg); background-size: 100%; width:{{map_pixel_width}}px; height:{{map_pixel_height}}px; position:relative" id="map">
+<div style="background-image: url(img/walks/{{map_id}}/map.jpg); background-size: 100%; width:{{map_pixel_width}}px; height:{{map_pixel_height}}px; " id="map">
+</div>
+<div style="width:{{map_pixel_width}}px; height:{{map_pixel_height}}px;" id="map_overlay">
 	{{#locations}}
-		<div style="position:absolute;  left: {{percentage.left}}%; top:{{percentage.top}}%;" class="location" data-longitude="{{Long}}" data-latitude="{{Lat}}">
+		<div style="position:absolute;  left: {{percentage.left}}%; top:{{percentage.top}}%;" class="location" data longitude="{{Long}}" data-latitude="{{Lat}}">
 			<a class="location-sprite location-{{Point}}"></a>
 			<div class="description">
 				<h3>{{DESCRIPTIO}}</h3>
