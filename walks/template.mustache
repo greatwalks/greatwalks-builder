@@ -4,15 +4,7 @@
 </script>
 <div style="background-image: url(img/walks/{{map_id}}/map.jpg); background-size: 100%; width:{{map_pixel_width}}px; height:{{map_pixel_height}}px; position:relative" id="map">
 	{{#locations}}
-		<div style="position:absolute;  left: {{percentage.left}}%; top:{{percentage.top}}%;" class="location" data-longitude="{{Long}}" data-latitude="{{Lat}}">
-			<a class=""></a>
-            <a class="location-sprite location-{{Point}}" rel="popover" data-content="{{DESCRIPTIO}}" data-original-title="{{DESCRIPTIO}}">Click to toggle popover</a>
-        
-			<div class="description">
-
-				<p class="distance"></p>
-			</div>
-		</div>
+		<a class="location location-sprite location-{{Point}}" rel="popover" style="position:absolute; left: {{percentage.left}}%; top:{{percentage.top}}%;" data-longitude="{{Long}}" data-latitude="{{Lat}}" data-content="{{DESCRIPTIO}}" data-original-title="{{DESCRIPTIO}}">Click to toggle popover</a>
 	{{/locations}}
 	<div id="youarehere"><div class="offmap">offmap</div></div>
 </div>
