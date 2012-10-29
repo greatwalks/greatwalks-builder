@@ -5,7 +5,7 @@
 <a id="weta" rel="popover" data-content="<b>sdfsdf</b>sdfsdf">Weta</a>
 <div style="background-image: url(img/walks/{{map_id}}/map.jpg); background-size: {{map_pixel_width}}px {{map_pixel_height}}px; width:{{map_pixel_width}}px; height:{{map_pixel_height}}px; position:relative" id="map">
 	{{#locations}}
-		<a class="location location-icon location-{{Point}}" rel="popover" style="position:absolute; left: {{percentage.left}}%; top:{{percentage.top}}%;" data-longitude="{{Long}}" data-latitude="{{Lat}}" data-content="{{DESCRIPTIO}}" data---original-title="{{DESCRIPTIO}}">Click to toggle popover</a>
+		<a class="location location-icon location-{{Point}}" rel="popover" style="position:absolute; left: {{pixel.left}}px; top:{{pixel.top}}px;" data-longitude="{{Long}}" data-latitude="{{Lat}}" data-content="{{DESCRIPTIO}}<br><b>Distance away<span></span></b>">Click to toggle popover</a>
 	{{/locations}}
 	<div id="youarehere"><div class="offmap">offmap</div></div>
 </div>
