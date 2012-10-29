@@ -29,7 +29,6 @@ resize -i"images/Routeburn-home.jpg" -o"../greatwalks/img/Routeburn-home.jpg" -s
 resize -i"images/Waikaremoana-NEW-home.jpg" -o"../greatwalks/img/Waikaremoana-NEW-home.jpg" -s640x430
 resize -i"images/Whanganui-Journey-home.jpg" -o"../greatwalks/img/Whanganui-Journey-home.jpg" -s640x430
 
-resize -i"images/icons.png" -o"../greatwalks/img/icons.png" -s20x750
 copy /Y images\icons.png ..\greatwalks\img\icons@2x.png
 copy /Y images\map-background.png ..\greatwalks\img\map-background.png
 
@@ -44,3 +43,23 @@ copy /Y images\Waikaremoana-NEW-home.jpg ..\greatwalks\img\Waikaremoana-NEW-home
 copy /Y images\Whanganui-Journey-home.jpg ..\greatwalks\img\Whanganui-Journey-home@2x.jpg
 
 copy /Y images\header-icons.png ..\greatwalks\img\header-icons.png
+
+copy /Y images\table.png ..\greatwalks\img\table.png
+copy /Y images\weta_land.png ..\greatwalks\img\weta_land.png
+copy /Y images\weta_twitch.png ..\greatwalks\img\weta_twitch.png
+
+copy /Y images\icons\animal_species.png ..\greatwalks\img\icon-animal_species.png
+copy /Y images\icons\attention.png ..\greatwalks\img\icon-attention.png
+copy /Y images\icons\carpark.png ..\greatwalks\img\icon-carpark.png
+copy /Y images\icons\hot_springs.png ..\greatwalks\img\icon-hot_springs.png
+copy /Y images\icons\isite.png ..\greatwalks\img\icon-isite.png
+copy /Y images\icons\lodging.png ..\greatwalks\img\icon-lodging.png
+copy /Y images\icons\plane.png ..\greatwalks\img\icon-plane.png
+copy /Y images\icons\plant_species.png ..\greatwalks\img\icon-plant_species.png
+copy /Y images\icons\shelter.png ..\greatwalks\img\icon-shelter.png
+copy /Y images\icons\tent.png ..\greatwalks\img\icon-tent.png
+copy /Y images\icons\toilets.png ..\greatwalks\img\icon-toilets.png
+copy /Y images\icons\trailhead.png ..\greatwalks\img\icon-trailhead.png
+copy /Y images\icons\viewpoints.png ..\greatwalks\img\icon-viewpoints.png
+copy /Y images\icons\volcano.png ..\greatwalks\img\icon-volcano.png
+copy /Y images\icons\waterfall.png ..\greatwalks\img\icon-waterfall.png

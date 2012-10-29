@@ -2,9 +2,10 @@
 <script type="text/javascript">
 	var map_details = {{{map_details}}};
 </script>
+<a id="weta" rel="popover" data-content="<b>sdfsdf</b>sdfsdf">Weta</a>
 <div style="background-image: url(img/walks/{{map_id}}/map.jpg); background-size: 100%; width:{{map_pixel_width}}px; height:{{map_pixel_height}}px; position:relative" id="map">
 	{{#locations}}
-		<a class="location location-sprite location-{{Point}}" rel="popover" style="position:absolute; left: {{percentage.left}}%; top:{{percentage.top}}%;" data-longitude="{{Long}}" data-latitude="{{Lat}}" data-content="{{DESCRIPTIO}}" data-original-title="{{DESCRIPTIO}}">Click to toggle popover</a>
+		<a class="location location-icon location-{{Point}}" rel="popover" style="position:absolute; left: {{percentage.left}}%; top:{{percentage.top}}%;" data-longitude="{{Long}}" data-latitude="{{Lat}}" data-content="{{DESCRIPTIO}}" data---original-title="{{DESCRIPTIO}}">Click to toggle popover</a>
 	{{/locations}}
 	<div id="youarehere"><div class="offmap">offmap</div></div>
 </div>

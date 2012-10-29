@@ -25,35 +25,26 @@ html {
 }
 
 body.map {
-    background: url("../img/map-background.png");
+    background: url("../img/table.png");
     padding: 41px 100px 0px 100px;
-    
-}
-
-.location {
-    .description {
-        font-size:small;
-        background:white;
-        display:none;
-        margin:0px;
-        white-space: nowrap;
-        float:left;
-        padding:0px 20px 0px 20px;
-        line-height:16px;
-        position:relative;
-        z-index:1000;
-
-        h3 {
-            font-size:10px;
-            margin:0px;
-            padding:5px 0px 0px 0px;
-            line-height:10px;
-        }
-
-    }
 }
 
 @import url(sprites.less);
+
+#weta {
+    background: url(../img/weta_land.png);
+    width: 255px;
+    height: 393px;
+    background-size: 100%;
+    position:absolute;
+    bottom:0px;
+    left:0px;
+    
+    &:hover,
+    &.active {
+        background-image: url(../img/weta_twitch.png);
+    }
+}
 
 #logo {
     position:absolute;
