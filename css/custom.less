@@ -105,10 +105,10 @@ body.map {
                         0 0 0 (@youarehereradius - 5) @youarehereradiuscolour,
                         0 0 0  @youarehereradius      @youarehereradiuscolour;
 
-    &.bad {
-        -webkit-box-shadow: 0 0 5px (@youarehreeradiusbadreception - 15) lighten(@youarehereradiuscolour, 20%),
-                            0 0 0 (@youarehreeradiusbadreception - 5) @youarehereradiuscolour,
-                            0 0 0  @youarehreeradiusbadreception      @youarehereradiuscolour;
+    &.badAccuracy {
+        -webkit-box-shadow: 0 0 5px @youarehreeradiusbadreception lighten(@youarehereradiuscolour, 20%),
+                            0 0 0 (@youarehreeradiusbadreception + 5)     @youarehereradiuscolour,
+                            0 0 0  (@youarehreeradiusbadreception + 10)   @youarehereradiuscolour;
     }
 
     .dot {
