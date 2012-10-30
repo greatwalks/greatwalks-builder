@@ -73,11 +73,28 @@ String.prototype.CSVMap = function(strDelimiter) {
  	return keyed_map;
 }
 
-
-
 String.prototype.endsWith = function(suffix) {
     return this.indexOf(suffix, this.length - suffix.length) !== -1;
 };
+
+function resolve_includes(html){
+	return html.replace(/<\!--#include(.*?)-->/g,
+		function(match, contents, offset, s){
+			var include_filename = contents.substr(contents.indexOf("=\"")+2),
+				include_path;
+			include_filename = include_filename.substr(0, include_filename.indexOf("\""));
+			include_path = path.join(include_directory, include_filename);
+			//process.stdout.write(" -- including : " + include_path + "\n");
+			return fs.readFileSync(include_path).toString();
+		})
+};
+
+
+/* BEGIN BUILDING HTML
+ *
+ */
+
+template = resolve_includes(template);
 
 for(var i = 0; i < walks_paths.length; i++){
 	var walk_name = walks_paths[i],
@@ -243,20 +260,11 @@ for(var i = 0; i < htmlf_paths.length; i++){
 
 
 function process_page(htmlf_path, page_title, mustache_data, page_id){
-	var htmlf_data = fs.readFileSync(htmlf_path).toString(),
+	var htmlf_data = resolve_includes(fs.readFileSync(htmlf_path).toString()),
 		htmlf_path_extension = htmlf_path.substr(htmlf_path.lastIndexOf(".") + 1),
 		htmlf_filename = path.basename(htmlf_path),
-		html_page,
+		html_page;
 
-	htmlf_data = htmlf_data.replace(/<\!--#include(.*?)-->/g,
-				function(match, contents, offset, s){
-					var include_filename = contents.substr(contents.indexOf("=\"")+2),
-						include_path;
-					include_filename = include_filename.substr(0, include_filename.indexOf("\""));
-					include_path = path.join(include_directory, include_filename);
-					//process.stdout.write(" -- including : " + include_path + "\n");
-					return fs.readFileSync(include_path).toString();
-				});
 	page_title = page_title || htmlf_path;
 
 	switch(htmlf_path_extension){
