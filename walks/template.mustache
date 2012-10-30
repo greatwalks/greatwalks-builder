@@ -4,7 +4,10 @@
 </script>
 <a id="weta" rel="popover" data-content="<b>Weta</b><br><b>Distance away:</b> really close!">Weta</a>
 <div style="background-image: url(img/walks/{{map_id}}/map.jpg); background-size: {{map_pixel_width}}px {{map_pixel_height}}px; width:{{map_pixel_width}}px; height:{{map_pixel_height}}px; position:relative" id="map">
-	<div id="youarehere"><div class="offmap">offmap</div></div>
+	<div id="youarehere">
+		<a class="dot"></a>
+		<div class="offmap">offmap</div>
+	</div>
 	{{#locations}}
 		<a class="location location-icon location-{{Point}}" rel="popover" style="position:absolute; left: {{pixel.left}}px; top:{{pixel.top}}px;" data-longitude="{{Long}}" data-latitude="{{Lat}}" data-content="{{DESCRIPTIO}}<div><b>Distance away</b> <span></span></div>">Click to toggle popover</a>
 	{{/locations}}

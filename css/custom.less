@@ -89,17 +89,38 @@ body.map {
 }
 
 
-
-@youarehereradius: 50px;
+@youarehereradius: 25px;
+@youarehereradiuscolour: rgba(0,0,255,0.3);
+@youarehreeradiusbadreception: @youarehereradius * 2;
 
 #youarehere {
-    width:10px;
-    height:10px;
+    display:none;
+    position:absolute;
+    width:1px
+    height:1px;
+    margin-left: -1px;
+    margin-top: -1px;
     border-radius:100%;
-    border: solid @youarehereradius rgba(0,85,146, 0.4);
-    margin-left:-(@youarehereradius / 2);
-    margin-top:-(@youarehereradius / 2);
-    background: rgba(255,255,255, 0.4);
+    -webkit-box-shadow: 0 0 5px (@youarehereradius - 15) lighten(@youarehereradiuscolour, 20%),
+                        0 0 0 (@youarehereradius - 5) @youarehereradiuscolour,
+                        0 0 0  @youarehereradius      @youarehereradiuscolour;
+
+    &.bad {
+        -webkit-box-shadow: 0 0 5px (@youarehreeradiusbadreception - 15) lighten(@youarehereradiuscolour, 20%),
+                            0 0 0 (@youarehreeradiusbadreception - 5) @youarehereradiuscolour,
+                            0 0 0  @youarehreeradiusbadreception      @youarehereradiuscolour;
+    }
+
+    .dot {
+        position:absolute;
+        left:-8px;
+        top: -8px;
+        display:block;
+        width:15px;
+        height:15px;
+        background: url(../img/youarehere.png) no-repeat center center;
+        background-size:100%;
+    }
 
     .offmap {
         display:none;
@@ -114,6 +135,15 @@ body.map {
         border-radius:3px;
         padding:3px 8px;
     }
+}
+
+#youarehere2 {
+    position:absolute;
+    width:1px;
+    height:1px;
+    margin-left:-1px;
+    margin-top:-1px;
+    background: red;
 }
 
 #no_gps {
