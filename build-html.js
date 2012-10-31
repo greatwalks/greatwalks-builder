@@ -220,9 +220,13 @@ for(var i = 0; i < walks_paths.length; i++){
 			for(var location_index = 0; location_index < locations.length; location_index++){
 				location = locations[location_index];
 				if(location.Long !== undefined) {  //'Long' (longitude) is arbitrary field chosen to see if it's present in the data, to test whether this this infact a row of data or a blank line
-					location.pixel = pixel_location(map_details.latitude, map_details.longitude, mustache_data.map_pixel_width, mustache_data.map_pixel_height, map_details.degrees_per_pixel, location.Lat, location.Long, walk_name, location.DESCRIPTIO);
-					location.percentage = {left: location.pixel.left / map_details.map_pixel_width * 100, top: location.pixel.top / map_details.map_pixel_height * 100 };
-					mustache_data.locations.push(location);
+					try {
+						location.pixel = pixel_location(map_details.latitude, map_details.longitude, mustache_data.map_pixel_width, mustache_data.map_pixel_height, map_details.degrees_per_pixel, location.Lat, location.Long, walk_name, location.DESCRIPTIO);
+						location.percentage = {left: location.pixel.left / map_details.map_pixel_width * 100, top: location.pixel.top / map_details.map_pixel_height * 100 };
+						mustache_data.locations.push(location);
+					} catch(exception) {
+						process.stdout.write(exception.message);
+					}
 				}
 			}
 		}
@@ -315,13 +319,21 @@ function pixel_location(map_latitude, map_longitude, map_pixel_width, map_pixel_
 		"longitude": location_longitude,
 		"latitude_offset": location_latitude - map_latitude,
 		"longitude_offset": location_longitude - map_longitude
-	}
+		},
+		offmap = false,
+		offmap_message = "WARNING location out of bounds " + map_name + ": " + location_name + "\n";
 	pixel.left = Math.round(pixel.longitude_offset / degrees_per_pixel_scaled_by);
 	pixel.top = -Math.round(pixel.latitude_offset / degrees_per_pixel_scaled_by);
 	if(pixel.left > map_pixel_width || pixel.top > map_pixel_height) {
-		process.stdout.write(" - WARNING location out of bounds " + map_name + ": " + location_name + "\n");
+		offmap = true;
 	} else if (pixel.left.toString() === "NaN" || pixel.top.toString() === "NaN") {
-		process.stdout.write(" - WARNING location not parseable " + map_name + ": " + location_name + "\n");
+		offmap = true;
+	}
+	if(offmap){
+		throw { 
+		    name: "OutOfBounds", 
+    		message: offmap_message
+		}
 	}
 	//process.stdout.write("[" + pixel.left.toString() + "]");
 	return pixel;
