@@ -103,9 +103,12 @@ body.map {
     margin-left: -1px;
     margin-top: -1px;
     border-radius:100%;
-    -webkit-box-shadow: 0 0 5px (@youarehereradius - 15) lighten(@youarehereradiuscolour, 20%),
-                        0 0 0 (@youarehereradius - 5) @youarehereradiuscolour,
-                        0 0 0  @youarehereradius      @youarehereradiuscolour;
+
+    &.goodAccuracy {
+        -webkit-box-shadow: 0 0 5px (@youarehereradius - 15) lighten(@youarehereradiuscolour, 20%),
+                            0 0 0 (@youarehereradius - 5) @youarehereradiuscolour,
+                            0 0 0  @youarehereradius      @youarehereradiuscolour;
+    }
 
     &.badAccuracy {
         -webkit-box-shadow: 0 0 5px @youarehreeradiusbadreception lighten(@youarehereradiuscolour, 20%),
