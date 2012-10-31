@@ -160,6 +160,7 @@ body.map {
 
 
 #wrapper {
+    padding-top:50px;
     position: relative;
     transition: .2s ease-in;
     -webkit-transition: .2s ease-in;
@@ -171,6 +172,8 @@ body.map {
 }
 
 #show_slideout_navigation {
+    display:none;
+    /*
     position:absolute;
     left:30%;
     top: 150px;
@@ -180,6 +183,7 @@ body.map {
     border: solid 1px red;
     background:red;
     -webkit-transform: scale3d(5,5,1);
+    */
 }
 
 #show_slideout_navigation:checked + #wrapper,
@@ -193,7 +197,7 @@ body.map {
 
 #slideoutnavigation {
     position: absolute;
-    top: -50px;
+    top: 0px;
     left: -300px;
     margin-right: -300px;
     width: 300px;
