@@ -9,7 +9,8 @@ var fs = require('fs'),
 	include_directory = path.join(path.resolve("html"), "includes"),
 	walks_paths = fs.readdirSync("walks"),
 	walks_template_path = path.resolve("walks/template.mustache"),
-	great_walks = {"walks":[]};
+	great_walks = {"walks":[]},
+	template_slideout_walks = "";
 
 String.prototype.CSV = function(strDelimiter) {
 	//I wouldn't extend a prototype in a browser but
@@ -94,13 +95,15 @@ function resolve_includes(html){
  *
  */
 
-template = resolve_includes(template);
+
 
 for(var i = 0; i < walks_paths.length; i++){
 	var walk_name = walks_paths[i],
 		walk_fullpath = path.resolve("walks/" + walk_name),
+		walk_sanitised_name = walk_name.toLowerCase().replace(/ /g, "-"),
 		walk_csv_path;
 	if(fs.statSync(walk_fullpath).isDirectory()) {
+		template_slideout_walks += '<li><a href="walk-' + walk_sanitised_name + '.html">' + walk_name + '</a></li>';
 		walk_csv_path = path.join(walk_fullpath, "locations.csv");
 		try {
 			fs.unlinkSync(walk_csv_path);
@@ -111,6 +114,7 @@ for(var i = 0; i < walks_paths.length; i++){
 	}
 }
 
+template = resolve_includes(template).replace(/{{slide-walks}}/g, template_slideout_walks);
 
 for(var i = 0; i < walks_paths.length; i++){
 	var walk_file = walks_paths[i],
@@ -152,8 +156,6 @@ for(var i = 0; i < walks_paths.length; i++){
 		}
 	}
 }
-
-
 
 for(var i = 0; i < walks_paths.length; i++){
 	var walk_name = walks_paths[i],
@@ -240,7 +242,6 @@ for(var i = 0; i < walks_paths.length; i++){
 	map_data = undefined;
 	locations_data = undefined;
 }
-
 
 for(var i = 0; i < htmlf_paths.length; i++){
 	var htmlf_path = htmlf_paths[i],

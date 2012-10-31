@@ -43,6 +43,7 @@ copy /Y images\Waikaremoana-NEW-home.jpg ..\greatwalks\img\Waikaremoana-NEW-home
 copy /Y images\Whanganui-Journey-home.jpg ..\greatwalks\img\Whanganui-Journey-home@2x.jpg
 
 copy /Y images\header-icons.png ..\greatwalks\img\header-icons.png
+copy /Y images\slideout-menu.png ..\greatwalks\img\slideout-menu.png
 
 copy /Y images\table.png ..\greatwalks\img\table.png
 copy /Y images\weta_land.png ..\greatwalks\img\weta_land.png
