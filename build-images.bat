@@ -66,3 +66,4 @@ copy /Y images\icons\volcano.png ..\greatwalks\img\icon-volcano.png
 copy /Y images\icons\waterfall.png ..\greatwalks\img\icon-waterfall.png
 
 copy /Y images\youarehere.png ..\greatwalks\img\youarehere.png
+copy /Y images\camera-placeholder.jpg ..\greatwalks\img\camera-placeholder.jpg
