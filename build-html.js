@@ -187,8 +187,8 @@ for(var i = 0; i < walks_paths.length; i++){
 		map_dimensions_json_string = execSync("imdim \"{\\\"width\\\":%w, \\\"height\\\":%h}\" \"" + map_fullpath + "\"");
 		if(map_dimensions_json_string.indexOf("{\"width") >= 0) {
 			var map_dimensions_json = JSON.parse(map_dimensions_json_string);
-			mustache_data.map_pixel_width = map_dimensions_json.width * scale_by;
-			mustache_data.map_pixel_height = map_dimensions_json.height * scale_by;
+			mustache_data.map_pixel_width = Math.floor(map_dimensions_json.width * scale_by);
+			mustache_data.map_pixel_height = Math.floor(map_dimensions_json.height * scale_by);
 		}
 		//offset
 		try {
