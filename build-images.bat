@@ -19,6 +19,13 @@ inkscape images/great-walks-logo.svg -z --export-png=../greatwalks/img/logo-x300
 inkscape images/great-walks-logo.svg -z --export-png=../greatwalks/img/logo-x600.png --export-width=600
 inkscape images/great-walks-logo.svg -z --export-png=../greatwalks/img/logo-x1200.png --export-width=1200
 
+inkscape images/great-walks-icon.svg -z --export-png=../greatwalks-phonegap/res/drawable-hdpi/ic_launcher.png --export-width=72
+inkscape images/great-walks-icon.svg -z --export-png=../greatwalks-phonegap/res/drawable-ldpi/ic_launcher.png --export-width=36
+inkscape images/great-walks-icon.svg -z --export-png=../greatwalks-phonegap/res/drawable-mdpi/ic_launcher.png --export-width=48
+inkscape images/great-walks-icon.svg -z --export-png=../greatwalks-phonegap/res/drawable-xhdpi/ic_launcher.png --export-width=96
+
+
+
 resize -i"images/tongariro-home.jpg" -o"../greatwalks/img/tongariro-home.jpg" -s640x430
 resize -i"images/Abel-NEW-home.jpg" -o"../greatwalks/img/Abel-NEW-home.jpg" -s640x430
 resize -i"images/heaphy-home_0.jpg" -o"../greatwalks/img/heaphy-home_0.jpg" -s640x430
