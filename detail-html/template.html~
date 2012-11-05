@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]>    <html class="no-js iem7"> <![endif]-->
+<!--[if (gt IEMobile 7)|!(IEMobile)]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <title>Great Walks - {{title}}</title>
+        <meta name="description" content="">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=0"">
+        <meta http-equiv="cleartype" content="on">
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="img/touch/apple-touch-icon-144x144-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="img/touch/apple-touch-icon-114x114-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="img/touch/apple-touch-icon-72x72-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" href="img/touch/apple-touch-icon-57x57-precomposed.png">
+        <link rel="shortcut icon" href="img/touch/apple-touch-icon.png">
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/bootstrap.css">
+        <link rel="stylesheet" href="css/bootstrap-responsive.css">
+        <link rel="stylesheet" href="css/main.css">
+        <script src="js/vendor/modernizr-2.6.1.min.js"></script>
+    </head>
+    <body class="{{pageid}}">
+	
+        <div>
+            {{{body}}}
+        </div>
+
+        <div id="photo-carousel" class="carousel slide">
+            <div class="carousel-inner">
+                {{#images}}
+                <div class="item" style="float:left">
+                    <img src="img/{{image}}"  />
+                </div>
+                {{/images}}
+            </div>
+            <div>
+                <a class="carousel-control left" href="#photo-carousel" data-slide="prev">&lsaquo;</a>
+                <a class="carousel-control right" href="#photo-carousel" data-slide="next">&rsaquo;</a>
+            </div>
+        </div>    
+
+        <div class="accordion" id="sections">
+            <div class="accordion-group"> 
+                <div class="accordion-toggle accordion-heading" data-toggle="collapse" data-target="#dontmiss" data-parent="#sections">Don't miss</div>
+                <div class="accordion-body collapse in" id="dontmiss"> 
+                    <div class="accordion-inner">
+                        {{{dontmiss}}}
+                    </div>
+                </div
+            </div>    
+            <div class="accordion-group"> 
+                <div class="accordion-toggle accordion-heading" data-toggle="collapse" data-target="#offers" data-parent="#sections">Offers</div>
+                <div class="accordion-body collapse in" id="offers"> 
+                    <div class="accordion-inner">
+                        {{{offers}}}
+                    </div>
+                </div
+            </div>    
+
+            <div class="accordion-group"> 
+                <div class="accordion-toggle accordion-heading" data-toggle="collapse" data-target="#beforeyougo" data-parent="#sections">Before you go</div>
+                <div class="accordion-body collapse in" id="beforeyougo"> 
+                    <div class="accordion-inner">
+                        {{{beforeyougo}}}
+
+                        <div class="accordion" id="byg-sections">
+                            {{#byg}}
+                                    <div class="accordion-group"> 
+                                        <div class="accordion-toggle accordion-heading" data-toggle="collapse" data-target="#{{html_title}}" data-parent="#byg-sections">{{title}}</div>
+                                        <div class="accordion-body collapse in" id="{{html_title}}"> 
+                                            <div class="accordion-inner">
+                                                {{{content}}}
+                                            </div>
+                                        </div>
+                                    </div>
+                            {{/byg}}
+                         </div>
+                    </div>
+                </div>
+            </div>    
+
+            <div class="accordion-group"> 
+                <div class="accordion-toggle accordion-heading" data-toggle="collapse" data-target="#gettingthere" data-parent="#sections">Getting There</div>
+                <div class="accordion-body collapse in" id="gettingthere"> 
+                    <div class="accordion-inner">
+                        {{{gettingthere}}}
+                    </div>
+                </div>
+            </div>    
+
+            <div class="accordion-group"> 
+                <div class="accordion-toggle accordion-heading" data-toggle="collapse" data-target="#wheretostay" data-parent="#sections">Where to stay</div>
+                <div class="accordion-body collapse in" id="wheretostay"> 
+                    <div class="accordion-inner">
+                        {{{wheretostay}}}
+                    </div>
+                </div>
+            </div>    
+
+            <div class="accordion-group"> 
+                <div class="accordion-toggle accordion-heading" data-toggle="collapse" data-target="#onthetrack" data-parent="#sections">On the track</div>
+                <div class="accordion-body collapse in" id="onthetrack"> 
+                    <div class="accordion-inner">
+                        {{{onthetrack}}}
+                    </div>
+                </div>
+            </div>    
+        </div>
+
+
+        <!-- Why jQuery and not Zepto? Well there's not much difference http://www.codefessions.com/2012/08/performance-of-jquery-compatible-mobile.html -->
+        <script src="js/vendor/jquery-1.8.2.min.js"></script>
+        <script src="js/vendor/bootstrap.js"></script>
+        <script src="js/vendor/bootstrapx-clickover.js"></script>
+        <!--<script src="js/vendor/bootstrap-popover.js"></script>-->
+        <script src="js/vendor/hammer.js"></script>
+        <script src="js/vendor/jquery.hammer.js"></script>
+        
+        <script src="js/helper.js"></script>
+        <script src="js/console.js"></script>
+        <script src="js/index.js"></script>
+        <script src="js/map.js"></script>
+
+        <script>
+            jQuery(function()
+            {
+            })
+        </script>
+
+
+
+    </body>
+</html>
