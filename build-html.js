@@ -268,9 +268,12 @@ for(var i = 0; i < htmlf_paths.length; i++){
 		htmlf_fullpath = path.resolve("html/" + htmlf_path),
 		htmlf_path_extension = htmlf_path.substr(htmlf_path.lastIndexOf(".") + 1),
 		new_path = path.resolve("../greatwalks/" + htmlf_path.replace("." + htmlf_path_extension, ".html")),
-		html_page = undefined;
+		html_page = undefined,
+		basename = path.basename(htmlf_path),
+		filename_extension = path.extname(htmlf_path),
+		basename_without_extension = path.basename(htmlf_path, filename_extension);
 	if(!fs.statSync(htmlf_fullpath).isDirectory()){
-		html_page = process_page(htmlf_fullpath);
+		html_page = process_page(htmlf_fullpath, "", {}, basename_without_extension);
 	}
 	if(html_page !== undefined) {
 		process.stdout.write("Building: " + htmlf_path + " to " + new_path + "\n");
