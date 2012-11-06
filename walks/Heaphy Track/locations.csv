@@ -1,21 +1,21 @@
-DESCRIPTIO,Point,GreatWalk,Long,Lat
-Brown Hut,Hut,HeaphyTrack,172.44700000000,-40.85020000000
-Brown River Campsite,Campsite,HeaphyTrack,172.44700000000,-40.85050000000
-Aorere Shelter,Shelter,HeaphyTrack,172.44000000000,-40.89450000000
-Aorere Campsite,Campsite,HeaphyTrack,172.43900000000,-40.89500000000
-Lookout Point,Feature,HeaphyTrack,172.42100000000,-40.90430000000
-Perry Saddle Campsite,Campsite,HeaphyTrack,172.40300000000,-40.90080000000
-Perry Saddle Hut,Hut,HeaphyTrack,172.40300000000,-40.90170000000
-Gouland Downs Campsite,Campsite,HeaphyTrack,172.35400000000,-40.89090000000
-Gouland Downs Hut,Hut,HeaphyTrack,172.35300000000,-40.89060000000
-Saxon Campsite,Campsite,HeaphyTrack,172.30800000000,-40.88600000000
-Saxon Hut,Hut,HeaphyTrack,172.30900000000,-40.88660000000
-James Mackay Campsite,Campsite,HeaphyTrack,172.21800000000,-40.88580000000
-James Mackay Hut,Hut,HeaphyTrack,172.21700000000,-40.88610000000
-Lewis Hut,Hut,HeaphyTrack,172.14800000000,-40.94020000000
-Heaphy Campsite,Campsite,HeaphyTrack,172.11100000000,-40.98650000000
-Heaphy Hut,Hut,HeaphyTrack,172.11100000000,-40.98730000000
-Katipo Creek Shelter,Shelter,HeaphyTrack,172.10700000000,-41.04420000000
-Katipo Creek Campsite,Campsite,HeaphyTrack,172.10700000000,-41.04410000000
-Scotts Beach Campsite,Campsite,HeaphyTrack,172.10500000000,-41.08840000000
-Kohaihai Shelter,Shelter,HeaphyTrack,172.10300000000,-41.10860000000
+Name,Description,Type,Long,Lat
+Brown Hut, ,Hut,172.447,-40.8502
+Brown River Campsite, ,Campsite,172.447,-40.8505
+Aorere Shelter, ,Shelter,172.44,-40.8945
+Aorere Campsite, ,Campsite,172.439,-40.895
+Lookout Point, ,Feature,172.421,-40.9043
+Perry Saddle Campsite, ,Campsite,172.403,-40.9008
+Perry Saddle Hut, ,Hut,172.403,-40.9017
+Gouland Downs Campsite, ,Campsite,172.354,-40.8909
+Gouland Downs Hut, ,Hut,172.353,-40.8906
+Saxon Campsite, ,Campsite,172.308,-40.886
+Saxon Hut, ,Hut,172.309,-40.8866
+James Mackay Campsite, ,Campsite,172.218,-40.8858
+James Mackay Hut, ,Hut,172.217,-40.8861
+Lewis Hut, ,Hut,172.148,-40.9402
+Heaphy Campsite, ,Campsite,172.111,-40.9865
+Heaphy Hut, ,Hut,172.111,-40.9873
+Katipo Creek Shelter, ,Shelter,172.107,-41.0442
+Katipo Creek Campsite, ,Campsite,172.107,-41.0441
+Scotts Beach Campsite, ,Campsite,172.105,-41.0884
+Kohaihai Shelter, ,Shelter,172.103,-41.1086

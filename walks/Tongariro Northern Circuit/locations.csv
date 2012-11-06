@@ -1,20 +1,20 @@
-DESCRIPTIO,Point,GreatWalk,Long,Lat
-Mangatepopo Hut,Hut,TongariroNorthernCircuit,175.59700000000,-39.14460000000
-Waihohonu Hut,Hut,TongariroNorthernCircuit,175.68300000000,-39.20990000000
-Oturere Campsite,Campsite,TongariroNorthernCircuit,175.68900000000,-39.15930000000
-Oturere Hut,Hut,TongariroNorthernCircuit,175.68900000000,-39.15880000000
-Mangatepopo Campsite,Campsite,TongariroNorthernCircuit,175.59600000000,-39.14480000000
-Mangatepopo Roadend Shelter,Shelter,TongariroNorthernCircuit,175.58100000000,-39.14450000000
-Lower Tama Lake,Feature,TongariroNorthernCircuit,175.60700000000,-39.20190000000
-Upper Tama Lake,Feature,TongariroNorthernCircuit,175.62200000000,-39.18490000000
-Ohinepango Springs,Feature,TongariroNorthernCircuit,175.67600000000,-39.21630000000
-Old Waihohonu Hut,Feature,TongariroNorthernCircuit,175.67300000000,-39.20930000000
-Soda Springs,Feature,TongariroNorthernCircuit,175.62200000000,-39.13830000000
-Taranaki Falls,Feature,TongariroNorthernCircuit,175.56500000000,-39.19740000000
-Blue Lake,Feature,TongariroNorthernCircuit,175.66100000000,-39.12470000000
-Red Crater,Feature,TongariroNorthernCircuit,175.65100000000,-39.13660000000
-Emerald Lakes,Feature,TongariroNorthernCircuit,175.65500000000,-39.13400000000
-Tongariro National Park Visitor Centre,VisitorCentre,TongariroNorthernCircuit,175.54000000000,-39.20160000000
-Whakapapa Motor Camp,Campsite,TongariroNorthernCircuit,175.54000000000,-39.20280000000
-Ketetahi Roadend Shelter,Shelter,TongariroNorthernCircuit,175.66200000000,-39.07610000000
-Waihohonu Campsite,Campsite,TongariroNorthernCircuit,175.68300000000,-39.21010000000
+Name,Description,Type,Long,Lat
+Mangatepopo Hut, ,Hut,175.597,-39.1446
+Waihohonu Hut, ,Hut,175.683,-39.2099
+Oturere Campsite, ,Campsite,175.689,-39.1593
+Oturere Hut, ,Hut,175.689,-39.1588
+Mangatepopo Campsite, ,Campsite,175.596,-39.1448
+Mangatepopo Roadend Shelter, ,Shelter,175.581,-39.1445
+Lower Tama Lake, ,Feature,175.607,-39.2019
+Upper Tama Lake, ,Feature,175.622,-39.1849
+Ohinepango Springs, ,Feature,175.676,-39.2163
+Old Waihohonu Hut, ,Feature,175.673,-39.2093
+Soda Springs, ,Feature,175.622,-39.1383
+Taranaki Falls, ,Feature,175.565,-39.1974
+Blue Lake, ,Feature,175.661,-39.1247
+Red Crater, ,Feature,175.651,-39.1366
+Emerald Lakes, ,Feature,175.655,-39.134
+Tongariro National Park Visitor Centre, ,VisitorCentre,175.54,-39.2016
+Whakapapa Motor Camp, ,Campsite,175.54,-39.2028
+Ketetahi Roadend Shelter, ,Shelter,175.662,-39.0761
+Waihohonu Campsite, ,Campsite,175.683,-39.2101

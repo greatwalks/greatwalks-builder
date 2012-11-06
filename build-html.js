@@ -12,6 +12,8 @@ var fs = require('fs'),
 	great_walks = {"walks":[]},
 	template_slideout_walks = "";
 
+process.stdout.write("sdfsdfsdf");
+
 String.prototype.CSV = function(strDelimiter) {
 	//I wouldn't extend a prototype in a browser but
 	// in a short-lived build script it's harmless
@@ -110,7 +112,7 @@ for(var i = 0; i < walks_paths.length; i++){
 		} catch (exception) {
 
 		}
-		fs.writeFileSync(walk_csv_path, "DESCRIPTIO,Point,GreatWalk,Long,Lat\n");
+		fs.writeFileSync(walk_csv_path, "Name,Description,Type,Long,Lat\n");
 	}
 }
 
@@ -136,6 +138,7 @@ for(var i = 0; i < walks_paths.length; i++){
 		location_data_by_location = {},
 		serialized_row = "";
 	if(!fs.statSync(walk_fullpath).isDirectory() && walk_file.endsWith(".csv")){
+		process.stdout.write(walk_file);
 		locations_data = fs.readFileSync(walk_fullpath).toString().CSVMap();
 		for(var y = 0; y < locations_data.length; y++){
 			row = locations_data[y];
@@ -148,7 +151,14 @@ for(var i = 0; i < walks_paths.length; i++){
 					throw "Unable to find GreatWalkId for " + row.GreatWalk;
 				}
 				walk_csv_path = path.resolve(path.join("walks", row.GreatWalkId, "locations.csv"));
-				serialized_row = row.DESCRIPTIO + "," + row.Point + "," + row.GreatWalk + "," + row.Long + "," + row.Lat + "\n";
+				if(row.NAME) {
+					serialized_row = row.NAME + ", ," + row.Point + "," + row.Long + "," + row.Lat + "\n";
+				} else if(row.POIIconType) {
+					serialized_row = row.Name + "," + row.Description + " ," + row.POIIconType + "," + row.Long + "," + row.Lat + "\n";
+				} else {
+					throw "Unrecognised CSV columns: " + JSON.stringify(row);
+				}
+
 				//process.stdout.write(walk_csv_path + " | " + serialized_row + "\n");
 				fs.appendFileSync(walk_csv_path, serialized_row);
 				location_data_by_location[row.GreatWalk].push(row);
@@ -156,6 +166,8 @@ for(var i = 0; i < walks_paths.length; i++){
 		}
 	}
 }
+
+process.stdout.write("all done");
 
 for(var i = 0; i < walks_paths.length; i++){
 	var walk_name = walks_paths[i],
@@ -167,7 +179,6 @@ for(var i = 0; i < walks_paths.length; i++){
 		locations_data = undefined,
 		location = undefined,
 		pgw_path = path.join(walk_fullpath, "map.pgw"),
-		tfw_path = path.join(walk_fullpath, "map.tfw"),
 		map_data = undefined,
 		map_data_array = undefined,
 		map_details = undefined,
@@ -182,14 +193,18 @@ for(var i = 0; i < walks_paths.length; i++){
 			map_id: walk_sanitised_name,
 			map_pixel_width: 100,
 			map_pixel_height: 100
-		}
+		},
+		imdim_command = "imdim \"{\\\"width\\\":%w, \\\"height\\\":%h}\" \"" + map_fullpath + "\"";
 		//map
-		map_dimensions_json_string = execSync("imdim \"{\\\"width\\\":%w, \\\"height\\\":%h}\" \"" + map_fullpath + "\"");
+		//process.stdout.write("map dimensions:\n " + imdim_command + "\n\n");
+		map_dimensions_json_string = execSync(imdim_command);
+		//process.stdout.write("/map dimensions");
 		if(map_dimensions_json_string.indexOf("{\"width") >= 0) {
 			var map_dimensions_json = JSON.parse(map_dimensions_json_string);
 			mustache_data.map_pixel_width = Math.floor(map_dimensions_json.width * scale_by);
 			mustache_data.map_pixel_height = Math.floor(map_dimensions_json.height * scale_by);
 		}
+
 		//offset
 		try {
 			map_data = fs.readFileSync(pgw_path).toString();
@@ -225,7 +240,8 @@ for(var i = 0; i < walks_paths.length; i++){
 						location.percentage = {left: location.pixel.left / map_details.map_pixel_width * 100, top: location.pixel.top / map_details.map_pixel_height * 100 };
 						mustache_data.locations.push(location);
 					} catch(exception) {
-						process.stdout.write(exception.message);
+						process.stdout.write(exception.message + " | " + JSON.stringify(location));
+						//throw exception
 					}
 				}
 			}

@@ -1,21 +1,21 @@
-DESCRIPTIO,Point,GreatWalk,Long,Lat
-Hopuruahine Shelter,Shelter,LakeWaikaremoana,177.06300000000,-38.71150000000
-Marauiti Hut,Hut,LakeWaikaremoana,176.99600000000,-38.76770000000
-Tapuaenui Shelter,Shelter,LakeWaikaremoana,177.05200000000,-38.73630000000
-Panekiri Hut,Hut,LakeWaikaremoana,177.05200000000,-38.81240000000
-Korokoro Campsite,Campsite,LakeWaikaremoana,176.98700000000,-38.79370000000
-Waiopaoa Campsite,Campsite,LakeWaikaremoana,176.99300000000,-38.80910000000
-Tapuaenui Campsite,Campsite,LakeWaikaremoana,177.05200000000,-38.73590000000
-Waiharuru Campsite,Campsite,LakeWaikaremoana,177.03300000000,-38.74430000000
-Maraunui Campsite,Campsite,LakeWaikaremoana,176.98800000000,-38.76860000000
-Waiharuru Hut,Hut,LakeWaikaremoana,177.03300000000,-38.74360000000
-Korokoro Camping Shelter,Shelter,LakeWaikaremoana,176.98600000000,-38.79460000000
-Waiopaoa Hut,Hut,LakeWaikaremoana,176.99400000000,-38.80960000000
-Maraunui Camping Shelter,Shelter,LakeWaikaremoana,176.98800000000,-38.76850000000
-Onepoto Bay Shelter,Shelter,LakeWaikaremoana,177.12000000000,-38.80040000000
-Whanganui Hut,Hut,LakeWaikaremoana,177.04000000000,-38.72050000000
-Korokoro Falls,Feature,LakeWaikaremoana,176.97600000000,-38.79830000000
-Aniwaniwa Visitor Centre,VisitorCentre,LakeWaikaremoana,177.16000000000,-38.74270000000
-Waikaremoana Motor Camp,Feature,LakeWaikaremoana,177.09000000000,-38.73360000000
-Armed Constablulary Redoubt,Feature,LakeWaikaremoana,177.11500000000,-38.80260000000
-Panekiri Bluff,Feature,LakeWaikaremoana,177.08900000000,-38.78980000000
+Name,Description,Type,Long,Lat
+Hopuruahine Shelter, ,Shelter,177.063,-38.7115
+Marauiti Hut, ,Hut,176.996,-38.7677
+Tapuaenui Shelter, ,Shelter,177.052,-38.7363
+Panekiri Hut, ,Hut,177.052,-38.8124
+Korokoro Campsite, ,Campsite,176.987,-38.7937
+Waiopaoa Campsite, ,Campsite,176.993,-38.8091
+Tapuaenui Campsite, ,Campsite,177.052,-38.7359
+Waiharuru Campsite, ,Campsite,177.033,-38.7443
+Maraunui Campsite, ,Campsite,176.988,-38.7686
+Waiharuru Hut, ,Hut,177.033,-38.7436
+Korokoro Camping Shelter, ,Shelter,176.986,-38.7946
+Waiopaoa Hut, ,Hut,176.994,-38.8096
+Maraunui Camping Shelter, ,Shelter,176.988,-38.7685
+Onepoto Bay Shelter, ,Shelter,177.12,-38.8004
+Whanganui Hut, ,Hut,177.04,-38.7205
+Korokoro Falls, ,Feature,176.976,-38.7983
+Aniwaniwa Visitor Centre, ,VisitorCentre,177.16,-38.7427
+Waikaremoana Motor Camp, ,Feature,177.09,-38.7336
+Armed Constablulary Redoubt, ,Feature,177.115,-38.8026
+Panekiri Bluff, ,Feature,177.089,-38.7898

@@ -9,7 +9,7 @@
 		<div class="offmap">offmap</div>
 	</div>
 	{{#locations}}
-		<a class="location location-icon location-{{Point}}" rel="popover" style="position:absolute; left: {{pixel.left}}px; top:{{pixel.top}}px;" data-longitude="{{Long}}" data-latitude="{{Lat}}" data-content-template="<b>{{DESCRIPTIO}}</b><br>[DISTANCE]">Click to toggle popover</a>
+		<a class="location location-icon location-{{Type}}" rel="popover" style="position:absolute; left: {{pixel.left}}px; top:{{pixel.top}}px;" data-longitude="{{Long}}" data-latitude="{{Lat}}" data-content-template="<h3>{{Name}}</h3>[DISTANCE]<br><b>{{Description}}</b>">Click to toggle popover</a>
 	{{/locations}}
 </div>
 <div id="no_gps">Current location unavailable</div>

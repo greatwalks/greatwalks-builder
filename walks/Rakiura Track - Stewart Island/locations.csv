@@ -1,9 +1,9 @@
-DESCRIPTIO,Point,GreatWalk,Long,Lat
-Rakiura National Park Visitor Centre,VisitorCentre,RakiuraTrack,168.12800000000,-46.89830000000
-Maori Beach Campsite,Campsite,RakiuraTrack,168.08800000000,-46.85730000000
-Port William Campsite,Campsite,RakiuraTrack,168.08400000000,-46.83690000000
-Maori Beach Shelter,Shelter,RakiuraTrack,168.08900000000,-46.85680000000
-Port William Hut,Hut,RakiuraTrack,168.08700000000,-46.83600000000
-North Arm Hut,Hut,RakiuraTrack,168.01900000000,-46.88280000000
-North Arm Campsite,Campsite,RakiuraTrack,168.03300000000,-46.89850000000
-North Arm Shelter,Shelter,RakiuraTrack,168.03400000000,-46.89860000000
+Name,Description,Type,Long,Lat
+Rakiura National Park Visitor Centre, ,VisitorCentre,168.128,-46.8983
+Maori Beach Campsite, ,Campsite,168.088,-46.8573
+Port William Campsite, ,Campsite,168.084,-46.8369
+Maori Beach Shelter, ,Shelter,168.089,-46.8568
+Port William Hut, ,Hut,168.087,-46.836
+North Arm Hut, ,Hut,168.019,-46.8828
+North Arm Campsite, ,Campsite,168.033,-46.8985
+North Arm Shelter, ,Shelter,168.034,-46.8986
