@@ -74,3 +74,4 @@ copy /Y images\icons\waterfall.png ..\greatwalks\img\icon-waterfall.png
 
 copy /Y images\youarehere.png ..\greatwalks\img\youarehere.png
 copy /Y images\camera-placeholder.jpg ..\greatwalks\img\camera-placeholder.jpg
+copy /Y images\missing-icon.png ..\greatwalks\img\missing-icon.png
