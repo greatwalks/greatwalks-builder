@@ -86,3 +86,21 @@
 </div>
 
 
+<div class="navbar navbar-fixed-bottom">
+    <div class="navbar-inner">
+        <div class="container-fluid">
+            <ul class="nav">
+                <li>
+                    <label for="show_slideout_navigation"><span class="header-sprite header-threebar">Menu</span></label>
+                </li>
+                <li>
+                    <a href="index.html"><span class="header-sprite header-info">Info</span></a>
+                </li>
+                <li>
+                    <a href="index.html"><span class="header-sprite header-share">Share</span></a>
+                </li>
+            </ul>
+        </div>
+   </div>
+</div>
+

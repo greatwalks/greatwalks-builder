@@ -1,3 +1,8 @@
+/*
+ *  Builds HTML for the site.
+ *
+ */
+
 var fs = require('fs'),
     path = require('path'),
     mustache = require("./mustache.js"),
@@ -12,11 +17,9 @@ var fs = require('fs'),
 	great_walks = {"walks":[]},
 	template_slideout_walks = "";
 
-process.stdout.write("sdfsdfsdf");
-
 String.prototype.CSV = function(strDelimiter) {
-	//I wouldn't extend a prototype in a browser but
-	// in a short-lived build script it's harmless
+	// Normally I wouldn't extend a prototype in JavaScript
+	// but in a short-lived build script it's harmless
 
 	//via http://stackoverflow.com/questions/1293147/javascript-code-to-parse-csv-data
      strDelimiter = (strDelimiter || ",");
@@ -43,15 +46,11 @@ String.prototype.CSV = function(strDelimiter) {
          if(strMatchedValue.length !== 0){
          	arrData[arrData.length - 1].push(strMatchedValue);
          } else {
-         	//process.stdout.write("There was an empty row\n");
          }
      }
-
-     //process.stdout.write(JSON.stringify(arrData) + "\n\n\n");
      if(arrData[arrData.length - 1].length === 0 ) {
      	arrData[arrData.length - 1].pop();
      }
-     //process.stdout.write(JSON.stringify(arrData) + "\n\n\n");
      return (arrData);
 }
 
@@ -92,13 +91,76 @@ function resolve_includes(html){
 		})
 };
 
+var share_social_details = {
+	"default": 
+		{
+		"social_text": "I'm going on a Great Walk in New Zealand",
+		"facebook_url": "http://greatwalks.co.nz/",
+		"facebook_image": "http://www.greatwalks.co.nz/sites/all/themes/sparks_responsive/logo.png",
+		"twitter_url": "http://bit.ly/SLFPlX"
+		},
+	"abel-tasman-coast-track":
+		{
+		"social_text": "I'm going on a Great Walk in New Zealand, the ABEL TASMEN COAST TRACK",
+		"facebook_url": "http://www.greatwalks.co.nz/abel-tasman-coast-track",
+		"twitter_url": "http://bit.ly/PBKyah"
+		},
+	"heaphy-track":
+		{
+		"social_text": "I'm going on a Great Walk in New Zealand, the HEAPHY TRACK",
+		"facebook_url": "http://www.greatwalks.co.nz/heaphy-track",
+		"twitter_url": "http://bit.ly/REibYQ"
+		},
+	"kepler-track":
+		{
+		"social_text": "I'm going on a Great Walk in New Zealand, the KEPLER TRACK",
+		"facebook_url": "http://www.greatwalks.co.nz/kepler-track",
+		"twitter_url": "http://bit.ly/VRNca2"
+		},
+	"lake-waikaremoana-track":
+		{
+		"social_text": "I'm going on a Great Walk in New Zealand, the WAIKAREMOANA TRACK",
+		"facebook_url": "http://www.greatwalks.co.nz/lake-waikaremoana",
+		"twitter_url": "http://bit.ly/PBKBTA"
+		},
+	"milford-track":
+		{
+		"social_text": "I'm going on a Great Walk in New Zealand, the MILFORD TRACK",
+		"facebook_url": "http://www.greatwalks.co.nz/milford-track",
+		"twitter_url": "http://bit.ly/SYbOOu"
+		},
+	"rakiura-track---stewart-island":
+		{
+		"social_text": "I'm going on a Great Walk in New Zealand, the RAKIURA TRACK ON STEWART ISLAND",
+		"facebook_url": "http://www.greatwalks.co.nz/rakiura-track",
+		"twitter_url": "http://bit.ly/XhJHyJ"
+		},
+	"routeburn-track":
+		{
+		"social_text": "I'm going on a Great Walk in New Zealand, the ROUTEBURN TRACK",
+		"facebook_url": "http://www.greatwalks.co.nz/routeburn-track",
+		"twitter_url": "http://bit.ly/UhPxQ8"
+		},
+	"tongariro-northern-circuit":
+		{
+		"social_text": "I'm going on a Great Walk in New Zealand, the TONGARIRO NORTHERN CIRCUIT",
+		"facebook_url": "http://www.greatwalks.co.nz/tongariro-northern-circuit",
+		"twitter_url": "http://bit.ly/YUBHSI"
+		},
+	"whanganui-journey":
+		{
+		"social_text": "I'm going on a Great Walk in New Zealand, the WHANGANUI JOURNEY",
+		"facebook_url": "http://www.greatwalks.co.nz/whanganui-journey",
+		"twitter_url": "http://bit.ly/Rf9sL6"
+		}
+}
 
-/* BEGIN BUILDING HTML
- *
+
+/* 
+ *  BEGIN BUILDING HTML
  */
 
-
-
+//  Delete resulting CSVs (while leaving source files)
 for(var i = 0; i < walks_paths.length; i++){
 	var walk_name = walks_paths[i],
 		walk_fullpath = path.resolve("walks/" + walk_name),
@@ -112,12 +174,14 @@ for(var i = 0; i < walks_paths.length; i++){
 		} catch (exception) {
 
 		}
+		// Write the header line of the CSV
 		fs.writeFileSync(walk_csv_path, "Name,Description,Type,Long,Lat\n");
 	}
 }
 
 template = resolve_includes(template).replace(/{{slide-walks}}/g, template_slideout_walks);
 
+//  Aggregate all CSVs and write them into each Great Walk directory.
 for(var i = 0; i < walks_paths.length; i++){
 	var walk_file = walks_paths[i],
 		walk_fullpath = path.resolve("walks/" + walk_file),
@@ -138,7 +202,6 @@ for(var i = 0; i < walks_paths.length; i++){
 		location_data_by_location = {},
 		serialized_row = "";
 	if(!fs.statSync(walk_fullpath).isDirectory() && walk_file.endsWith(".csv")){
-		process.stdout.write(walk_file);
 		locations_data = fs.readFileSync(walk_fullpath).toString().CSVMap();
 		for(var y = 0; y < locations_data.length; y++){
 			row = locations_data[y];
@@ -158,8 +221,6 @@ for(var i = 0; i < walks_paths.length; i++){
 				} else {
 					throw "Unrecognised CSV columns: " + JSON.stringify(row);
 				}
-
-				//process.stdout.write(walk_csv_path + " | " + serialized_row + "\n");
 				fs.appendFileSync(walk_csv_path, serialized_row);
 				location_data_by_location[row.GreatWalk].push(row);
 			}
@@ -167,8 +228,7 @@ for(var i = 0; i < walks_paths.length; i++){
 	}
 }
 
-process.stdout.write("all done");
-
+//  Generate Maps
 for(var i = 0; i < walks_paths.length; i++){
 	var walk_name = walks_paths[i],
 		walk_sanitised_name = walk_name.toLowerCase().replace(/ /g, "-"),
@@ -251,16 +311,25 @@ for(var i = 0; i < walks_paths.length; i++){
 	}
 
 	if(html_page !== undefined) {
-		new_filename = "walk-" + walk_sanitised_name + ".html";
+		new_filename = "map-" + walk_sanitised_name + ".html";
 		new_path = path.resolve("../greatwalks/" + new_filename);
 		great_walks.walks.push({"id": walk_sanitised_name, "name": walk_name, "filename":new_filename})
 		fs.writeFileSync(new_path, html_page);
-		process.stdout.write("Building walk: " + new_filename + "\n");
+		process.stdout.write("Building map: " + new_filename + "\n");
 	}
 
 	html_page = undefined;
 	map_data = undefined;
 	locations_data = undefined;
+}
+
+// Generate Walk Info Page
+for(var i = 0; i < walks_paths.length; i++){
+	var walk_name = walks_paths[i],
+		walk_sanitised_name = walk_name.toLowerCase().replace(/ /g, "-"),
+		walk_fullpath = path.resolve("walks/" + walk_name);
+
+
 }
 
 for(var i = 0; i < htmlf_paths.length; i++){
@@ -287,7 +356,32 @@ function process_page(htmlf_path, page_title, mustache_data, page_id){
 	var htmlf_data = resolve_includes(fs.readFileSync(htmlf_path).toString()),
 		htmlf_path_extension = htmlf_path.substr(htmlf_path.lastIndexOf(".") + 1),
 		htmlf_filename = path.basename(htmlf_path),
-		html_page;
+		html_page,
+		share_social_detail_key,
+		chosen_share_social,
+		chosen_share_social_key,
+		social_item_key
+		page_key = htmlf_path;
+
+	if(mustache_data && mustache_data.map_id !== undefined) {
+		page_key = mustache_data.map_id;
+	}
+
+	for(share_social_detail_key in share_social_details){
+		if(page_key.indexOf(share_social_detail_key) !== -1) {
+			chosen_share_social = share_social_details[share_social_detail_key];
+			chosen_share_social_key = share_social_detail_key;
+		}
+	}
+	if(chosen_share_social === undefined) {
+		chosen_share_social_key = "default";
+		chosen_share_social = share_social_details[chosen_share_social_key];
+	}
+	for(social_item_key in share_social_details.default){
+		if(chosen_share_social[social_item_key] === undefined) {
+			chosen_share_social[social_item_key] = share_social_details.default[social_item_key];
+		}
+	}
 
 	page_title = page_title || htmlf_path;
 
@@ -301,11 +395,6 @@ function process_page(htmlf_path, page_title, mustache_data, page_id){
 		case "mustache": //mustache template - see http://mustache.github.com/
 			var json_data = mustache_data || {},
 				json_path = path.join("html", htmlf_path.replace("." + htmlf_path_extension, ".json"));
-			if(fs.exists(json_path)) { //check for a .json file to use
-				//NOTE THIS IS PROBABLY BROKEN. NEVER TESTED JUST AN IDEA
-				process.stdout.write("Found a JSON file for " + json_path + "\n")
-				json_data = JSON.parse(fs.readFileSync("html/" + json_path).toString());
-			}
 			switch(htmlf_filename) { //add any custom JSON data here
 				case "walks.mustache":
 					json_data = great_walks;
@@ -318,6 +407,13 @@ function process_page(htmlf_path, page_title, mustache_data, page_id){
 				.replace(/{{pageid}}/, page_id);
 			json_data = {};
 			break;
+	}
+	if(html_page !== undefined){
+		html_page = html_page
+						.replace(/{{social_text}}/g, encodeURIComponent(chosen_share_social.social_text).replace(/'/g, "%27"))
+						.replace(/{{twitter_url}}/g, encodeURIComponent(chosen_share_social.twitter_url).replace(/'/g, "%27"))
+						.replace(/{{facebook_image}}/g, encodeURIComponent(chosen_share_social.facebook_image).replace(/'/g, "%27"))
+						.replace(/{{facebook_url}}/g, encodeURIComponent(chosen_share_social.facebook_url).replace(/'/g, "%27"));
 	}
 	return html_page;
 }
