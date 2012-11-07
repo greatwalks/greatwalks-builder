@@ -56,7 +56,7 @@
 	}
 
 	window.hide_popover = function(event){
-		//$(this).popover('hide');
+		$(this).popover('hide');
 	}
 
 	window.toggle_popover = function(event){
@@ -80,10 +80,10 @@
 		}
 		$this.popover(options).popover('toggle');
 		existing_popovers.push($this);
-		event.stopPropagation();
 		if(event.originalEvent) {
 			event.originalEvent.stopPropagation();
 		}
+		return false;
 	}
 
 	window.show_popover = function(event, override_content){
