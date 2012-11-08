@@ -25,7 +25,6 @@ inkscape images/great-walks-icon.svg -z --export-png=../greatwalks-phonegap/res/
 inkscape images/great-walks-icon.svg -z --export-png=../greatwalks-phonegap/res/drawable-xhdpi/ic_launcher.png --export-width=96
 
 
-
 resize -i"images/tongariro-home.jpg" -o"../greatwalks/img/tongariro-home.jpg" -s640x430
 resize -i"images/Abel-NEW-home.jpg" -o"../greatwalks/img/Abel-NEW-home.jpg" -s640x430
 resize -i"images/heaphy-home_0.jpg" -o"../greatwalks/img/heaphy-home_0.jpg" -s640x430
@@ -75,3 +74,5 @@ copy /Y images\icons\waterfall.png ..\greatwalks\img\icon-waterfall.png
 copy /Y images\youarehere.png ..\greatwalks\img\youarehere.png
 copy /Y images\camera-placeholder.jpg ..\greatwalks\img\camera-placeholder.jpg
 copy /Y images\missing-icon.png ..\greatwalks\img\missing-icon.png
+copy /Y images\homepage-sign.png ..\greatwalks\img\homepage-sign.png
+copy /Y images\homepage-buttons.png ..\greatwalks\img\homepage-buttons.png

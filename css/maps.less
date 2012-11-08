@@ -21,6 +21,7 @@ body.maps {
             width:752px;
             height:1056px;
             background: url("../img/new-zealand-map.png");
+            background-size: 100%;
 
             .map-location {
                 position:absolute;
@@ -77,6 +78,114 @@ body.maps {
             .map-icon-height3 {
                 min-height:50px;
                 line-height:normal;
+            }
+        }
+    }
+}
+
+@media (max-width: 600px) {
+    body.maps {
+        #wrapper {
+            padding-top:110px;
+
+            #new-zealand-map {
+                width:496px;
+                height:697px;
+
+                h2.map-location {
+                    font-size:11px;
+                    line-height:12px;
+                    font-weight:normal;
+                }
+
+                a.map-location {
+                    font-size:15px;
+                }
+
+                .map-icon-bottom {
+                    padding-bottom:40px;
+                }
+
+                .map-icon-bottom2 {
+                    padding-bottom:40px;
+                }
+
+                .map-icon-left {
+                    padding-left: 40px;
+                }
+
+                .map-icon-right {
+                    padding-right: 40px;
+                }
+
+                .map-icon-height {
+                    min-height:25px;
+                    line-height:25px;
+                }
+
+                .map-icon-height2 {
+                    min-height:20px;
+                    line-height:45px;
+                }
+
+                .map-icon-height3 {
+                    min-height:25px;
+                    line-height:normal;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 400px) {
+    body.maps {
+        #wrapper {
+            padding-top:80px;
+
+            #new-zealand-map {
+                width:376px;
+                height:528px;
+
+                h2.map-location {
+                    font-size:9px;
+                    line-height:12px;
+                    font-weight:normal;
+                }
+
+                a.map-location {
+                    font-size:13px;
+                }
+
+                .map-icon-bottom {
+                    padding-bottom:30px;
+                }
+
+                .map-icon-bottom2 {
+                    padding-bottom:27px;
+                }
+
+                .map-icon-left {
+                    padding-left: 30px;
+                }
+
+                .map-icon-right {
+                    padding-right: 30px;
+                }
+
+                .map-icon-height {
+                    min-height:25px;
+                    line-height:25px;
+                }
+
+                .map-icon-height2 {
+                    min-height:20px;
+                    line-height:40px;
+                }
+
+                .map-icon-height3 {
+                    min-height:25px;
+                    line-height:normal;
+                }
             }
         }
     }

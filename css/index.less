@@ -1,18 +1,51 @@
 body.index {
+	height:100%;
+
 	#wrapper {
-		background: url("../img/Waikaremoana-NEW-home.jpg") no-repeat center 40px;
+		background: url("../img/Waikaremoana-NEW-home.jpg") no-repeat center 20px;
 		color: #fff;
+		min-height:100%;
 
 		.navbar-fixed-bottom .container-fluid * {
 			width:auto;
 			text-align:center;
 			float:none;
 		}
+
+		#doc-sign {
+			display:block;
+			text-decoration:none;
+			background: url("../img/homepage-sign.png");
+			background-size:100%;
+			position:relative;
+			top: -227px;
+			width:394px;
+			height: 227px;
+			margin: 0px auto -227px auto;
+
+		}
+
 	}
 }
 
 @media (min-width: 640px) {
 	body.index #wrapper {
-		background: url("../img/Waikaremoana-NEW-home@2x.jpg") no-repeat center 20px;
+		background: url("../img/Waikaremoana-NEW-home@2x.jpg") no-repeat center 0px;
+	}
+
+}
+
+@media (max-width: 600px) {
+	body.index {
+		#wrapper {
+			#doc-sign {
+				position:relative;
+				top: -172px;
+				width:299px;
+				height: 172px;
+				margin: 0px auto -172px auto;
+			}
+		}
 	}
 }
+
