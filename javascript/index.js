@@ -10,7 +10,7 @@
             scale_treshold: 0,
             drag_min_distance: 0
 		},
-		drag_distanceX_threshold = 100,
+		drag_distanceX_threshold = 10,
 		drag_distanceX,
 		drag_carousel = function(event){
 			drag_distanceX = event.distanceX;

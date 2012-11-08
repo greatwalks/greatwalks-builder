@@ -106,5 +106,4 @@
     } else {
         $(document).ready(popover_init);
     }
-
 }(jQuery));

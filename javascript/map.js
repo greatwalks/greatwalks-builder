@@ -9,7 +9,7 @@
  * ========================================================== */
 (function($){
 	"use strict";
-
+	if(window.location.toString().indexOf("map-") === -1) return;
 	(function(){
 		var PIx = 3.141592653589793,
 		 	degrees_to_radians = function(degrees) {
@@ -21,6 +21,7 @@
 		window.format_distance = function(kilometres){
 	 		 return (Math.round(kilometres * 100) / 100) + "km/ " + (Math.round(kilometres * kilometres_to_miles * 100) / 100) + "mi";
 	 	};
+
 		window.difference_between_positions_in_kilometers = function(lat1, lon1, lat2, lon2, lat3, lon3){
 			if(lat3 !== undefined && lon3 !== undefined) {
 				//normally lat3/lon3 aren't given and this function just figures out the distance
@@ -44,6 +45,7 @@
 			var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
 			return R * c; // Distance in km
 		};
+
 		window.position_expires_after_milliseconds = one_hour_in_milliseconds;
 	}());
 
@@ -154,15 +156,6 @@
 					$("#no_gps").attr("title", msg.message).show();
 				};
 			},
-			
-			close_any_clickovers = function(){
-				if(window.close_all_clickovers) {
-					var closer = window.close_all_clickovers;
-					delete window.close_all_clickovers;
-        			closer('hide');
-        		}
-        	},
-
 			enable_map = function($image){
 				//based on code from http://eightmedia.github.com/hammer.js/zoom/index2.html
 		        var hammer,
@@ -212,10 +205,6 @@
 		            drag_min_distance: 0
 		        });
 
-		        hammer.bind('dragstart', function(event) {
-		        	close_any_clickovers();
-		        })
-
 		   		hammer.bind('dragend', function(event) {
 		   			drag_offset.base_x = drag_offset.x;
 		   			drag_offset.base_y = drag_offset.y;
@@ -230,7 +219,6 @@
 		   		});
 
 		        hammer.bind('transformstart', function(event) {
-		        	close_any_clickovers();
 		            screenOrigin.x = (event.originalEvent.touches[0].clientX + event.originalEvent.touches[1].clientX) / 2;
 		            return screenOrigin.y = (event.originalEvent.touches[0].clientY + event.originalEvent.touches[1].clientY) / 2;
 		        });
