@@ -36,7 +36,7 @@
 			$carousel_items = $carousel.find(".item");
 			$navbar_bottom = $(".navbar-fixed-bottom");
 			$navbar_top = $(".navbar-fixed-top");
-			$(window).resize(adjust_carousel_height);
+			$(window).bind("resize orientationchange", adjust_carousel_height);
 			adjust_carousel_height();
 			if(!Modernizr.touch) {
 				$carousel.find(".carousel-control").show();
