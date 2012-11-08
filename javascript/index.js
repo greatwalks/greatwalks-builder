@@ -38,8 +38,8 @@
 			$navbar_top = $(".navbar-fixed-top");
 			$(window).resize(adjust_carousel_height);
 			adjust_carousel_height();
-			if(Modernizr.touch) {
-				$carousel.find(".carousel-control").hide();
+			if(!Modernizr.touch) {
+				$carousel.find(".carousel-control").show();
 			}
 			$carousel_items.hammer(hammer_defaults).bind('drag', drag_carousel);
 			$carousel_items.hammer(hammer_defaults).bind('dragend', dragend_carousel);
