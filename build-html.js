@@ -313,7 +313,7 @@ for(var i = 0; i < walks_paths.length; i++){
 	if(html_page !== undefined) {
 		new_filename = "map-" + walk_sanitised_name + ".html";
 		new_path = path.resolve("../greatwalks/" + new_filename);
-		great_walks.walks.push({"id": walk_sanitised_name, "name": walk_name, "filename":new_filename})
+		great_walks.walks.push({"id": walk_sanitised_name, "name": walk_name, "map_filename":new_filename, "walk_filename": "walk-" + walk_sanitised_name + ".html"})
 		fs.writeFileSync(new_path, html_page);
 		process.stdout.write("Building map: " + new_filename + "\n");
 	}
@@ -327,9 +327,18 @@ for(var i = 0; i < walks_paths.length; i++){
 for(var i = 0; i < walks_paths.length; i++){
 	var walk_name = walks_paths[i],
 		walk_sanitised_name = walk_name.toLowerCase().replace(/ /g, "-"),
-		walk_fullpath = path.resolve("walks/" + walk_name);
+		walk_fullpath = path.resolve("walks/" + walk_name),
+		content_path = path.join(walk_fullpath, "all.html"),
+		content_data,
+		new_path = path.resolve("../greatwalks/walk-" + walk_sanitised_name + ".html");
 
 
+	if(fs.statSync(walk_fullpath).isDirectory()) {
+		content_data = fs.readFileSync(content_path).toString();
+		content_data = '<h1><a href="map-' + walk_sanitised_name + '.html">MAP</a></h1>' + content_data;
+		fs.writeFileSync(new_path, content_data);
+		
+	}
 }
 
 for(var i = 0; i < htmlf_paths.length; i++){
