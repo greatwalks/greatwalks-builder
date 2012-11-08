@@ -12,22 +12,24 @@ for(var i = 0; i < walks_paths.length; i++){
         map_path = path.join("walks", walk_name, "map.png"),
         map_fullpath = path.resolve(map_path),
 		width = 0,
-		height = 0;
+		height = 0,
+        command = "imdim \"{\\\"width\\\":%w, \\\"height\\\":%h}\" \"" + map_fullpath + "\"";
 
-	var map_dimensions_json_string = execSync("imdim \"{\\\"width\\\":%w, \\\"height\\\":%h}\" \"" + map_fullpath + "\"");
-
-	if(map_dimensions_json_string.indexOf("{\"width") >= 0) {
-		var map_dimensions_json = JSON.parse(map_dimensions_json_string);
-		width = parseInt(map_dimensions_json.width * scale_by);
-		height = parseInt(map_dimensions_json.height * scale_by);
-	}
-
-    var exec  = require('child_process').exec;
-
-    var resize_command = "resize -i\"walks\\" + walk_name + "\\map.png\" -o\"..\\greatwalks\\img\\walks\\" + walk_sanitised_name + "\\map.jpg\" -s" + width + "x" + height;
-    process.stdout.write(resize_command + "\n");
-
-    exec(resize_command);
+    if(fs.statSync(walk_fullpath).isDirectory()) {
+        //process.stdout.write("A directory " + walk_fullpath + "\n" + command + "\n");
+    	var map_dimensions_json_string = execSync(command);
+    	if(map_dimensions_json_string.indexOf("{\"width") >= 0) {
+    		var map_dimensions_json = JSON.parse(map_dimensions_json_string);
+    		width = parseInt(map_dimensions_json.width * scale_by);
+    		height = parseInt(map_dimensions_json.height * scale_by);
+            var exec  = require('child_process').exec;
+            var resize_command = "resize -i\"walks\\" + walk_name + "\\map.png\" -o\"..\\greatwalks\\img\\walks\\" + walk_sanitised_name + "\\map.jpg\" -s" + width + "x" + height;
+            //process.stdout.write(resize_command + "\n");
+            exec(resize_command);
+        }
+    } else {
+        process.stdout.write("Not a directory " + walk_fullpath + "\n");
+    }
 }
 
 function execSync(cmd) {
