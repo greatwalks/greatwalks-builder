@@ -10,10 +10,15 @@
 #show_slideout_navigation:checked + #wrapper,
 #show_slideout_navigation:checked + #wrapper .navbar {
     left: 300px;
+    
+}
+
+#show_slideout_navigation:checked + #wrapper {
+    
 }
 
 #show_slideout_navigation:checked + #wrapper #slideout_navigation {
-    
+    left: 0px;
 }
 
 #wrapper {
@@ -24,17 +29,19 @@
 }
 
 #slideout_navigation {
-    position: absolute;
+    position: fixed;
     top: 0px;
     left: -300px;
     margin-right: -300px;
     width: 300px;
-    height:1000px;
+    min-height:100%;
     z-index:10000;
     background:#3d692a;
     text-transform:uppercase;
     font-weight:bold;
     font-size:12px;
+    transition: .2s ease-in;
+    -webkit-transition: .2s ease-in;
 
     a,
     label {

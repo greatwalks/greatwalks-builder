@@ -1,12 +1,7 @@
-
-<div style="margin:20px">
- 
-
-  
+<div id="carousel">
 </div>
 
-
-<div class="navbar navbar-fixed-bottom">
+<div class="navbar navbar-fixed-bottom" style="display:none;">
     <div class="navbar-inner">
         <div class="container-fluid">
             <a id="doc-sign" href="maps.html"></a>
