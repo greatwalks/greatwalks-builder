@@ -19,9 +19,9 @@
 			if(drag_distanceX === undefined) return;
 			if(Math.abs(drag_distanceX) < drag_distanceX_threshold) return;
 			if(drag_distanceX > 0) {
-				$carousel.carousel('next');
-			} else {
 				$carousel.carousel('prev');
+			} else {
+				$carousel.carousel('next');
 			}
 			drag_distanceX = undefined;
 		},
