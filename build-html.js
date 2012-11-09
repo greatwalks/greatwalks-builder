@@ -424,7 +424,19 @@ function process_page(htmlf_path, page_title, mustache_data, page_id){
 						.replace(/{{social_text}}/g, encodeURIComponent(chosen_share_social.social_text).replace(/'/g, "%27"))
 						.replace(/{{twitter_url}}/g, encodeURIComponent(chosen_share_social.twitter_url).replace(/'/g, "%27"))
 						.replace(/{{facebook_image}}/g, encodeURIComponent(chosen_share_social.facebook_image).replace(/'/g, "%27"))
-						.replace(/{{facebook_url}}/g, encodeURIComponent(chosen_share_social.facebook_url).replace(/'/g, "%27"));
+						.replace(/{{facebook_url}}/g, encodeURIComponent(chosen_share_social.facebook_url).replace(/'/g, "%27"))
+						.replace(/&Auml;/g, "&#256;")  //macronised A
+						.replace(/&auml;/g, "&#257;")  //macronised a
+						.replace(/&Euml;/g, "&#274;")  //macronised E
+						.replace(/&euml;/g, "&#275;")  //macronised e
+						.replace(/&Iuml;/g, "&#298;")  //macronised I
+						.replace(/&iuml;/g, "&#399;")  //macronised i
+						.replace(/&Ouml;/g, "&#332;")  //macronised O
+						.replace(/&ouml;/g, "&#333;")  //macronised o
+						.replace(/&Uuml;/g, "&#362;")  //macronised U
+						.replace(/&uuml;/g, "&#363;") //macronised u
+						.replace(/Maori/gi, "M&#257;ori"); //may be too broad, may cause problems if the word Maori is in a URL or something
+						
 	}
 	return html_page;
 }

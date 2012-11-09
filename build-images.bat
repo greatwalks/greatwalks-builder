@@ -35,7 +35,6 @@ resize -i"images/Routeburn-home.jpg" -o"../greatwalks/img/Routeburn-home.jpg" -s
 resize -i"images/Waikaremoana-NEW-home.jpg" -o"../greatwalks/img/Waikaremoana-NEW-home.jpg" -s640x430
 resize -i"images/Whanganui-Journey-home.jpg" -o"../greatwalks/img/Whanganui-Journey-home.jpg" -s640x430
 
-copy /Y images\icons.png ..\greatwalks\img\icons@2x.png
 copy /Y images\map-background.png ..\greatwalks\img\map-background.png
 
 copy /Y images\tongariro-home.jpg ..\greatwalks\img\tongariro-home@2x.jpg
@@ -55,16 +54,18 @@ copy /Y images\table.png ..\greatwalks\img\table.png
 copy /Y images\weta_land.png ..\greatwalks\img\weta_land.png
 copy /Y images\weta_twitch.png ..\greatwalks\img\weta_twitch.png
 
-copy /Y images\icons\animal_species.png ..\greatwalks\img\icon-animal_species.png
-copy /Y images\icons\attention.png ..\greatwalks\img\icon-attention.png
+copy /Y images\icons\airport.png ..\greatwalks\img\icon-airport.png
+copy /Y images\icons\alert.png ..\greatwalks\img\icon-alert.png
+copy /Y images\icons\bird-or-animal-species.png ..\greatwalks\img\icon-bird-or-animal-species.png
+copy /Y images\icons\camp_hut.png ..\greatwalks\img\icon-camp_hut.png
+copy /Y images\icons\camping.png ..\greatwalks\img\icon-camping.png
 copy /Y images\icons\carpark.png ..\greatwalks\img\icon-carpark.png
-copy /Y images\icons\hot_springs.png ..\greatwalks\img\icon-hot_springs.png
-copy /Y images\icons\isite.png ..\greatwalks\img\icon-isite.png
-copy /Y images\icons\lodging.png ..\greatwalks\img\icon-lodging.png
-copy /Y images\icons\plane.png ..\greatwalks\img\icon-plane.png
-copy /Y images\icons\plant_species.png ..\greatwalks\img\icon-plant_species.png
+copy /Y images\icons\hotsprings.png ..\greatwalks\img\icon-hotsprings.png
+copy /Y images\icons\huts.png ..\greatwalks\img\icon-huts.png
+copy /Y images\icons\icons.png ..\greatwalks\img\icon-icons.png
+copy /Y images\icons\information.png ..\greatwalks\img\icon-information.png
+copy /Y images\icons\plantspecies.png ..\greatwalks\img\icon-plantspecies.png
 copy /Y images\icons\shelter.png ..\greatwalks\img\icon-shelter.png
-copy /Y images\icons\tent.png ..\greatwalks\img\icon-tent.png
 copy /Y images\icons\toilets.png ..\greatwalks\img\icon-toilets.png
 copy /Y images\icons\trailhead.png ..\greatwalks\img\icon-trailhead.png
 copy /Y images\icons\viewpoints.png ..\greatwalks\img\icon-viewpoints.png
