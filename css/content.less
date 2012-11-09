@@ -1,0 +1,70 @@
+.text-column1 {
+	width:70%;
+	max-width:600px;
+	min-width:250px;
+	margin: 100px auto 0px auto;
+	color:#333333;
+
+	h1 {
+		color: #ac9420;
+		font-weight:normal;
+		font-family:serif;
+	}
+
+	h2 {
+		color: #333333;
+		font-weight:normal;
+		font-family:serif;	
+
+	}
+
+	.btn {
+		display:inline-block;
+		padding: 8px;
+		border-radius: 7px;
+		background-color: #15a5de;
+		color: #ffffff;
+		text-transform:uppercase;
+		font-family:serif;
+		font-size:18px;
+
+		&:hover {
+			text-decoration:none;
+			background-color: lighten(#15a5de, 10%);
+		}
+	}
+
+	.btn.phone,
+	.btn.email,
+	.btn.vistorcenter,
+	.btn.bookonline {
+		background-image: url("../img/content-buttons.png");
+		background-size:16px 166px;
+		background-repeat: no-repeat;
+		padding-left:30px;
+	}
+
+	.btn.phone {
+		background-position: 10px -140px;
+	}
+
+	.btn.email {
+		background-position: 10px 13px;
+		padding-left:33px;
+	}
+
+	.btn.vistorcenter {
+		background-position: 10px -40px;
+	}
+
+	.btn.bookonline {
+		background-position: 10px -90px;
+		padding-left:33px;
+	}
+}
+
+@media (max-height: 300px) {
+	.text-column1 {
+		margin: 50px auto 0px auto;
+	}
+}

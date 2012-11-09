@@ -76,3 +76,4 @@ copy /Y images\camera-placeholder.jpg ..\greatwalks\img\camera-placeholder.jpg
 copy /Y images\missing-icon.png ..\greatwalks\img\missing-icon.png
 copy /Y images\homepage-sign.png ..\greatwalks\img\homepage-sign.png
 copy /Y images\homepage-buttons.png ..\greatwalks\img\homepage-buttons.png
+copy /Y images\content-buttons.png ..\greatwalks\img\content-buttons.png

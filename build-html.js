@@ -334,8 +334,9 @@ for(var i = 0; i < walks_paths.length; i++){
 
 
 	if(fs.statSync(walk_fullpath).isDirectory()) {
-		content_data = fs.readFileSync(content_path).toString();
-		content_data = '<h1><a href="map-' + walk_sanitised_name + '.html">MAP</a></h1>' + content_data;
+		content_data = process_page(content_path, walk_name, undefined, "walk");
+		
+		//content_data = '<h1><a href="map-' + walk_sanitised_name + '.html">MAP</a></h1>' + content_data;
 		fs.writeFileSync(new_path, content_data);
 		
 	}
@@ -395,6 +396,7 @@ function process_page(htmlf_path, page_title, mustache_data, page_id){
 	page_title = page_title || htmlf_path;
 
 	switch(htmlf_path_extension){
+		case "html":
 		case "htmlf": //straight copy
 			html_page = template
 				.replace(/{{body}}/, htmlf_data)

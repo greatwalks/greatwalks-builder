@@ -1,3 +1,5 @@
+/* Looking for the homepage's bottom navbar? Try index.less */
+
 .navbar-fixed-top {
 	z-index:10000;
 
@@ -33,9 +35,6 @@
 	margin: 0px;
 }
 
-
-/* Looking for the homepage's bottom navbar? Try index.less */
-
 .popover.social {
 	width:60px;
 	border: 2px solid white;
@@ -61,14 +60,17 @@
 			text-indent: -10000px;
 			padding: 10px;
 		}
+
 		.email {
 			background-position: 10px 10px;
 			margin-bottom:10px;
 		}
+
 		.facebook {
 			background-position: 10px -61px;
 			margin-bottom:10px;
 		}
+
 		.twitter {
 			background-position: 10px -129px;
 		}
@@ -95,7 +97,7 @@
     }
 }
 
-@media (max-width: 400px), (max-height: 400px) { /* Note: this is an OR http://stackoverflow.com/questions/11404744/media-queries-max-width-or-max-height */
+@media (max-width: 400px), (max-height: 300px) { /* Note: this is an OR http://stackoverflow.com/questions/11404744/media-queries-max-width-or-max-height */
     #logo {
         margin-left: -75px;
         background-image: url("../img/logo-x150.png");
@@ -103,4 +105,3 @@
         height:64px;
     }
 }
-
