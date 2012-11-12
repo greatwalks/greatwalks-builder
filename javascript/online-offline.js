@@ -1,3 +1,6 @@
+/*
+ * Responsible for making changes to pages based on whether the device is online or offline
+ */
 (function($){
 	"use strict";
 
@@ -6,7 +9,7 @@
 	},
 	going_offline = function(){
 		$("#share-social").hide();
-	}
+	};
 
 	document.addEventListener("online", going_online, false);
 	document.addEventListener("offline", going_offline, false);

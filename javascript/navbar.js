@@ -1,6 +1,6 @@
 /*
  * Handles the navbars (including the bottom one, if it's there)
- */ 
+ */
 (function($){
 	"use strict";
 	var navbar_init = function(){
@@ -37,8 +37,8 @@
 			}
 			
 			
-		})
-	}
+		});
+	};
 
 	if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
         document.addEventListener("deviceready", navbar_init, false);
