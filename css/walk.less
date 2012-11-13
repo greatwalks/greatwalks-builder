@@ -1,68 +1,127 @@
-.walk .text-column1 {
-    h1 {
-        background-repeat: no-repeat;
-        background-size: 63px 91px;
-        padding-left:70px;
-        min-height:91px;
+.horizontal-gradient(@left, @right) {
+    background: @left; /* Old browsers */
+    background: -moz-linear-gradient(left,  @left 0%, @right 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%,@left), color-stop(100%,@right)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(left, @left 0%,@right 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(left,  @left 0%,@right 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(left,  @left 0%,@right 100%); /* IE10+ */
+    background: linear-gradient(to right,  @left 0%,@right 100%); /* W3C */
+}
+
+.walk {
+     .text-column1 {
+        h1 {
+            background-repeat: no-repeat;
+            background-size: 63px 91px;
+            padding-left:70px;
+            min-height:91px;
+            text-transform:uppercase;
+        }
+
+        .youtube {
+            text-align:center;
+        }
+
+        .walk-detail-header {
+            color:white;
+            background: red;
+            padding: 0.4em 0.5em;
+
+            &.dont-miss {
+                background: #ec9103;
+            }
+
+            &.offers{
+                background: #60a443;
+            }
+
+            &.before-you-go {
+                background: #999966;
+            }
+
+            &.getting-there {
+                background: #ccb200;
+            }
+
+            &.where-to-stay {
+                background: #3b93c5;
+            }
+
+            &.on-the-track {
+                background: #026a5a;
+            }
+
+        } 
+
+        .walk-detail {
+            display:none;
+        }
+
+        &.lake-waikaremoana {
+            h1 {
+                background-image: url("../img/walks/lake-waikaremoana/national.gif");
+            }
+        }
+
+        &.wellington {
+            h1 {            
+                background-image: url("../img/walks/wellington/national.gif");
+            }
+        }
+
+        &.tongariro-northern-circuit {
+            h1 {
+                background-image: url("../img/walks/tongariro-northern-circuit/national.gif");
+            }
+        }
+
+        &.whanganui-journey {
+            h1 {
+                background-image: url("../img/walks/whanganui-journey/national.gif");
+            }
+        }
+
+        &.abel-tasman-coast-track {
+            h1 {
+                background-image: url("../img/walks/abel-tasman-coast-track/national.gif");
+            }
+        }
+
+        &.heaphy-track {
+            h1 {
+                background-image: url("../img/walks/heaphy-track/national.gif");
+            }
+        }
+
+        &.routeburn-track {
+            h1 {
+                background-image: url("../img/walks/routeburn-track/national.gif");
+            }
+        }
+
+        &.milford-track {
+            h1 {
+                background-image: url("../img/walks/milford-track/national.gif");
+            }
+        }
+
+        &.kepler-track {
+            h1 {
+                background-image: url("../img/walks/kepler-track/national.gif");
+            }
+        }
+
+        &.rakiura-track---stewart-island {
+            h1 {
+                background-image: url("../img/walks/rakiura-track---stewart-island/national.gif");
+            }
+        }
+
     }
 }
 
-.text-column1.wellington {
-    h1 {
-        background-image: url("../img/walks/wellington/national.gif");
-    }
-}
 
-.text-column1.lake-waikaremoana {
-    h1 {
-        background-image: url("../img/walks/lake-waikaremoana/national.gif");
-    }
-}
 
-.text-column1.tongariro-northern-circuit {
-    h1 {
-        background-image: url("../img/walks/tongariro-northern-circuit/national.gif");
-    }
-}
 
-.text-column1.whanganui-journey {
-    h1 {
-        background-image: url("../img/walks/whanganui-journey/national.gif");
-    }
-}
 
-.text-column1.abel-tasman-coast-track {
-    h1 {
-        background-image: url("../img/walks/abel-tasman-coast-track/national.gif");
-    }
-}
 
-.text-column1.heaphy-track {
-    h1 {
-        background-image: url("../img/walks/heaphy-track/national.gif");
-    }
-}
-
-.text-column1.routeburn-track {
-    h1 {
-        background-image: url("../img/walks/routeburn-track/national.gif");
-    }
-}
-
-.text-column1.milford-track {
-    h1 {
-        background-image: url("../img/walks/milford-track/national.gif");
-    }
-}
-
-.text-column1.kepler-track {
-    h1 {
-        background-image: url("../img/walks/kepler-track/national.gif");
-    }
-}
-
-.text-column1.rakiura-track---stewart-island {
-    h1 {
-        background-image: url("../img/walks/rakiura-track---stewart-island/national.gif");
-    }
-}

@@ -68,8 +68,8 @@ String.prototype.CSV = function(strDelimiter) {
 };
 
 String.prototype.CSVMap = function(strDelimiter) {
-    //I wouldn't extend a prototype in a browser but
-    // in a short-lived build script it's harmless
+    /* Normally I wouldn't extend a prototype in a browser
+       but in a short-lived build script it's harmless */
     
     //presumes that first line is are the keys
     var csv_array = this.CSV(strDelimiter),
@@ -89,21 +89,54 @@ String.prototype.CSVMap = function(strDelimiter) {
 };
 
 String.prototype.endsWith = function(suffix) {
+    /* Normally I wouldn't extend a prototype but
+       in a short lived build script it's harmless */
     return this.indexOf(suffix, this.length - suffix.length) !== -1;
 };
 
+String.prototype.toId = function() {
+    // Sanitises an arbitrary string into an valid id (for the purposes of HTML id or CSS class)
+    /* Normally I wouldn't extend a prototype but
+       in a short lived build script it's harmless */
+    return this.toLowerCase().replace(/['.]/g, "").replace(/ /g, "-");
+};
+
+String.prototype.toCased = function() {
+    var concatenated = "",
+        parts = this.split("-"),
+        part,
+        i;
+    /* Normally I wouldn't extend a prototype but
+       in a short lived build script it's harmless */
+    for(i = 0; i < parts.length; i++){
+        part = parts[i];
+        concatenated += part.substr(0, 1).toUpperCase() + part.substr(1) + " ";
+    }
+    return concatenated.trim();
+};
+
+
 function resolve_includes(html, using_includes_directory){
+    var special_includes = ["don't-miss.mustache", "offers.mustache", "before-you-go.mustache", "getting-there.mustache", "where-to-stay.mustache", "on-the-track.mustache"];
     if(using_includes_directory === undefined) {
         using_includes_directory = default_include_directory;
     }
+
     return html.replace(/<\!--#include(.*?)-->/g,
         function(match, contents, offset, s){
             var include_filename = contents.substr(contents.indexOf("=\"")+2),
-                include_path;
+                include_path,
+                data,
+                basename;
             include_filename = include_filename.substr(0, include_filename.indexOf("\""));
             include_path = path.join(using_includes_directory, include_filename);
             //process.stdout.write(" -- including : " + include_path + "\n");
-            return fs.readFileSync(include_path).toString();
+            data = fs.readFileSync(include_path).toString();
+            if(special_includes.indexOf(include_filename) !== -1) {
+                basename = path.basename(include_filename, ".mustache");
+                data = '<!-- included from build-html.js. Just search for this string --><h2 class="walk-detail-header ' + basename.toId() + '">' + basename.toCased() + '</h2><div class="walk-detail">' + data + "</div>";
+            }
+            return data;
         });
 }
 
@@ -133,7 +166,7 @@ var share_social_details = {
         "facebook_url": "http://www.greatwalks.co.nz/kepler-track",
         "twitter_url": "http://bit.ly/VRNca2"
         },
-    "lake-waikaremoana-track":
+    "lake-waikaremoana":
         {
         "social_text": "I'm going on a Great Walk in New Zealand, the WAIKAREMOANA TRACK",
         "facebook_url": "http://www.greatwalks.co.nz/lake-waikaremoana",
@@ -355,16 +388,11 @@ for(var i = 0; i < walks_paths.length; i++){
             new_path = path.resolve("../greatwalks/walk-" + walk_sanitised_name + ".html"),
             mustache_data;
 
-
         if(fs.statSync(walk_fullpath).isDirectory()) {
             mustache_data = {"walk-id":walk_sanitised_name};
             mustache_data["youtube-id"] = fs.readFileSync(youtube_path);
             content_data = process_page(content_path, walk_name, mustache_data, "walk");
-            
-            
-            //content_data = '<h1><a href="map-' + walk_sanitised_name + '.html">MAP</a></h1>' + content_data;
             fs.writeFileSync(new_path, content_data);
-            
         }
     }
 }());
@@ -445,8 +473,6 @@ function process_page(htmlf_path, page_title, mustache_data, page_id){
             json_data = {};
             break;
     }
-
-    
 
     if(html_page !== undefined){
         html_page = html_page
