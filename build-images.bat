@@ -78,3 +78,5 @@ copy /Y images\missing-icon.png ..\greatwalks\img\missing-icon.png
 copy /Y images\homepage-sign.png ..\greatwalks\img\homepage-sign.png
 copy /Y images\homepage-buttons.png ..\greatwalks\img\homepage-buttons.png
 copy /Y images\content-buttons.png ..\greatwalks\img\content-buttons.png
+
+copy /Y images\walk-icons.png ..\greatwalks\img\walk-icons.png

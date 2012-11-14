@@ -26,35 +26,73 @@
             color:white;
             background: red;
             padding: 0.4em 0.5em;
+            font-size:25px;
+
+            span {
+                display:block;
+                background-image: url("../img/walk-icons.png");
+                background-position: right -90px;
+                background-repeat: no-repeat;
+                background-size: 35px 118px;
+            }
+
+            &.open span {
+                display:block;
+                background-image: url("../img/walk-icons.png");
+                background-repeat: no-repeat;
+                background-position: right -41px;
+                background-size: 35px 118px;
+            }
 
             &.dont-miss {
                 background: #ec9103;
+                padding-left:50px;
+                .horizontal-gradient(#a96a00, #f0b14a);
+            }
+
+            &.dont-miss:before {
+                content: "";
+                position:absolute;
+                width: 0;
+                height: 0;
+                margin-top: -0.3em;
+                margin-left:-50px;
+                border-top: 1.1em solid transparent;
+                border-left: 1em solid #e5dfbd;
+                border-bottom: 1.1em solid transparent;
             }
 
             &.offers{
                 background: #60a443;
+                .horizontal-gradient(#44762f, #8abe74);
             }
 
             &.before-you-go {
                 background: #999966;
+                .horizontal-gradient(#706d4c, #b4b48e);
             }
 
             &.getting-there {
                 background: #ccb200;
+                .horizontal-gradient(#938000, #dac746);
             }
 
             &.where-to-stay {
                 background: #3b93c5;
+                .horizontal-gradient(#2a6a8e, #71b1d5);
             }
 
             &.on-the-track {
                 background: #026a5a;
+                .horizontal-gradient(#004c3f, #479387);
             }
 
         } 
 
         .walk-detail {
             display:none;
+            background: white;
+            padding: 0.5em 1em;
         }
 
         &.lake-waikaremoana {
