@@ -30,6 +30,14 @@ var fs = require('fs'),
     kilograms_to_pounds = 2.20462,
     one_hour_in_milliseconds = 60 * 60 * 1000;
 
+String.prototype.removeNonStandardCharacters = function(){
+    var current_string = this;
+    // note: you might think that it would be easier to match the invalid characters but I can't seem to when Node.js is on Windows. Not sure why (loading file as Windows-1252 or something I'd guess but can't figure out how to override it, and hence the following code...
+    return this.replace(/([^a-zA-Z.,'"<>\s0-9&\-()!\/\?])/g, function(match, contents, offset, s){
+        throw "At offset " + offset + " found a non-standard character (unicode:" + current_string.charCodeAt(offset) + "): " + match.toString() + "\nSurrounding text: " + current_string.substr(offset - 10, 20) + " \nThis is probably a problem with MS SmartQuotes or emdash/endashes in your CSV file so replace them with conventional ASCII or UTF-8 characters.";
+    });
+};
+
 String.prototype.CSV = function(overrideStrDelimiter) {
     // Normally I wouldn't extend a prototype in JavaScript
     // but in a short-lived build script it's harmless
@@ -46,7 +54,7 @@ String.prototype.CSV = function(overrideStrDelimiter) {
              ],
         strMatchedDelimiter,
         strMatchedValue,
-        csv_string = this.replace(/,,/g, ", ,"),
+        csv_string = this.replace(/,,/g, ", ,").removeNonStandardCharacters(),
         arrMatches = null;
      while (arrMatches = objPattern.exec(csv_string)) {/* JSLINT IGNORE */ /* UNFORTUNATELY JSLINT DOESN'T HAVE AN IGNORE (I THINK) */
          strMatchedDelimiter = arrMatches[1];
