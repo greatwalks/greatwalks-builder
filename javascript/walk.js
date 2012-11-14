@@ -5,6 +5,8 @@
         $(".walk-detail-header").click(function(){
             $(this).toggleClass("open").next(".walk-detail").slideToggle();
         });
+
+        $(".dont-miss").click();
     };
 
     if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
