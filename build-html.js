@@ -30,24 +30,25 @@ var fs = require('fs'),
     kilograms_to_pounds = 2.20462,
     one_hour_in_milliseconds = 60 * 60 * 1000;
 
-String.prototype.CSV = function(strDelimiter) {
+String.prototype.CSV = function(overrideStrDelimiter) {
     // Normally I wouldn't extend a prototype in JavaScript
     // but in a short-lived build script it's harmless
 
     //via http://stackoverflow.com/questions/1293147/javascript-code-to-parse-csv-data
-     strDelimiter = (strDelimiter || ",");
-     var objPattern = new RegExp(
-     (
-     "(\\" + strDelimiter + "|\\r?\\n|\\r|^)" +
-     "(?:\"([^\"]*(?:\"\"[^\"]*)*)\"|" +
-     "([^\"\\" + strDelimiter + "\\r\\n]*))"), "gi");
-     var arrData = [
-         []
-     ],
+     var strDelimiter = (overrideStrDelimiter || ","),
+        objPattern = new RegExp(
+             (
+             "(\\" + strDelimiter + "|\\r?\\n|\\r|^)" +
+             "(?:\"([^\"]*(?:\"\"[^\"]*)*)\"|" +
+             "([^\"\\" + strDelimiter + "\\r\\n]*))"), "gi");
+             var arrData = [
+                 []
+             ],
         strMatchedDelimiter,
-        strMatchedValue;
-     var arrMatches = null;
-     while (arrMatches = objPattern.exec(this)) {/* JSLINT IGNORE */ /* UNFORTUNATELY JSLINT DOESN'T HAVE AN IGNORE (I THINK) */
+        strMatchedValue,
+        csv_string = this.replace(/,,/g, ", ,"),
+        arrMatches = null;
+     while (arrMatches = objPattern.exec(csv_string)) {/* JSLINT IGNORE */ /* UNFORTUNATELY JSLINT DOESN'T HAVE AN IGNORE (I THINK) */
          strMatchedDelimiter = arrMatches[1];
          if(strMatchedDelimiter.length && (strMatchedDelimiter != strDelimiter)) {
              arrData.push([]);
@@ -92,15 +93,15 @@ String.prototype.CSVMap = function(strDelimiter) {
 
 String.prototype.endsWith = function(suffix) {
     /* Normally I wouldn't extend a prototype but
-       in a short lived build script it's harmless */
+       in a short lived build script it's relatively harmless */
     return this.indexOf(suffix, this.length - suffix.length) !== -1;
 };
 
 String.prototype.toId = function() {
     // Sanitises an arbitrary string into an valid id (for the purposes of HTML id or CSS class)
     /* Normally I wouldn't extend a prototype but
-       in a short lived build script it's harmless */
-    return this.toLowerCase().replace(/['.]/g, "").replace(/ /g, "-");
+       in a short lived build script it's relatively harmless */
+    return this.toLowerCase().replace(/['.,]/g, "").replace(/ /g, "-");
 };
 
 String.prototype.toCased = function() {
@@ -109,7 +110,7 @@ String.prototype.toCased = function() {
         part,
         i;
     /* Normally I wouldn't extend a prototype but
-       in a short lived build script it's harmless */
+       in a short lived build script it's relatively harmless */
     for(i = 0; i < parts.length; i++){
         part = parts[i];
         concatenated += part.substr(0, 1).toUpperCase() + part.substr(1) + " ";
@@ -267,12 +268,17 @@ for(var i = 0; i < walks_paths.length; i++){
         row,
         locations_data,
         location_data_by_location = {},
-        serialized_row = "";
+        serialized_row = "",
+        read_a_line;
     if(!fs.statSync(walk_fullpath).isDirectory() && walk_file.endsWith(".csv")){
         process.stdout.write("Found a CSV: " + walk_file + "\n");
+        read_a_line = false;
         locations_data = fs.readFileSync(walk_fullpath).toString().CSVMap();
+        //throw JSON.stringify(locations_data); //DEBUG
+
         for(var y = 0; y < locations_data.length; y++){
             row = locations_data[y];
+            
             if(row.Longitude !== undefined) { //test for blank line in CSV. Longitude) is arbitrary field that should exist.
                 if(location_data_by_location[row.GreatWalk] === undefined) {
                     location_data_by_location[row.GreatWalk] = [];
@@ -288,10 +294,15 @@ for(var i = 0; i < walks_paths.length; i++){
                     throw "Unrecognised CSV columns in file " + walk_file + " : " + JSON.stringify(row);
                 }
                 fs.appendFileSync(walk_csv_path, serialized_row);
+                read_a_line = true;
                 location_data_by_location[row.GreatWalk].push(row);
             }
         }
-
+        if(read_a_line === false) {
+            process.stdout.write("  - WARNING read no row from this CSV\n");
+        } else {
+            process.stdout.write("  - was able to successfully read rows from this CSV\n");
+        }
     }
 }
 
@@ -316,7 +327,8 @@ for(var i = 0; i < walks_paths.length; i++){
             new_filename,
             map_dimensions_json_string,
             imdim_command,
-            locations;
+            locations,
+            recoverable_errors = "";
 
         if(fs.statSync(walk_fullpath).isDirectory()) {
             mustache_data = {
@@ -372,13 +384,12 @@ for(var i = 0; i < walks_paths.length; i++){
                         } catch(exception) {
                             if(exception.name === "OutOfBounds") {
                                 fs.appendFileSync(out_of_bounds_path, JSON.stringify(location) + "\n");
-                                process.stdout.write(" - WARNING " + location.Name + " is out of bounds. See " + path.basename(out_of_bounds_path) + " for more\n");
+                                recoverable_errors += " - WARNING " + location.Name + " is out of bounds. See " + path.basename(out_of_bounds_path) + " for more\n";
                             } else if(exception.name) {
                                 throw exception.name + ":" + exception.message + "\n" + JSON.stringify(exception);
                             } else {
                                 throw "Unknown error" + JSON.stringify(exception);
                             }
-
                         }
                     }
                 }
@@ -392,7 +403,8 @@ for(var i = 0; i < walks_paths.length; i++){
             new_path = path.resolve("../greatwalks/" + new_filename);
             great_walks.walks.push({"id": walk_sanitised_name, "name": walk_name, "map_filename":new_filename, "walk_filename": "walk-" + walk_sanitised_name + ".html"});
             fs.writeFileSync(new_path, html_page);
-            process.stdout.write("Building map: " + new_filename + "\n");
+            process.stdout.write("Building map: " + new_filename + "\n" + recoverable_errors);
+            recoverable_errors = "";
         }
 
         html_page = undefined;

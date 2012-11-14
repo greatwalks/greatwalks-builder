@@ -71,7 +71,8 @@ copy /Y images\icons\trailhead.png ..\greatwalks\img\icon-trailhead.png
 copy /Y images\icons\viewpoints.png ..\greatwalks\img\icon-viewpoints.png
 copy /Y images\icons\volcano.png ..\greatwalks\img\icon-volcano.png
 copy /Y images\icons\waterfall.png ..\greatwalks\img\icon-waterfall.png
-
+copy /Y images\icons\swimming.png ..\greatwalks\img\icon-swimming.png
+copy /Y images\icons\side_trail.png ..\greatwalks\img\icon-side_trail.png
 copy /Y images\youarehere.png ..\greatwalks\img\youarehere.png
 copy /Y images\camera-placeholder.jpg ..\greatwalks\img\camera-placeholder.jpg
 copy /Y images\missing-icon.png ..\greatwalks\img\missing-icon.png
