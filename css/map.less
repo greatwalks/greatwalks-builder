@@ -21,6 +21,10 @@ body.map {
         }
     }
 
+    #map {
+        border: solid 8px #201e1e;
+    }
+
     @youarehereradius: 25px;
     @youarehereradiuscolour: rgba(0,0,255,0.3);
     @youarehreeradiusbadreception: @youarehereradius * 2;
@@ -141,7 +145,8 @@ body.map {
     }
 
 
-    .location-animal {
+    .location-animal,
+    .location-birdwatching {
         background-image: url(../img/icon-bird-or-animal-species.png);
         border: none;
     }
@@ -151,7 +156,8 @@ body.map {
         border: none;
     }
 
-    .location-attention {
+    .location-attention,
+    .location-generic-poi {
         background-image: url(../img/icon-attention.png);
         border: none;
     }
@@ -222,6 +228,10 @@ body.map {
     }
 
     .location-viewpoints,
+    .location-generic-poi,
+    .location-scenic-lookout,
+    .location-historic-site,
+    .location-lake,
     .location-Feature {
         background-image: url(../img/icon-viewpoints.png);
         border: none;
