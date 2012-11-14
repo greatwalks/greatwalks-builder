@@ -8,6 +8,12 @@
     background: linear-gradient(to right,  @left 0%,@right 100%); /* W3C */
 }
 
+.drop-shadow(@radius:10px, @color:#8d8874) {
+  -moz-box-shadow:    3px 3px @radius @color;
+  -webkit-box-shadow: 3px 3px @radius @color;
+  box-shadow:         3px 3px @radius @color;
+}
+
 .walk {
      .text-column1 {
         h1 {
@@ -26,7 +32,9 @@
             color:white;
             background: red;
             padding: 0.4em 0.5em;
+            margin-bottom: 10px;
             font-size:25px;
+            .drop-shadow();
 
             span {
                 display:block;
@@ -46,7 +54,7 @@
 
             &.dont-miss {
                 background: #ec9103;
-                padding-left:50px;
+                padding-left:40px;
                 .horizontal-gradient(#a96a00, #f0b14a);
             }
 
@@ -55,11 +63,11 @@
                 position:absolute;
                 width: 0;
                 height: 0;
-                margin-top: -0.3em;
-                margin-left:-50px;
-                border-top: 1.1em solid transparent;
-                border-left: 1em solid #e5dfbd;
-                border-bottom: 1.1em solid transparent;
+                margin-top: -0.7em;
+                margin-left:-60px;
+                border-top: 1.5em solid transparent;
+                border-left: 1.5em solid #e5dfbd;
+                border-bottom: 1.5em solid transparent;
             }
 
             &.offers{
@@ -93,6 +101,8 @@
             display:none;
             background: white;
             padding: 0.5em 1em;
+            margin-top: -10px;
+            .drop-shadow();
         }
 
         &.lake-waikaremoana {
