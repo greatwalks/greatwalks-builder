@@ -50,7 +50,7 @@ RouteburnTrack,Routeburn Falls Hut, ,168.1991291,-44.72552828,Hut,,30
 RouteburnTrack,View from 'The Big Slip', ,168.2094805,-44.73037644,Scenic Lookout,,
 RouteburnTrack,View of Hollyford Valley & Darran Mountains, ,168.1673282,-44.73240166,Scenic Lookout,,
 WhanganuiJourney,The river Drop Scene , ,175.015937,-39.434377,Generic POI,,
-WhanganuiJourney,Visit riverside villages by canoe i.e. Whakahoro & Pipiriki, ,175.046911,-39.479861,Generic POI,,
+WhanganuiJourney,Visit riverside villages by canoe i.e. Whakahoro & Pipiriki, ,175.046911,-39.479861,Generic POI,,-25
 AbelTasman CoastTrack,Cleopatras Pool ,"Swim at Cleopatras Pool, a natural rock pool with a moss-lined waterslide that is fit for a queen! From Torrent Bay estuary, a 20 minute walk takes you to this refreshing pool.",173.037096,-40.956148,Swimming,5,
 AbelTasman CoastTrack,Onetahuti Beach,"Rest your weary walking feet at Onetahuti Beach. Shaped like a horse shoe it's one of the longest and most beautiful beaches in the park. Swim, snorkel or soak up the sunshine!",173.048404,-40.885308,Swimming,,-5
 AbelTasman CoastTrack,Pitt Head,"A 20 min walk crosses a low ridge from Anchorage Hut to crescent-shaped Te Pukatea Bay. From there, a 1 hour walk with great views leads to Pitt Head, an old pa site, and back to Anchorage.",173.067242,-40.948339,Historic site,,
@@ -123,18 +123,15 @@ WhanganuiJourney,Managpapa Campsite,,174.999,-39.1295,Campsite,,
 WhanganuiJourney,John Coull Campsite,,174.914,-39.233,Campsite,,
 WhanganuiJourney,Maharanui Campsite,,175.045,-39.0736,Campsite,,
 WhanganuiJourney,Whakahoro Campsite,,175.071,-39.1092,Campsite,,
-WhanganuiJourney,Whakahoro Shelter,,175.07,-39.1088,Shelter,,
+WhanganuiJourney,Whakahoro Shelter,,175.07,-39.1088,Shelter,,30
 WhanganuiJourney,Ohauora Campsite,,174.959,-39.1711,Campsite,,
 WhanganuiJourney,John Coull Hut,,174.914,-39.2327,Hut,,
 WhanganuiJourney,Mangawaiiti Campsite,,174.905,-39.2841,Campsite,,
-WhanganuiJourney,Mangapurua Campsite,,174.967,-39.2807,Campsite,,
-WhanganuiJourney,Bridge To Nowhere,,174.973,-39.2705,Feature,,
-WhanganuiJourney,Tieke Campsite,,174.993,-39.3375,Campsite,,
-WhanganuiJourney,Tieke Kainga Marae,,174.995,-39.3381,Hut,,
+WhanganuiJourney,Mangapurua Campsite,,174.967,-39.2807,Campsite,-30,-30
+WhanganuiJourney,Tieke Kainga Marae and Tieke Campsite,,174.993,-39.3375,Camphut,,
 WhanganuiJourney,Ngaporo Campsite,,175.036,-39.4248,Campsite,,
 WhanganuiJourney,Ohura Falls,,175.038,-39.0547,Feature,,
 WhanganuiJourney,Managanui O Te Ao River,,175.047,-39.4032,Feature,,
-WhanganuiJourney,Drop Scene,,175.015,-39.435,Feature,,
 AbelTasmanCoastTrack,Wainui Carpark Shelter,,172.957,-40.8099,Shelter,,
 AbelTasmanCoastTrack,Whariwharangi Hut,"The historic homestead at Whariwharangi. Stay in an historic homestead, which is now a DOC hut",172.974,-40.789,Camphut,30,15
 AbelTasmanCoastTrack,Mutton Cove Campsite,,172.994,-40.791,Campsite,,3
@@ -207,4 +204,4 @@ RakiuraTrack,Maori Beach Campsite,,168.088,-46.8573,Campsite,25,
 RakiuraTrack,Maori Beach Shelter,,168.089,-46.8568,Shelter,50,
 RakiuraTrack,Port William Hut,,168.087,-46.836,Camphut,-10,10
 RakiuraTrack,North Arm Campsite,,168.033,-46.8985,Campsite,,
-RakiuraTrack,North Arm Shelter,,168.034,-46.8986,Shelter,25
+RakiuraTrack,North Arm Shelter,,168.034,-46.8986,Shelter,25,
