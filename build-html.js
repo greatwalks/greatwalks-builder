@@ -187,7 +187,7 @@ function check_for_nearby_locations(location){
         point_of_interest = walk_points_of_interest[i];
         distance_between_points = difference_between_positions_in_kilometers(location.Lat, location.Long, point_of_interest.Lat, point_of_interest.Long);
         if(distance_between_points < within_kilometers) {
-            warning_message = " - WARNING " + location.Name + " (" + location.WalkName + ") is " + (Math.round(distance_between_points * 100) / 100) + "km away from " + point_of_interest.Name + "\n";
+            warning_message += " - WARNING " + location.Name + " (" + location.WalkName + ") is " + (Math.round(distance_between_points * 100) / 100) + "km away from " + point_of_interest.Name + "\n";
         }
     }
     points_of_interest[location.WalkName].push(location);
