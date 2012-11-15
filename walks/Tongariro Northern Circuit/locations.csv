@@ -10,7 +10,7 @@ Name,Description,Type,Long,Lat,PixelOffsetLeft,PixelOffsetTop
 "Ohinepango Springs"," ","Feature","175.676","-39.2163"," "," "
 "Old Waihohonu Hut"," ","Feature","175.673","-39.2093"," "," "
 "Soda Springs"," ","Feature","175.622","-39.1383"," "," "
-"Blue Lake"," ","Feature","175.661","-39.1247","-15"," "
+"Blue Lake"," ","Feature","175.661","-39.1247","-15","-10"
 "Red Crater"," ","Feature","175.651","-39.1366"," "," "
 "Emerald Lakes"," ","Feature","175.655","-39.134"," ","-20"
 "Tongariro National Park Visitor Centre"," ","VisitorCentre","175.54","-39.2016"," ","30"
