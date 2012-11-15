@@ -1,1 +1,6 @@
-Name,Description,Type,Long,Lat
+Name,Description,Type,Long,Lat,PixelOffsetLeft,PixelOffsetTop
+"Water Whirler"," ","Feature","174.779","-41.2865"," "," "
+"Kupe's Statue"," ","Feature","174.78","-41.2891","-5"," "
+"The Great Leap"," ","Feature","174.78","-41.2884"," ","-5"
+"Hikitia Floating Crane"," ","Feature","174.78","-41.2892"," ","4"
+"Te Papa"," ","Feature","174.782","-41.29","12","5"

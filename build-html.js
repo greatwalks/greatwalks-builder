@@ -2,7 +2,9 @@
 /*
  *  Builds HTML for the site.
  *
- *  Generally it uses synchronous calls to make it easier to debug (because speed isn't a concern)
+ *  Generally it uses synchronous calls to make it easier to debug (avoiding lots of nested callbacks)
+ *  and because speed isn't currently a concern.
+ *  
  */
 
 "use strict";
@@ -19,6 +21,7 @@ var fs = require('fs'),
     walks_paths = fs.readdirSync("walks"),
     walks_template_path = path.resolve("walks/template.mustache"),
     out_of_bounds_path = path.resolve("walks/out-of-bounds.log"),
+    too_close_locations_path = path.resolve("walks/too-close-locations.log"),
     great_walks = {"walks":[]},
     template_slideout_walks = "",
     PIx = 3.141592653589793,
@@ -28,11 +31,15 @@ var fs = require('fs'),
     kilometres_to_miles = 0.621371,
     metres_to_feet = 3.28084,
     kilograms_to_pounds = 2.20462,
-    one_hour_in_milliseconds = 60 * 60 * 1000;
+    one_hour_in_milliseconds = 60 * 60 * 1000,
+    points_of_interest = {};
 
 String.prototype.removeNonStandardCharacters = function(){
     var current_string = this;
-    // note: you might think that it would be easier to match the invalid characters but I can't seem to when Node.js is on Windows. Not sure why (loading file as Windows-1252 or something I'd guess but can't figure out how to override it, and hence the following code...
+    // note: you might think that it would be easier to match the invalid characters themselves
+    // but I can't seem to when Node.js is running on Windows.
+    // Not sure why (loading file as Windows-1252 or something I'd guess but can't figure
+    // out how to override it, and hence the following code...
     return this.replace(/([^a-zA-Z.,'"<>\s0-9&\-()!\/\?])/g, function(match, contents, offset, s){
         throw "At offset " + offset + " found a non-standard character (unicode:" + current_string.charCodeAt(offset) + "): " + match.toString() + "\nSurrounding text: " + current_string.substr(offset - 10, 20) + " \nThis is probably a problem with MS SmartQuotes or emdash/endashes in your CSV file so replace them with conventional ASCII or UTF-8 characters.";
     });
@@ -41,8 +48,11 @@ String.prototype.removeNonStandardCharacters = function(){
 String.prototype.CSV = function(overrideStrDelimiter) {
     // Normally I wouldn't extend a prototype in JavaScript
     // but in a short-lived build script it's harmless
-
-    //via http://stackoverflow.com/questions/1293147/javascript-code-to-parse-csv-data
+    //
+    // This CSV parser was taken from
+    //   http://stackoverflow.com/questions/1293147/javascript-code-to-parse-csv-data
+    // It's a bit shit. It can't deal with zero-length fields ",," it needs ", ,"
+    // If you find a CSV problem it's probably in here...
      var strDelimiter = (overrideStrDelimiter || ","),
         objPattern = new RegExp(
              (
@@ -82,7 +92,7 @@ String.prototype.CSVMap = function(strDelimiter) {
     /* Normally I wouldn't extend a prototype in a browser
        but in a short-lived build script it's harmless */
     
-    //presumes that first line is are the keys
+    // assumes that first line contains the keys
     var csv_array = this.CSV(strDelimiter),
         first_row = csv_array[0],
         keyed_map = [],
@@ -126,7 +136,6 @@ String.prototype.toCased = function() {
     return concatenated.trim();
 };
 
-
 function resolve_includes(html, using_includes_directory){
     var special_includes = ["don't-miss.mustache", "offers.mustache", "before-you-go.mustache", "getting-there.mustache", "where-to-stay.mustache", "on-the-track.mustache"];
     if(using_includes_directory === undefined) {
@@ -149,6 +158,40 @@ function resolve_includes(html, using_includes_directory){
             }
             return data;
         });
+}
+
+function difference_between_positions_in_kilometers(lat1, lon1, lat2, lon2){
+    var R = 6371; // adverage radius of the earth in km
+    var dLat = degrees_to_radians(lat2-lat1);  // Javascript functions in radians
+    var dLon = degrees_to_radians(lon2-lon1);
+    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(degrees_to_radians(lat1)) * Math.cos(degrees_to_radians(lat2)) *
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c; // Distance in km
+}
+
+function check_for_nearby_locations(location){
+    var warning_message = "",
+        i,
+        walk_points_of_interest,
+        point_of_interest,
+        within_kilometers = 0.1,
+        distance_between_points;
+    
+    if(points_of_interest[location.WalkName] === undefined) {
+        points_of_interest[location.WalkName] = [];
+    }
+    walk_points_of_interest = points_of_interest[location.WalkName];
+    for(i = 0; i < walk_points_of_interest.length; i++){
+        point_of_interest = walk_points_of_interest[i];
+        distance_between_points = difference_between_positions_in_kilometers(location.Lat, location.Long, point_of_interest.Lat, point_of_interest.Long);
+        if(distance_between_points < within_kilometers) {
+            warning_message = " - WARNING " + location.Name + " (" + location.WalkName + ") is " + (Math.round(distance_between_points * 100) / 100) + "km away from " + point_of_interest.Name + "\n";
+        }
+    }
+    points_of_interest[location.WalkName].push(location);
+    return warning_message;
 }
 
 var share_social_details = {
@@ -227,11 +270,17 @@ var share_social_details = {
     } catch (exception) {
     }
     fs.writeSync(out_of_bounds_path, "");
+    try {
+        fs.unlinkSync(too_close_locations_path);
+    } catch (exception) {
+    }
+    fs.writeSync(too_close_locations_path, "");
     walks_paths = fs.readdirSync("walks");
 }());
 
 (function(){
-    //  Delete resulting CSVs (while leaving source files)
+    // Delete per-walk CSVs while leaving source file(s)
+    // Also build up a list of walks (each walk has a directory under 'walks')
     for(var i = 0; i < walks_paths.length; i++){
         var walk_name = walks_paths[i],
             walk_fullpath = path.resolve("walks/" + walk_name),
@@ -247,7 +296,7 @@ var share_social_details = {
 
             }
             // Write the header line of the CSV
-            fs.writeFileSync(walk_csv_path, "Name,Description,Type,Long,Lat\n");
+            fs.writeFileSync(walk_csv_path, "Name,Description,Type,Long,Lat,PixelOffsetLeft,PixelOffsetTop\n");
         }
     }
 }());
@@ -277,10 +326,10 @@ for(var i = 0; i < walks_paths.length; i++){
         locations_data,
         location_data_by_location = {},
         serialized_row = "",
-        read_a_line;
+        was_able_to_read_a_line;
     if(!fs.statSync(walk_fullpath).isDirectory() && walk_file.endsWith(".csv")){
         process.stdout.write("Found a CSV: " + walk_file + "\n");
-        read_a_line = false;
+        was_able_to_read_a_line = false;
         locations_data = fs.readFileSync(walk_fullpath).toString().CSVMap();
         //throw JSON.stringify(locations_data); //DEBUG
 
@@ -291,25 +340,31 @@ for(var i = 0; i < walks_paths.length; i++){
                 if(location_data_by_location[row.GreatWalk] === undefined) {
                     location_data_by_location[row.GreatWalk] = [];
                 }
+                if(row.PixelOffsetLeft === undefined) {
+                    row.PixelOffsetLeft = " ";
+                }
+                if(row.PixelOffsetTop === undefined) {
+                    row.PixelOffsetTop = " ";
+                }
                 row.GreatWalkId = location_id_mapping[row.GreatWalk];
                 if(row.GreatWalkId === undefined) {
                     throw "Unable to find GreatWalkId for " + row.GreatWalk;
                 }
                 walk_csv_path = path.resolve(path.join("walks", row.GreatWalkId, "locations.csv"));
                 if(row.POIIconType) {
-                    serialized_row = '"' + row.Name + '","' + row.Description + '","' + row.POIIconType + '","' + row.Longitude + '","' + row.Latitude + '"\n';
+                    serialized_row = '"' + row.Name + '","' + row.Description + '","' + row.POIIconType + '","' + row.Longitude + '","' + row.Latitude + '","' + row.PixelOffsetLeft + '","' + row.PixelOffsetTop + '"\n';
                 } else {
                     throw "Unrecognised CSV columns in file " + walk_file + " : " + JSON.stringify(row);
                 }
                 fs.appendFileSync(walk_csv_path, serialized_row);
-                read_a_line = true;
+                was_able_to_read_a_line = true;
                 location_data_by_location[row.GreatWalk].push(row);
             }
         }
-        if(read_a_line === false) {
+        if(was_able_to_read_a_line === false) {
             process.stdout.write("  - WARNING read no row from this CSV\n");
         } else {
-            process.stdout.write("  - was able to successfully read rows from this CSV\n");
+            process.stdout.write("  - SUCCESS was able to read long/lat rows\n");
         }
     }
 }
@@ -336,7 +391,8 @@ for(var i = 0; i < walks_paths.length; i++){
             map_dimensions_json_string,
             imdim_command,
             locations,
-            recoverable_errors = "";
+            recoverable_errors = "",
+            too_close_message;
 
         if(fs.statSync(walk_fullpath).isDirectory()) {
             mustache_data = {
@@ -379,15 +435,30 @@ for(var i = 0; i < walks_paths.length; i++){
             }
             mustache_data.locations = [];
             if(locations_data !== undefined){
+                //process.stdout.write("Reading CSV from " + locations_path + "\n");
                 locations = locations_data.CSVMap(",");
                 mustache_data.locations = [];
                 for(var location_index = 0; location_index < locations.length; location_index++){
                     location = locations[location_index];
                     if(location.Long !== undefined) {  //'Long' (longitude) is arbitrary field chosen to see if it's present in the data, to test whether this this infact a row of data or a blank line
                         try {
+                            
                             location.pixel = pixel_location(map_details.latitude, map_details.longitude, mustache_data.map_pixel_width, mustache_data.map_pixel_height, map_details.degrees_per_pixel, location.Lat, location.Long, walk_name, location.Name);
+                            
+                            if(location.PixelOffsetLeft !== undefined && location.PixelOffsetLeft !== " "){
+                                location.pixel.left += parseInt(location.PixelOffsetLeft, 10);
+                            }
+                            if(location.PixelOffsetTop !== undefined && location.PixelOffsetTop !== " " ){
+                                location.pixel.top += parseInt(location.PixelOffsetTop, 10);
+                            }
                             location.percentage = {left: location.pixel.left / map_details.map_pixel_width * 100, top: location.pixel.top / map_details.map_pixel_height * 100 };
                             location.Type = location.Type.toId();
+                            location.WalkName = walk_name;
+                            too_close_message = check_for_nearby_locations(location);
+                            if(too_close_message !== undefined && too_close_message.length > 0) {
+                                fs.appendFileSync(too_close_locations_path, too_close_message);
+                            }
+                            recoverable_errors += too_close_message;
                             mustache_data.locations.push(location);
                         } catch(exception) {
                             if(exception.name === "OutOfBounds") {
