@@ -16,51 +16,54 @@
 		font-weight:normal;
 		font-family:serif;	
 	}
+}
 
-	.btn {
-		display:inline-block;
-		padding: 8px;
-		border-radius: 7px;
-		background-color: #15a5de;
-		color: #ffffff;
-		text-transform:uppercase;
-		font-family:serif;
-		font-size:18px;
+.btn {
+	display:inline-block;
+	padding: 8px;
+	border-radius: 7px;
+	background-color: #15a5de;
+	color: #ffffff;
+	text-transform:uppercase;
+	font-family:serif;
+	font-size:18px;
 
-		&:hover {
-			text-decoration:none;
-			background-color: lighten(#15a5de, 10%);
-		}
+	&:hover {
+		text-decoration:none;
+		background-color: lighten(#15a5de, 10%);
+		color:white;
 	}
 
-	.btn.phone,
-	.btn.email,
-	.btn.vistorcenter,
-	.btn.bookonline {
+	&.phone,
+	&.email,
+	&.vistorcenter,
+	&.bookonline {
 		background-image: url("../img/content-buttons.png");
 		background-size:16px 166px;
 		background-repeat: no-repeat;
 		padding-left:30px;
 	}
 
-	.btn.phone {
+	&.phone {
 		background-position: 10px -140px;
 	}
 
-	.btn.email {
+	&.email {
 		background-position: 10px 13px;
 		padding-left:33px;
 	}
 
-	.btn.vistorcenter {
+	&.vistorcenter {
 		background-position: 10px -40px;
 	}
 
-	.btn.bookonline {
+	&.bookonline {
 		background-position: 10px -90px;
 		padding-left:33px;
 	}
 }
+
+	
 
 @media (max-height: 300px) {
 	.text-column1 {
