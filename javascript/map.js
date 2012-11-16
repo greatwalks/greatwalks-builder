@@ -20,7 +20,7 @@
             one_hour_in_milliseconds = 60 * 60 * 1000;
 
         window.format_distance = function(kilometres){
-             return (Math.round(kilometres * 100) / 100) + "km/ " + (Math.round(kilometres * kilometres_to_miles * 100) / 100) + "mi";
+             return (Math.round(kilometres * 100) / 100) + "km / " + (Math.round(kilometres * kilometres_to_miles * 100) / 100) + "mi";
         };
 
         window.difference_between_positions_in_kilometers = function(lat1, lon1, lat2, lon2, lat3, lon3){
