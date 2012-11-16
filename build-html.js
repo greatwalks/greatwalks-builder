@@ -615,14 +615,7 @@ function process_page(htmlf_path, page_title, mustache_data, page_id){
                         })
                         .replace(/([0-9.]+) kg/gi, function(match, contents, offset, s){
                             return format_kilograms(parseFloat(contents));
-                        })
-                        .replace(/(\+64[\+0-9 \s]+)/gi, function(match, contents, offset, s){
-                            return ' <a href="tel:' + contents.replace(/ /g, '') + '" class="btn phone">' + contents + '</a>';
-                        })
-                        .replace(/ (0800 NZ GREATWALKS)/gi, function(match, contents, offset, s){
-                            return ' <a href="tel:0800694732" class="btn phone">' + contents + '</a>';
-                        })
-                        ;
+                        });
                         
     }
     return html_page;
