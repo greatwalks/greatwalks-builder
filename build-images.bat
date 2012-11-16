@@ -49,6 +49,8 @@ resize -i"images/homepage-carousel/Whanganui Journey.jpg" -o"../greatwalks/img/h
 resize -i"images/homepage-carousel/Milford Track.jpg" -o"../greatwalks/img/homepage-carousel-x1024-milford-track.jpg" -s1024
 resize -i"images/homepage-carousel/_default.jpg" -o"../greatwalks/img/homepage-carousel-x1024-_default.jpg" -s1024
 
+copy /Y images\bootstrap-images\glyphicons-halflings.png ..\greatwalks\img\glyphicons-halflings.png
+copy /Y images\bootstrap-images\glyphicons-halflings-white.png ..\greatwalks\img\glyphicons-halflings-white.png
 copy /Y images\header-icons.png ..\greatwalks\img\header-icons.png
 copy /Y images\slideout-menu.png ..\greatwalks\img\slideout-menu.png
 copy /Y images\table.png ..\greatwalks\img\table.png
