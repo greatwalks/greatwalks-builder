@@ -10,7 +10,11 @@ var scale_by = 1; // the build-html.js has a scale_by=0.5 but this has scale_by=
   "use strict";
     fs.copy = function (src, dst) {
         //process.stdout.write("Copied " + dst);
-        execSync('copy /b "' + src + '" "' + dst + '"');
+        if (process.platform === 'win32') {
+            execSync('copy /b "' + src + '" "' + dst + '"');
+        } else {
+            execSync('cp "' + src + '" "' + dst + '"');
+        }
         //process.stdout.write("...done\n");
     };
 }());
@@ -20,15 +24,22 @@ for(var i = 0; i < walks_paths.length; i++){
         walk_sanitised_name = walk_name.toLowerCase().replace(/ /g, "-"),
         walk_fullpath = path.resolve("walks/" + walk_name),
         map_path = path.join("walks", walk_name, "map.png"),
+        map_destination_path = path.resolve(path.join("../greatwalks/img/walks", walk_sanitised_name, "map.jpg")),
         national_path = path.join("walks", walk_name, "national.gif"),
         national_destination_path = path.resolve(path.join("../greatwalks/img/walks", walk_sanitised_name, "national.gif")),
         map_fullpath = path.resolve(map_path),
         width = 0,
         height = 0,
-        command = "imdim \"{\\\"width\\\":%w, \\\"height\\\":%h}\" \"" + map_fullpath + "\"",
+        command,
         map_dimensions_json_string,
         map_dimensions_json,
         resize_command;
+    
+    if (process.platform === 'win32') {
+        command = "imdim \"{\\\"width\\\":%w, \\\"height\\\":%h}\" \"" + map_fullpath + "\"";
+    } else {
+        command = "identify -format \"{\\\"width\\\":%w, \\\"height\\\":%h}\" \"" + map_fullpath + "\"";
+    }
     
     if(fs.statSync(walk_fullpath).isDirectory()) {
         map_dimensions_json_string = execSync(command);
@@ -36,7 +47,8 @@ for(var i = 0; i < walks_paths.length; i++){
             map_dimensions_json = JSON.parse(map_dimensions_json_string);
             width = parseInt(map_dimensions_json.width * scale_by, 10);
             height = parseInt(map_dimensions_json.height * scale_by, 10);
-            resize_command = "resize -i\"walks\\" + walk_name + "\\map.png\" -o\"..\\greatwalks\\img\\walks\\" + walk_sanitised_name + "\\map.jpg\" -s" + width + "x" + height;
+            resize_command = process.platform === 'win32' ? "resize" : "./yresize";
+            resize_command = resize_command + " -i\"" + map_path + "\" -o\"" + map_destination_path + "\" -s" + width + "x" + height;
             execSync(resize_command);
         } else {
 
@@ -55,19 +67,22 @@ function execSync(cmd) {
 
     var exec  = require('child_process').exec;
     var fs = require('fs');
-    //for linux use ; instead of &&
     //execute your command followed by a simple echo
     //to file to indicate process is finished
-    exec(cmd + " > c:\\stdout.txt && echo done > c:\\sync.txt");
+    if (process.platform === 'win32') {
+        exec(cmd + " > stdout.txt && echo done > sync.txt");
+    } else {
+        exec(cmd + " > stdout.txt; echo done > sync.txt");
+    }
     while (true) {
         //consider a timeout option to prevent infinite loop
         //NOTE: this will max out your cpu too!
         try {
-            var status = fs.readFileSync('c:\\sync.txt', 'utf8');
+            var status = fs.readFileSync('sync.txt', 'utf8');
             if (status.trim() == "done") {
-                var res = fs.readFileSync("c:\\stdout.txt", 'utf8');
-                fs.unlinkSync("c:\\stdout.txt"); //cleanup temp files
-                fs.unlinkSync("c:\\sync.txt");
+                var res = fs.readFileSync("stdout.txt", 'utf8');
+                fs.unlinkSync("stdout.txt"); //cleanup temp files
+                fs.unlinkSync("sync.txt");
                 return res;
             }
         } catch(e) { } //readFileSync will fail until file exists

@@ -399,8 +399,12 @@ for(var i = 0; i < walks_paths.length; i++){
                 map_id: walk_sanitised_name,
                 map_pixel_width: 100,
                 map_pixel_height: 100
-            },
-            imdim_command = "imdim \"{\\\"width\\\":%w, \\\"height\\\":%h}\" \"" + map_fullpath + "\"";
+            };
+            if (process.platform === 'win32') {
+                imdim_command = "imdim \"{\\\"width\\\":%w, \\\"height\\\":%h}\" \"" + map_fullpath + "\"";
+            } else {
+                imdim_command = "identify -format \"{\\\"width\\\":%w, \\\"height\\\":%h}\" \"" + map_fullpath + "\"";
+            }
             //map
             //process.stdout.write("map dimensions:\n " + imdim_command + "\n\n");
             map_dimensions_json_string = execSync(imdim_command);
@@ -702,19 +706,22 @@ function execSync(cmd) {
 
     var exec  = require('child_process').exec;
     var fs = require('fs');
-    //for linux use ; instead of &&
     //execute your command followed by a simple echo
     //to file to indicate process is finished
-    exec(cmd + " > c:\\stdout.txt && echo done > c:\\sync.txt");
+    if (process.platform === 'win32') {
+        exec(cmd + " > stdout.txt && echo done > sync.txt");
+    } else {
+        exec(cmd + " > stdout.txt; echo done > sync.txt");
+    }
     while (true) {
         //consider a timeout option to prevent infinite loop
         //NOTE: this will max out your cpu too!
         try {
-            var status = fs.readFileSync('c:\\sync.txt', 'utf8');
+            var status = fs.readFileSync('sync.txt', 'utf8');
             if (status.trim() == "done") {
-                var res = fs.readFileSync("c:\\stdout.txt", 'utf8');
-                fs.unlinkSync("c:\\stdout.txt"); //cleanup temp files
-                fs.unlinkSync("c:\\sync.txt");
+                var res = fs.readFileSync("stdout.txt", 'utf8');
+                fs.unlinkSync("stdout.txt"); //cleanup temp files
+                fs.unlinkSync("sync.txt");
                 return res;
             }
         } catch(e) { } //readFileSync will fail until file exists
