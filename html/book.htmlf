@@ -3,10 +3,10 @@
       Book Now
     </h1>
     <p>
-      You have lots of options to book your Great Walk
+      You have lots of options to book your Great Walk:
     </p>
     <h2>
-      <a name="h.roc2xhkohk9n" id="h.roc2xhkohk9n"></a>Call us
+Call us
     </h2>
     <p>
       <a href="tel:0800694732" class="btn phone">0800 NZ GREATWALKS</a>
@@ -18,28 +18,31 @@
       Email us
     </h2>
     <p>
-      <a href="mailto:greatwalks@doc.govt.nz" class="btn email">Send Email</a>
+      <a href="mailto:greatwalks@doc.govt.nz" class="btn email">greatwalks@doc.govt.nz</a>
     </p>
     <h2>
-      Come to a DOC Visitor Centre
+      Come see us
     </h2>
     <p>
-      <a href="vistor-center.html" class="btn vistorcenter">Find the nearest DOC Visitor Centre</a>.
+      <a href="vistor-center.html" class="btn vistorcenter">Find the nearest DOC Visitor Centre</a>
     </p>
     <p>
       While you&rsquo;re here, you can also pick up maps and other things for your
       Great Walk.
     </p>
+        <h2>
+      Book online
+    </h2>
     
     <p>
       <a class="btn bookonline"
       href=
       "http://bookings.bookitsecure.com/pub/supplier.aspx?b=DEPART">Book
-      online</a>
+      now</a>
     </p>
     
     <p>
-      For more resources and info, visit the <a class="c2"
+      For more resources and info, visit the <a
       href="http://www.doc.govt.nz/parks-and-recreation/tracks-and-walks/great-walks/">
       Great Walks on the DOC website</a>.
     </p>
