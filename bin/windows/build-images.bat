@@ -1,1 +1,1 @@
-node %0\..\..\build-images.js
+@node %0\..\..\build-images.js

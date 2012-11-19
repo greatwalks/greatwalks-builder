@@ -1,27 +1,31 @@
-/*global require process*/
+/*global require process __dirname*/
 /*
  *  Builds HTML for the site.
  *
  *  Generally it uses synchronous calls to make it easier to debug (avoiding lots of nested callbacks)
  *  and because speed isn't currently a concern.
- *  
+ *
  */
-
-"use strict";
+"use strict"; /* Ignore this JSLint complaint, it's a bit stupid*/
 
 var fs = require('fs'),
     path = require('path'),
-    mustache = require("./mustache.js"),
+    approot = path.dirname(__dirname),
+    mustache = require(path.join(approot, "bin/lib/mustache.js")),
+    greatwalks_repo = path.join(path.dirname(approot), "greatwalks"),
     scale_by = 0.5, // the build-images.js has a scale_by=1 but this has scale_by=0.5.
                     // The reason for the difference is that build-images.js should render images at full resolution
                     // but the html should display these at half-size for high DPI displays (e.g. 'retina display')
-    template = fs.readFileSync("html/template.html").toString(),
-    htmlf_paths = fs.readdirSync("html"),
+    template = fs.readFileSync(path.join(approot, "html/template.html"), 'utf8').toString(),
+    htmlf_paths = fs.readdirSync(path.join(approot, "html")),
     default_include_directory = path.join(path.resolve("html"), "includes"),
-    walks_paths = fs.readdirSync("walks"),
-    walks_template_path = path.resolve("walks/template.mustache"),
-    out_of_bounds_path = path.resolve("walks/out-of-bounds.log"),
-    too_close_locations_path = path.resolve("walks/too-close-locations.log"),
+    walks_paths = fs.readdirSync(path.join(approot, "walks")),
+    ignore_names = ["Thumbs.db", ".DS_Store"],
+    walks_template_path = path.join(approot, "walks/template.mustache"),
+    out_of_bounds_path = path.join(approot, "walks/out-of-bounds.log"),
+    some_locations_were_out_of_bounds = false,
+    too_close_locations_path = path.join(approot, "walks/too-close-locations.log"),
+    some_locations_were_too_close = false,
     great_walks = {"walks":[]},
     template_slideout_walks = "",
     PIx = 3.141592653589793,
@@ -38,8 +42,8 @@ String.prototype.removeNonStandardCharacters = function(){
     var current_string = this;
     // note: you might think that it would be easier to match the invalid characters themselves
     // but I can't seem to when Node.js is running on Windows.
-    // Not sure why (loading file as Windows-1252 or something I'd guess but can't figure
-    // out how to override it, and hence the following code...
+    // Not sure why (loading file as Windows-1252 or something I'd guess but parsing as Windows-1252 doesn't
+    // fix it, and hence the following code...
     return this.replace(/([^a-zA-Z.,'"<>\s0-9&\-()!\/\?])/g, function(match, contents, offset, s){
         throw "At offset " + offset + " found a non-standard character (unicode:" + current_string.charCodeAt(offset) + "): " + match.toString() + "\nSurrounding text: " + current_string.substr(offset - 10, 20) + " \nThis is probably a problem with MS SmartQuotes or emdash/endashes in your CSV file so replace them with conventional ASCII or UTF-8 characters.";
     });
@@ -47,7 +51,7 @@ String.prototype.removeNonStandardCharacters = function(){
 
 String.prototype.CSV = function(overrideStrDelimiter) {
     // Normally I wouldn't extend a prototype in JavaScript
-    // but in a short-lived build script it's harmless
+    // but in a short-lived build script it's relatively harmless
     //
     // This CSV parser was taken from
     //   http://stackoverflow.com/questions/1293147/javascript-code-to-parse-csv-data
@@ -66,7 +70,7 @@ String.prototype.CSV = function(overrideStrDelimiter) {
         strMatchedValue,
         csv_string = this.replace(/,,/g, ", ,").removeNonStandardCharacters(),
         arrMatches = null;
-     while (arrMatches = objPattern.exec(csv_string)) {/* JSLINT IGNORE */ /* UNFORTUNATELY JSLINT DOESN'T HAVE AN IGNORE (I THINK) */
+     while (arrMatches = objPattern.exec(csv_string)) {
          strMatchedDelimiter = arrMatches[1];
          if(strMatchedDelimiter.length && (strMatchedDelimiter != strDelimiter)) {
              arrData.push([]);
@@ -89,9 +93,8 @@ String.prototype.CSV = function(overrideStrDelimiter) {
 };
 
 String.prototype.CSVMap = function(strDelimiter) {
-    /* Normally I wouldn't extend a prototype in a browser
-       but in a short-lived build script it's harmless */
-    
+    /* Normally I wouldn't extend a prototype but
+       in a short-lived build script it's relatively harmless */
     // assumes that first line contains the keys
     var csv_array = this.CSV(strDelimiter),
         first_row = csv_array[0],
@@ -151,7 +154,7 @@ function resolve_includes(html, using_includes_directory){
             include_filename = include_filename.substr(0, include_filename.indexOf("\""));
             include_path = path.join(using_includes_directory, include_filename);
             //process.stdout.write(" -- including : " + include_path + "\n");
-            data = fs.readFileSync(include_path).toString();
+            data = fs.readFileSync(include_path, 'utf8').toString();
             if(special_includes.indexOf(include_filename) !== -1) {
                 basename = path.basename(include_filename, ".mustache");
                 data = '<!-- included from build-html.js. Just search for this string --><h2 class="walk-detail-header ' + basename.toId() + '"><span><span>' + basename.toCased() + '</span></span></h2><div class="walk-detail">' + data + "</div>";
@@ -263,19 +266,21 @@ var share_social_details = {
  *  BEGIN BUILDING HTML
  */
 
+ template = resolve_includes(template).replace(/\{\{slide-walks\}\}/g, template_slideout_walks);
+
 (function(){
     //  Delete log of out of bounds
     try {
         fs.unlinkSync(out_of_bounds_path);
     } catch (exception) {
     }
-    fs.writeSync(out_of_bounds_path, "");
+    fs.writeFileSync(out_of_bounds_path, "");
     try {
         fs.unlinkSync(too_close_locations_path);
     } catch (exception) {
     }
-    fs.writeSync(too_close_locations_path, "");
-    walks_paths = fs.readdirSync("walks");
+    fs.writeFileSync(too_close_locations_path, "");
+    walks_paths = fs.readdirSync(path.join(approot, "walks"));
 }());
 
 (function(){
@@ -283,10 +288,10 @@ var share_social_details = {
     // Also build up a list of walks (each walk has a directory under 'walks')
     for(var i = 0; i < walks_paths.length; i++){
         var walk_name = walks_paths[i],
-            walk_fullpath = path.resolve("walks/" + walk_name),
+            walk_fullpath = path.join(approot, "walks", walk_name),
             walk_sanitised_name = walk_name.toLowerCase().replace(/ /g, "-"),
             walk_csv_path;
-
+        if(ignore_names.indexOf(walk_name) !== -1) continue;
         if(fs.statSync(walk_fullpath).isDirectory()) {
             template_slideout_walks += '<li><a href="walk-' + walk_sanitised_name + '.html">' + walk_name + '</a></li>';
             walk_csv_path = path.join(walk_fullpath, "locations.csv");
@@ -301,83 +306,86 @@ var share_social_details = {
     }
 }());
 
-template = resolve_includes(template).replace(/\{\{slide-walks\}\}/g, template_slideout_walks);
 
-//  Read all CSVs and write each line into the appropriate Great Walk directory.
-for(var i = 0; i < walks_paths.length; i++){
-    var walk_file = walks_paths[i],
-        walk_fullpath = path.resolve("walks/" + walk_file),
-        location_id_mapping = {
-            "LakeWaikaremoana":"Lake Waikaremoana",
-            "WellingtonWaterfront":"Wellington",
-            "TongariroNorthernCircuit":"Tongariro Northern Circuit",
-            "TongariroNationalPark":"Tongariro Northern Circuit",
-            "WhanganuiJourney":"Whanganui Journey",
-            "AbelTasmanCoastTrack":"Abel Tasman Coast Track",
-            "AbelTasman CoastTrack":"Abel Tasman Coast Track",
-            "HeaphyTrack":"Heaphy Track",
-            "RouteburnTrack":"Routeburn Track",
-            "MilfordTrack":"Milford Track",
-            "KeplerTrack":"Kepler Track",
-            "RakiuraTrack":"Rakiura Track - Stewart Island"
-        },
-        walk_csv_path,
-        row,
-        locations_data,
-        location_data_by_location = {},
-        serialized_row = "",
-        was_able_to_read_a_line;
-    if(!fs.statSync(walk_fullpath).isDirectory() && walk_file.endsWith(".csv")){
-        process.stdout.write("Found a CSV: " + walk_file + "\n");
-        was_able_to_read_a_line = false;
-        locations_data = fs.readFileSync(walk_fullpath).toString().CSVMap();
-        //throw JSON.stringify(locations_data); //DEBUG
 
-        for(var y = 0; y < locations_data.length; y++){
-            row = locations_data[y];
-            
-            if(row.Longitude !== undefined) { //test for blank line in CSV. Longitude) is arbitrary field that should exist.
-                if(location_data_by_location[row.GreatWalk] === undefined) {
-                    location_data_by_location[row.GreatWalk] = [];
+(function(){
+    for(var i = 0; i < walks_paths.length; i++){
+        var walk_name = walks_paths[i],
+            walk_fullpath = path.join(approot, "walks", walk_name),
+            location_id_mapping = {
+                "LakeWaikaremoana":"Lake Waikaremoana",
+                "WellingtonWaterfront":"Wellington",
+                "TongariroNorthernCircuit":"Tongariro Northern Circuit",
+                "TongariroNationalPark":"Tongariro Northern Circuit",
+                "WhanganuiJourney":"Whanganui Journey",
+                "AbelTasmanCoastTrack":"Abel Tasman Coast Track",
+                "AbelTasman CoastTrack":"Abel Tasman Coast Track",
+                "HeaphyTrack":"Heaphy Track",
+                "RouteburnTrack":"Routeburn Track",
+                "MilfordTrack":"Milford Track",
+                "KeplerTrack":"Kepler Track",
+                "RakiuraTrack":"Rakiura Track - Stewart Island"
+            },
+            walk_csv_path,
+            row,
+            locations_data,
+            location_data_by_location = {},
+            serialized_row = "",
+            was_able_to_read_a_line;
+
+        if(ignore_names.indexOf(walk_name) !== -1) continue;
+
+        if(!fs.statSync(walk_fullpath).isDirectory() && walk_name.endsWith(".csv")){
+            process.stdout.write("Found a CSV: " + walk_name + "\n");
+            was_able_to_read_a_line = false;
+            locations_data = fs.readFileSync(walk_fullpath, 'utf8').toString().CSVMap();
+            //throw JSON.stringify(locations_data); //DEBUG
+
+            for(var y = 0; y < locations_data.length; y++){
+                row = locations_data[y];
+                
+                if(row.Longitude !== undefined) { //test for blank line in CSV. Longitude) is arbitrary field that should exist.
+                    if(location_data_by_location[row.GreatWalk] === undefined) {
+                        location_data_by_location[row.GreatWalk] = [];
+                    }
+                    if(row.PixelOffsetLeft === undefined) {
+                        row.PixelOffsetLeft = " ";
+                    }
+                    if(row.PixelOffsetTop === undefined) {
+                        row.PixelOffsetTop = " ";
+                    }
+                    row.GreatWalkId = location_id_mapping[row.GreatWalk];
+                    if(row.GreatWalkId === undefined) {
+                        throw "Unable to find GreatWalkId for " + row.GreatWalk;
+                    }
+                    walk_csv_path = path.join(approot, "walks", row.GreatWalkId, "locations.csv");
+                    if(row.POIIconType) {
+                        serialized_row = '"' + row.Name + '","' + row.Description + '","' + row.POIIconType + '","' + row.Longitude + '","' + row.Latitude + '","' + row.PixelOffsetLeft + '","' + row.PixelOffsetTop + '"\n';
+                    } else {
+                        throw "Unrecognised CSV columns in file " + walk_name + " : " + JSON.stringify(row);
+                    }
+                    fs.appendFileSync(walk_csv_path, serialized_row);
+                    was_able_to_read_a_line = true;
+                    location_data_by_location[row.GreatWalk].push(row);
                 }
-                if(row.PixelOffsetLeft === undefined) {
-                    row.PixelOffsetLeft = " ";
-                }
-                if(row.PixelOffsetTop === undefined) {
-                    row.PixelOffsetTop = " ";
-                }
-                row.GreatWalkId = location_id_mapping[row.GreatWalk];
-                if(row.GreatWalkId === undefined) {
-                    throw "Unable to find GreatWalkId for " + row.GreatWalk;
-                }
-                walk_csv_path = path.resolve(path.join("walks", row.GreatWalkId, "locations.csv"));
-                if(row.POIIconType) {
-                    serialized_row = '"' + row.Name + '","' + row.Description + '","' + row.POIIconType + '","' + row.Longitude + '","' + row.Latitude + '","' + row.PixelOffsetLeft + '","' + row.PixelOffsetTop + '"\n';
-                } else {
-                    throw "Unrecognised CSV columns in file " + walk_file + " : " + JSON.stringify(row);
-                }
-                fs.appendFileSync(walk_csv_path, serialized_row);
-                was_able_to_read_a_line = true;
-                location_data_by_location[row.GreatWalk].push(row);
+            }
+            if(was_able_to_read_a_line === false) {
+                process.stdout.write("  - WARNING read no row from this CSV\n");
+            } else {
+                process.stdout.write("  - SUCCESS was able to read long/lat rows\n");
             }
         }
-        if(was_able_to_read_a_line === false) {
-            process.stdout.write("  - WARNING read no row from this CSV\n");
-        } else {
-            process.stdout.write("  - SUCCESS was able to read long/lat rows\n");
-        }
     }
-}
+}());
 
 //  Generate Maps
 (function(){
     for(var i = 0; i < walks_paths.length; i++){
         var walk_name = walks_paths[i],
             walk_sanitised_name = walk_name.toLowerCase().replace(/ /g, "-"),
-            walk_fullpath = path.resolve("walks/" + walk_name),
-            map_path = path.join("walks", walk_name, "map.png"),
-            map_fullpath = path.resolve(map_path),
-            locations_path = path.join(walk_fullpath, "locations.csv"),
+            walk_fullpath = path.join(approot, "walks", walk_name),
+            map_path = path.join(approot, "walks", walk_name, "map.png"),
+            locations_path = path.join(approot, "walks", walk_name, "locations.csv"),
             locations_data,
             location,
             pgw_path = path.join(walk_fullpath, "map.pgw"),
@@ -389,10 +397,12 @@ for(var i = 0; i < walks_paths.length; i++){
             new_path,
             new_filename,
             map_dimensions_json_string,
-            imdim_command,
+            dimensions_command,
             locations,
             recoverable_errors = "",
             too_close_message;
+
+        if(ignore_names.indexOf(walk_name) !== -1) continue;
 
         if(fs.statSync(walk_fullpath).isDirectory()) {
             mustache_data = {
@@ -400,10 +410,10 @@ for(var i = 0; i < walks_paths.length; i++){
                 map_pixel_width: 100,
                 map_pixel_height: 100
             },
-            imdim_command = "imdim \"{\\\"width\\\":%w, \\\"height\\\":%h}\" \"" + map_fullpath + "\"";
+            dimensions_command = "identify -format {\\\"width\\\":%w,\\\"height\\\":%h} \"" + map_path + "\"";
             //map
-            //process.stdout.write("map dimensions:\n " + imdim_command + "\n\n");
-            map_dimensions_json_string = execSync(imdim_command);
+            
+            map_dimensions_json_string = execSync(dimensions_command);
             //process.stdout.write("/map dimensions");
             if(map_dimensions_json_string.indexOf("{\"width") >= 0) {
                 var map_dimensions_json = JSON.parse(map_dimensions_json_string);
@@ -413,7 +423,7 @@ for(var i = 0; i < walks_paths.length; i++){
 
             //offset
             try {
-                map_data = fs.readFileSync(pgw_path).toString();
+                map_data = fs.readFileSync(pgw_path, 'utf8').toString();
             } catch(exception) {
                 throw "Unable to find a pgw file. Unable to proceed";
             }
@@ -430,7 +440,7 @@ for(var i = 0; i < walks_paths.length; i++){
                 mustache_data.map_details = JSON.stringify(map_details);
             }
             try {
-                locations_data = fs.readFileSync(locations_path).toString();
+                locations_data = fs.readFileSync(locations_path, 'utf8').toString();
             } catch(exception) {
             }
             mustache_data.locations = [];
@@ -457,13 +467,15 @@ for(var i = 0; i < walks_paths.length; i++){
                             too_close_message = check_for_nearby_locations(location);
                             if(too_close_message !== undefined && too_close_message.length > 0) {
                                 fs.appendFileSync(too_close_locations_path, too_close_message);
+                                some_locations_were_too_close = true;
                             }
-                            recoverable_errors += too_close_message;
+                            //recoverable_errors += too_close_message;
                             mustache_data.locations.push(location);
                         } catch(exception) {
                             if(exception.name === "OutOfBounds") {
                                 fs.appendFileSync(out_of_bounds_path, JSON.stringify(location) + "\n");
-                                recoverable_errors += " - WARNING " + location.Name + " is out of bounds. See " + path.basename(out_of_bounds_path) + " for more\n";
+                                //recoverable_errors += " - WARNING " + location.Name + " is out of bounds. See " + path.basename(out_of_bounds_path) + " for more\n";
+                                some_locations_were_out_of_bounds = true;
                             } else if(exception.name) {
                                 throw exception.name + ":" + exception.message + "\n" + JSON.stringify(exception);
                             } else {
@@ -479,16 +491,21 @@ for(var i = 0; i < walks_paths.length; i++){
 
         if(html_page !== undefined) {
             new_filename = "map-" + walk_sanitised_name + ".html";
-            new_path = path.resolve("../greatwalks/" + new_filename);
+            new_path = path.join(greatwalks_repo, new_filename);
             great_walks.walks.push({"id": walk_sanitised_name, "name": walk_name, "map_filename":new_filename, "walk_filename": "walk-" + walk_sanitised_name + ".html"});
             fs.writeFileSync(new_path, html_page);
             process.stdout.write("Building map: " + new_filename + "\n" + recoverable_errors);
             recoverable_errors = "";
         }
-
         html_page = undefined;
         map_data = undefined;
         locations_data = undefined;
+    }
+    if(some_locations_were_out_of_bounds){
+        process.stdout.write("WARNING: Some map locations were out of bounds. See walks/" + path.basename(out_of_bounds_path) + " for more details.\n");
+    }
+    if(some_locations_were_too_close) {
+        process.stdout.write("WARNING: Some map locations were too close to one another. See walks/" + path.basename(too_close_locations_path) + " for more details.\n");
     }
 }());
 
@@ -497,16 +514,21 @@ for(var i = 0; i < walks_paths.length; i++){
     for(var i = 0; i < walks_paths.length; i++){
         var walk_name = walks_paths[i],
             walk_sanitised_name = walk_name.toLowerCase().replace(/ /g, "-"),
-            walk_fullpath = path.resolve("walks/" + walk_name),
-            content_path = path.join(walk_fullpath, "index.mustache"),
-            youtube_path = path.join(walk_fullpath, "youtube.txt"),
+            walk_path = path.join(approot, "walks", walk_name),
+            content_path,
+            youtube_path,
             content_data,
-            new_path = path.resolve("../greatwalks/walk-" + walk_sanitised_name + ".html"),
+            new_path = path.join(greatwalks_repo, "walk-" + walk_sanitised_name + ".html"),
             mustache_data;
 
-        if(fs.statSync(walk_fullpath).isDirectory()) {
+        if(ignore_names.indexOf(walk_name) !== -1) continue;
+
+        content_path = path.join(walk_path, "index.mustache");
+        youtube_path = path.join(walk_path, "youtube.txt");
+
+        if(fs.statSync(walk_path).isDirectory()) {
             mustache_data = {"walk-id":walk_sanitised_name};
-            mustache_data["youtube-id"] = fs.readFileSync(youtube_path);
+            mustache_data["youtube-id"] = fs.readFileSync(youtube_path, 'utf8');
             content_data = process_page(content_path, walk_name, mustache_data, "walk");
             fs.writeFileSync(new_path, content_data);
         }
@@ -516,9 +538,9 @@ for(var i = 0; i < walks_paths.length; i++){
 (function(){
     for(var i = 0; i < htmlf_paths.length; i++){
         var htmlf_path = htmlf_paths[i],
-            htmlf_fullpath = path.resolve("html/" + htmlf_path),
+            htmlf_fullpath = path.join(approot, "html", htmlf_path),
             htmlf_path_extension = htmlf_path.substr(htmlf_path.lastIndexOf(".") + 1),
-            new_path = path.resolve("../greatwalks/" + htmlf_path.replace("." + htmlf_path_extension, ".html")),
+            new_path = path.resolve(greatwalks_repo, htmlf_path.replace("." + htmlf_path_extension, ".html")),
             html_page,
             basename = path.basename(htmlf_path),
             filename_extension = path.extname(htmlf_path),
@@ -535,7 +557,7 @@ for(var i = 0; i < walks_paths.length; i++){
 }());
 
 function process_page(htmlf_path, page_title, mustache_data, page_id){
-    var raw_htmlf_data = fs.readFileSync(htmlf_path).toString(),
+    var raw_htmlf_data = fs.readFileSync(htmlf_path, 'utf8').toString(),
         htmlf_data = resolve_includes(raw_htmlf_data, path.dirname(htmlf_path)),
         htmlf_path_extension = htmlf_path.substr(htmlf_path.lastIndexOf(".") + 1),
         htmlf_filename = path.basename(htmlf_path),

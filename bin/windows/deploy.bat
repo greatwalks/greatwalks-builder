@@ -1,3 +1,4 @@
+cd %0\..\..\..\
 git checkout master
 git add -A
 git commit -m "Automated commit"

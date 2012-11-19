@@ -1,12 +1,14 @@
-/*global process require __dirname*/
-var fs = require('fs');
-var path = require('path');
-var approot = path.dirname(__dirname);
-var greatwalks_phonegap_repo = path.join(path.dirname(approot), "greatwalks-phonegap");
-var greatwalks_repo = path.join(path.dirname(approot), "greatwalks");
-var walks_directory = path.join(approot, "walks");
-var walks_paths = fs.readdirSync(walks_directory);
-var scale_by = 1, // the build-html.js has a scale_by=0.5 but this has scale_by=1.
+/*global process require __dirname Buffer*/
+"use strict"; /* Ignore this JSLint complaint, it's a bit stupid*/
+
+var fs = require('fs'),
+    path = require('path'),
+    approot = path.dirname(__dirname),
+    greatwalks_phonegap_repo = path.join(path.dirname(approot), "greatwalks-phonegap"),
+    greatwalks_repo = path.join(path.dirname(approot), "greatwalks"),
+    walks_directory = path.join(approot, "walks"),
+    walks_paths = fs.readdirSync(walks_directory),
+    scale_by = 1, // the build-html.js has a scale_by=0.5 but this has scale_by=1.
                   // The reason for the difference is that build-html.js will display the images at 0.5
                   // but we still want the source images to be large for high DPI displays (e.g. 'retina display')
     ignore_names = ["Thumbs.db", ".DS_Store"],
@@ -29,7 +31,6 @@ var scale_by = 1, // the build-html.js has a scale_by=0.5 but this has scale_by=
     };
 
 (function(){
-    "use strict";
     fs.mkdir(path.join(greatwalks_repo, "img")); //probably already exists
     fs.mkdir(path.join(greatwalks_repo, "img/walks"));//probably already exists
 }());
@@ -72,7 +73,6 @@ var scale_by = 1, // the build-html.js has a scale_by=0.5 but this has scale_by=
 }());
 
 (function () {
-    "use strict";
     var svg_source;
     process.stdout.write("Generating Phonegap Android icons\n");
     svg_source = path.join(approot, "images/great-walks-icon.svg");
@@ -112,7 +112,8 @@ var scale_by = 1, // the build-html.js has a scale_by=0.5 but this has scale_by=
             dimension = dimensions[y];
             carousel_destination_path = path.join(greatwalks_repo, "img/homepage-carousel-x" + dimension + "-" + sanitised_name);
             resize_command = "convert \"" + carousel_image_path + "\" -resize " + dimension + "x \"" + carousel_destination_path + "\"";
-            process.stdout.write(".");
+            process.stdout.write("..");
+
             execSync(resize_command);
         }
     }
@@ -120,7 +121,6 @@ var scale_by = 1, // the build-html.js has a scale_by=0.5 but this has scale_by=
 }());
 
 (function(){
-    "use strict";
     process.stdout.write("Generating maps\n");
     for(var i = 0; i < walks_paths.length; i++){
         var walk_name = walks_paths[i],
@@ -158,9 +158,7 @@ var scale_by = 1, // the build-html.js has a scale_by=0.5 but this has scale_by=
     }
 }());
 
-
 function execSync(cmd) {
-    "use strict";
     // nodeJS doesn't have a synchronous exec e.g. execSync()
     // full credit (and blame!) for this function goes to
     // http://stackoverflow.com/questions/4443597/node-js-execute-system-command-synchronously/9051718#9051718

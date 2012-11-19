@@ -1,1 +1,1 @@
-node build-html.js
+@node %0\..\..\build-html.js

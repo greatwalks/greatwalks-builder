@@ -1,1 +1,1 @@
-node %0\..\..\build-css.js
+@node %0\..\..\build-css.js
