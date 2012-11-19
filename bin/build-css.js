@@ -45,8 +45,22 @@ var fs = require('fs'),
         });
     };
 
-process.stdout.write("LESS CSS Rendering\n");
-render_to_file(path.join(approot, "css/bootstrap-css/bootstrap.less"), path.join(greatwalks_repo, "css/bootstrap.css"));
-render_to_file(path.join(approot, "css/bootstrap-css/responsive.less"), path.join(greatwalks_repo, "css/bootstrap-responsive.css"));
-render_to_file(path.join(approot, "css/main.less"), path.join(greatwalks_repo, "css/main.css"));
-copyFileSync(path.join(approot, "css/normalize.css"), path.join(greatwalks_repo, "css/normalize.css"));
+process.stdout.write("Generating CSS\n");
+
+(function(){
+    fs.mkdir(path.join(greatwalks_repo, "css")); //probably already exists
+    fs.mkdir(path.join(greatwalks_repo, "css/bootstrap-css"));//probably already exists
+}());
+
+(function(){
+  copyFileSync(path.join(approot, "css/normalize.css"), path.join(greatwalks_repo, "css/normalize.css"));
+  process.stdout.write(" - Copying CSS that doesn't need processing\n");
+  render_to_file(path.join(approot, "css/bootstrap-css/bootstrap.less"), path.join(greatwalks_repo, "css/bootstrap.css"));
+  render_to_file(path.join(approot, "css/bootstrap-css/responsive.less"), path.join(greatwalks_repo, "css/bootstrap-responsive.css"));
+  process.stdout.write(" - Generated Bootstrap CSS\n");
+  render_to_file(path.join(approot, "css/main.less"), path.join(greatwalks_repo, "css/main.css"));
+  process.stdout.write(" - Generated App CSS\n");
+}());
+
+
+process.stdout.write("Success\n\n");

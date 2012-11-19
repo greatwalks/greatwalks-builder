@@ -4,7 +4,7 @@ var fs = require('fs'),
     path = require('path'),
     approot = path.dirname(__dirname),
     greatwalks_repo = path.join(path.dirname(approot), "greatwalks"),
-    // Twitter Bootstrap JavaScript needs to be aggregated in a particular order
+    // Twitter Bootstrap JavaScript needs to be aggregated in a particular order to be valid
     bootstrap_javascripts = ['bootstrap-transition.js', 'bootstrap-alert.js',
         'bootstrap-modal.js', 'bootstrap-dropdown.js', 'bootstrap-scrollspy.js',
         'bootstrap-tab.js', 'bootstrap-tooltip.js', 'bootstrap-popover.js',
@@ -13,6 +13,8 @@ var fs = require('fs'),
     bootstrap_javascript_path,
     app_javascripts = fs.readdirSync(path.join(approot, "javascript")),
     app_javascript_path,
+    vendor_javascripts = fs.readdirSync(path.join(approot, "javascript/vendor")),
+    vendor_javascript_path,
     ignore_names = ["Thumbs.db", ".DS_Store"],
     copyFileSync = function(srcFile, destFile) {
       //via http://procbits.com/2011/11/15/synchronous-file-copy-in-node-js/
@@ -34,16 +36,23 @@ var fs = require('fs'),
     file_handle,
     i;
 
+process.stdout.write("Generating JavaScript\n");
+
+(function(){
+    fs.mkdir(path.join(greatwalks_repo, "js")); //probably already exists
+    fs.mkdir(path.join(greatwalks_repo, "js/vendor"));//probably already exists
+}());
+
 (function(){
   // copy over the Phonegap vendor JavaScript
   copyFileSync(path.join(approot, "javascript/cordova/android.js"), path.join(greatwalks_repo, "cordova.js"));
   //Copy over a NodeJS web server (used only for debug purposes)
   copyFileSync(path.join(approot, "javascript/debug-web-server/web.js"), path.join(greatwalks_repo, "web.js"));
-}());
-
-(function(){
-    fs.mkdir(path.join(greatwalks_repo, "js")); //probably already exists
-    fs.mkdir(path.join(greatwalks_repo, "js/vendor"));//probably already exists
+  for(i = 0; i < vendor_javascripts.length; i++){
+      vendor_javascript_path = path.join(approot, "javascript/vendor", vendor_javascripts[i]);
+      copyFileSync(vendor_javascript_path, path.join(greatwalks_repo, "js/vendor", vendor_javascripts[i]));
+  }
+  process.stdout.write(" - Copied static files\n");
 }());
 
 (function(){
@@ -55,6 +64,7 @@ var fs = require('fs'),
       fs.writeSync(file_handle, fs.readFileSync(bootstrap_javascript_path, 'utf8').toString());
   }
   fs.closeSync(file_handle);
+  process.stdout.write(" - Aggregated Bootstrap JavaScript\n");
 }());
 
 (function(){
@@ -68,4 +78,8 @@ var fs = require('fs'),
       }
   }
   fs.closeSync(file_handle);
+  process.stdout.write(" - Aggregated application JavaScript\n");
 }());
+
+
+process.stdout.write("Success\n\n");
