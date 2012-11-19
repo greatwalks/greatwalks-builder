@@ -1,6 +1,6 @@
 #! /bin/bash
 
-mkdir -p "../greatwalks/img/walks/abel-tasman-coast-track" \
+mkdir -p "../greatwalks/img/walks/abel-tasman-coast-track"
 mkdir -p "../greatwalks/img/walks/heaphy-track"
 mkdir -p "../greatwalks/img/walks/kepler-track"
 mkdir -p "../greatwalks/img/walks/lake-waikaremoana"
@@ -54,23 +54,41 @@ cp images/table.png ../greatwalks/img/table.png
 cp images/weta_land.png ../greatwalks/img/weta_land.png
 cp images/weta_twitch.png ../greatwalks/img/weta_twitch.png
 
-cp images/icons/airport.png ../greatwalks/img/icon-airport.png
-cp images/icons/alert.png ../greatwalks/img/icon-alert.png
-cp images/icons/bird-or-animal-species.png ../greatwalks/img/icon-bird-or-animal-species.png
-cp images/icons/camp_hut.png ../greatwalks/img/icon-camp_hut.png
-cp images/icons/camping.png ../greatwalks/img/icon-camping.png
-cp images/icons/carpark.png ../greatwalks/img/icon-carpark.png
-cp images/icons/hotsprings.png ../greatwalks/img/icon-hotsprings.png
-cp images/icons/huts.png ../greatwalks/img/icon-huts.png
-cp images/icons/icons.png ../greatwalks/img/icon-icons.png
-cp images/icons/information.png ../greatwalks/img/icon-information.png
-cp images/icons/plantspecies.png ../greatwalks/img/icon-plantspecies.png
-cp images/icons/shelter.png ../greatwalks/img/icon-shelter.png
-cp images/icons/toilets.png ../greatwalks/img/icon-toilets.png
-cp images/icons/trailhead.png ../greatwalks/img/icon-trailhead.png
-cp images/icons/viewpoints.png ../greatwalks/img/icon-viewpoints.png
-cp images/icons/volcano.png ../greatwalks/img/icon-volcano.png
-cp images/icons/waterfall.png ../greatwalks/img/icon-waterfall.png
+cp images/map-icons/airport.png ../greatwalks/img/icon-airport.png
+cp images/map-icons/alert.png ../greatwalks/img/icon-alert.png
+cp images/map-icons/bird-or-animal-species.png ../greatwalks/img/icon-bird-or-animal-species.png
+cp images/map-icons/camp_hut.png ../greatwalks/img/icon-camp_hut.png
+cp images/map-icons/camping.png ../greatwalks/img/icon-camping.png
+cp images/map-icons/carpark.png ../greatwalks/img/icon-carpark.png
+cp images/map-icons/hotsprings.png ../greatwalks/img/icon-hotsprings.png
+cp images/map-icons/huts.png ../greatwalks/img/icon-huts.png
+cp images/map-icons/icons.png ../greatwalks/img/icon-icons.png
+cp images/map-icons/information.png ../greatwalks/img/icon-information.png
+cp images/map-icons/plantspecies.png ../greatwalks/img/icon-plantspecies.png
+cp images/map-icons/shelter.png ../greatwalks/img/icon-shelter.png
+cp images/map-icons/toilets.png ../greatwalks/img/icon-toilets.png
+cp images/map-icons/trailhead.png ../greatwalks/img/icon-trailhead.png
+cp images/map-icons/viewpoints.png ../greatwalks/img/icon-viewpoints.png
+cp images/map-icons/generic_nature.png ../greatwalks/img/icon-map-generic_nature.png
+cp images/map-icons/volcano.png ../greatwalks/img/icon-volcano.png
+cp images/map-icons/waterfall.png ../greatwalks/img/icon-waterfall.png
+cp images/map-icons/swimming.png ../greatwalks/img/icon-map-swimming.png
+cp images/map-icons/side_trail.png ../greatwalks/img/icon-map-side_trail.png
+
+cp images/content-icons/calendar.png  ../greatwalks/img/icon-content-calendar.png
+cp images/content-icons/culture.png ../greatwalks/img/icon-content-culture.png
+cp images/content-icons/maps_blue.png ../greatwalks/img/icon-content-maps_blue.png
+cp images/content-icons/plants_trees.png ../greatwalks/img/icon-content-plants_trees.png
+cp images/content-icons/volcano.png ../greatwalks/img/icon-content-volcano.png
+cp images/content-icons/camping.png ../greatwalks/img/icon-content-camping.png
+cp images/content-icons/kiwi.png ../greatwalks/img/icon-content-kiwi.png
+cp images/content-icons/maps_gold.png ../greatwalks/img/icon-content-maps_gold.png
+cp images/content-icons/river.png ../greatwalks/img/icon-content-river.png
+cp images/content-icons/canoe.png ../greatwalks/img/icon-content-canoe.png
+cp images/content-icons/lakes.png ../greatwalks/img/icon-content-lakes.png
+cp images/content-icons/mountains.png ../greatwalks/img/icon-content-mountains.png
+cp images/content-icons/specials.png ../greatwalks/img/icon-content-specials.png
+
 
 cp images/youarehere.png ../greatwalks/img/youarehere.png
 cp images/camera-placeholder.jpg ../greatwalks/img/camera-placeholder.jpg
