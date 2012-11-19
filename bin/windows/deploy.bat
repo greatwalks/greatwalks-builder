@@ -1,5 +1,7 @@
+@REM This assumes that you have 3 repos named "greatwalks-builder", "greatwalks", and "greatwalks-phonegap" in directories side-by-side.
 cd %0\..\..\..\
 git checkout master
+git pull
 git add -A
 git commit -m "Automated commit"
 git push
@@ -14,4 +16,8 @@ git push origin gh-pages
 git checkout master
 cd ../greatwalks-phonegap/assets/www
 git pull
-cd ../../../greatwalks-builder
+cd ../../
+git add -A
+git commit -m "Automated commit"
+git push
+cd ../greatwalks-builder
