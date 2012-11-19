@@ -45,6 +45,7 @@ var fs = require('fs'),
     copyFileSync(path.join(approot, "images/bootstrap-images/glyphicons-halflings-white.png"), path.join(greatwalks_repo, "img/glyphicons-halflings-white.png"));
     copyFileSync(path.join(approot, "images/header-icons.png"), path.join(greatwalks_repo, "img/header-icons.png"));
     copyFileSync(path.join(approot, "images/slideout-menu.png"), path.join(greatwalks_repo, "img/slideout-menu.png"));
+    copyFileSync(path.join(approot, "images/social-buttons.png"), path.join(greatwalks_repo, "img/social-buttons.png"));
     copyFileSync(path.join(approot, "images/table.png"), path.join(greatwalks_repo, "img/table.png"));
     copyFileSync(path.join(approot, "images/weta_land.png"), path.join(greatwalks_repo, "img/weta_land.png"));
     copyFileSync(path.join(approot, "images/weta_twitch.png"), path.join(greatwalks_repo, "img/weta_twitch.png"));
