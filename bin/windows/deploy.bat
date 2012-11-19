@@ -1,4 +1,4 @@
-@REM This assumes that you have 3 repos named "greatwalks-builder", "greatwalks", and "greatwalks-phonegap" in directories side-by-side.
+@REM This assumes that you have 3 repos named "greatwalks-builder", "greatwalks", and "greatwalks-android" in directories side-by-side.
 cd %0\..\..\..\
 git checkout master
 git pull
@@ -14,7 +14,7 @@ git checkout gh-pages
 git merge origin
 git push origin gh-pages
 git checkout master
-cd ../greatwalks-phonegap/assets/www
+cd ../greatwalks-android/assets/www
 git pull
 cd ../../
 git add -A

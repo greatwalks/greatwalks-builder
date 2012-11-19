@@ -4,7 +4,7 @@
 var fs = require('fs'),
     path = require('path'),
     approot = path.dirname(__dirname),
-    greatwalks_phonegap_repo = path.join(path.dirname(approot), "greatwalks-phonegap"),
+    greatwalks_phonegap_repo = path.join(path.dirname(approot), "greatwalks-android"),
     greatwalks_repo = path.join(path.dirname(approot), "greatwalks"),
     walks_directory = path.join(approot, "walks"),
     walks_paths = fs.readdirSync(walks_directory),
@@ -56,6 +56,7 @@ var fs = require('fs'),
     copyFileSync(path.join(approot, "images/homepage-buttons.png"), path.join(greatwalks_repo, "img/homepage-buttons.png"));
     copyFileSync(path.join(approot, "images/content-buttons.png"), path.join(greatwalks_repo, "img/content-buttons.png"));
     copyFileSync(path.join(approot, "images/walk-icons.png"), path.join(greatwalks_repo, "img/walk-icons.png"));
+    copyFileSync(path.join(approot, "images/new-zealand-map.png"), path.join(greatwalks_repo, "img/new-zealand-map.png"));
     icons = fs.readdirSync(path.join(approot, "images/map-icons"));
     for(i = 0; i < icons.length; i++){
         icon = icons[i];
