@@ -328,8 +328,9 @@
                 },
                 data_photo_uri_key: "content-image-uri",
                 show_user_photo: function(event){
-                    var $photo = user_actions.$photo_preview;
-                    $photo.attr("src", $photo.data(user_actions.data_photo_uri_key)).show();
+                    var $photo = user_actions.$photo_preview,
+                        $this = $(this);
+                    $photo.attr("src", $this.data(user_actions.data_photo_uri_key)).show();
                 },
                 hide_user_photo: function(event){
                     var $photo = user_actions.$photo_preview;
@@ -347,7 +348,7 @@
                         user_photo_style.position = "absolute";
                     }
                     user_photo_data[user_actions.data_photo_uri_key] = imageURI;
-                    var $photo_icon = $("<a/>").addClass("location location-icon location-user-photo").data(user_photo_data);
+                    var $photo_icon = $("<a/>").addClass("location location-icon location-user-photo").data(user_photo_data).style(user_photo_style);
                     $photo_icon.click(user_actions.show_user_photo); //TODO: click and hammerjs
                     $("#map").append($photo_icon);
                     if(display_immediately) {
