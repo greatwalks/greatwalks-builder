@@ -341,15 +341,16 @@
                         "longitude": longitude,
                         "latitude": latitude
                         },
-                        user_photo_style = {
-                        };
+                        user_photo_style;
                     if(latitude !== undefined && longitude !== undefined) {
                         user_photo_style = longitude_latitude_to_pixels(longitude, latitude);
                         user_photo_style.position = "absolute";
                     }
                     user_photo_data[user_actions.data_photo_uri_key] = imageURI;
-                    var $photo_icon = $("<a/>").addClass("location location-icon location-user-photo").data(user_photo_data).css(user_photo_style);
-                    $photo_icon.click(user_actions.show_user_photo); //TODO: click and hammerjs
+                    var $photo_icon = $("<a/>").addClass("location location-icon location-user-photo").data(user_photo_data).click(user_actions.show_user_photo); //TODO: click and hammerjs
+                    if(user_photo_style){
+                        $photo_icon.css(user_photo_style);
+                    }
                     $("#map").append($photo_icon);
                     if(display_immediately) {
                         $photo_icon.click();
@@ -357,6 +358,7 @@
                     if(add_to_localStorage) {
                         //TODO
                     }
+                    alert(JSON.stringify(user_photo_style));
                 },
                 take_photo: function(){
                     var camera_success = function(imageURI) {
