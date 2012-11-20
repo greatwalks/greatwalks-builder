@@ -73,8 +73,8 @@
             },
             longitude_latitude_to_pixels = function(longitude, latitude){
                 return {
-                    left: (longitude - map_details.longitude) / map_details.degrees_per_pixel,
-                    top: (latitude - map_details.latitude) / map_details.degrees_per_pixel
+                    left: Math.abs((longitude - map_details.longitude) / map_details.degrees_per_pixel) + "px",
+                    top: Math.abs((latitude - map_details.latitude) / map_details.degrees_per_pixel) + "px"
                 };
             },
             geolocationSuccess = function(position){
