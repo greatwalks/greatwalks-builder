@@ -312,27 +312,28 @@
                     };
                 navigator.camera.getPicture(camera_success, camera_fail, {quality: 50, destinationType: Camera.DestinationType.FILE_URI });
             },
-            user_actions_panel_toggle = function(event){
-                var $user_actions_panel = $("#user_actions"),
-                    $no_camera_available = $("#no_camera_available"),
-                    no_camera_available_timer,
-                    no_camera_available_fadeOut = function(){
-                        $no_camera_available.fadeOut();
-                    };
-
-                if(!navigator.camera) {
-                    if($user_actions_panel.hasClass("hidden")){
-                        $user_actions_panel.removeClass("hidden");
-                    } else {
-                        $user_actions_panel.addClass("hidden");
-                    }
-                } else {
-                    $no_camera_available.fadeIn("fast", function(){
-                        if(no_camera_available_timer) {
-                            clearTimeout(no_camera_available_timer);
+            user_actions = {
+                $no_camera_available: $("#no_camera_available"),
+                panel_toggle: function(event){
+                    var $user_actions_panel = $("#user_actions"),
+                        no_camera_available_timer;
+                    if(!navigator.camera) {
+                        if($user_actions_panel.hasClass("hidden")){
+                            $user_actions_panel.removeClass("hidden");
+                        } else {
+                            $user_actions_panel.addClass("hidden");
                         }
-                        no_camera_available_timer = setTimeout(no_camera_available_fadeOut, 2000);
-                    }).click(no_camera_available_fadeOut);
+                    } else {
+                        user_actions.$no_camera_available.fadeIn("fast", function(){
+                            if(no_camera_available_timer) {
+                                clearTimeout(no_camera_available_timer);
+                            }
+                            no_camera_available_timer = setTimeout(user_actions.no_camera_available, 2000);
+                        });
+                    }
+                },
+                no_camera_available: function(){
+                    user_actions.$no_camera_available.fadeOut();
                 }
             },
             $locations = $(".location"),
@@ -343,7 +344,6 @@
                 scale_treshold: 0,
                 drag_min_distance: 0
             };
-            
 
         if(last_known_position !== undefined) {
             last_known_position = JSON.parse(last_known_position);
@@ -374,8 +374,9 @@
             //anything for desktop browsers
         }
         youarehere_hammer = $("#youarehere, #no_gps").hammer(hammer_defaults);
-        youarehere_hammer.bind("tap", toggle_user_actions_panel);
-
+        youarehere_hammer.bind("tap", user_actions.panel_toggle);
+        user_actions.$no_camera_available.click(user_actions.no_camera_available);
+        //$("")
         
     };
 

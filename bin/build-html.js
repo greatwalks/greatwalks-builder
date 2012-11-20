@@ -27,7 +27,6 @@ var fs = require('fs'),
     too_close_locations_path = path.join(approot, "walks/too-close-locations.log"),
     some_locations_were_too_close = false,
     great_walks = {"walks":[]},
-    template_slideout_walks = "",
     PIx = 3.141592653589793,
     degrees_to_radians = function(degrees) {
         return degrees * PIx / 180;
@@ -70,7 +69,7 @@ String.prototype.CSV = function(overrideStrDelimiter) {
         strMatchedValue,
         csv_string = this.replace(/,,/g, ", ,").removeNonStandardCharacters(),
         arrMatches = null;
-     while (arrMatches = objPattern.exec(csv_string)) {
+     while (arrMatches = objPattern.exec(csv_string)) { /*JSLINT IGNORE*/
          strMatchedDelimiter = arrMatches[1];
          if(strMatchedDelimiter.length && (strMatchedDelimiter != strDelimiter)) {
              arrData.push([]);
@@ -266,7 +265,7 @@ var share_social_details = {
  *  BEGIN BUILDING HTML
  */
 
- template = resolve_includes(template).replace(/\{\{slide-walks\}\}/g, template_slideout_walks);
+process.stdout.write("Generating HTML\n");
 
 (function(){
     //  Delete log of out of bounds
@@ -284,16 +283,31 @@ var share_social_details = {
 }());
 
 (function(){
-    // Delete per-walk CSVs while leaving source file(s)
+    // Delete any per-walk CSVs while leaving source file(s)
     // Also build up a list of walks (each walk has a directory under 'walks')
-    for(var i = 0; i < walks_paths.length; i++){
-        var walk_name = walks_paths[i],
-            walk_fullpath = path.join(approot, "walks", walk_name),
-            walk_sanitised_name = walk_name.toLowerCase().replace(/ /g, "-"),
-            walk_csv_path;
+    var walks_in_order = [
+        "Lake Waikaremoana",
+        "Tongariro Northern Circuit",
+        "Whanganui Journey",
+        "Abel Tasman Coast Track",
+        "Heaphy Track",
+        "Kepler Track",
+        "Milford Track",
+        "Routeburn Track",
+        "Rakiura Track - Stewart Island"],
+        i,
+        walk_name,
+        walk_fullpath,
+        walk_sanitised_name,
+        walk_csv_path,
+        template_slideout_walks = "";
+            
+    for(i = 0; i < walks_paths.length; i++){
+        walk_name = walks_paths[i];
+        walk_fullpath = path.join(approot, "walks", walk_name);
+        walk_sanitised_name = walk_name.toLowerCase().replace(/ /g, "-");
         if(ignore_names.indexOf(walk_name) !== -1) continue;
         if(fs.statSync(walk_fullpath).isDirectory()) {
-            template_slideout_walks += '<li><a href="walk-' + walk_sanitised_name + '.html">' + walk_name + '</a></li>';
             walk_csv_path = path.join(walk_fullpath, "locations.csv");
             try {
                 fs.unlinkSync(walk_csv_path);
@@ -304,9 +318,14 @@ var share_social_details = {
             fs.writeFileSync(walk_csv_path, "Name,Description,Type,Long,Lat,PixelOffsetLeft,PixelOffsetTop\n");
         }
     }
+
+    for(i = 0; i < walks_in_order.length; i++){
+        walk_name = walks_in_order[i],
+        walk_sanitised_name = walk_name.toLowerCase().replace(/ /g, "-");
+        template_slideout_walks += '<li><a href="walk-' + walk_sanitised_name + '.html">' + walk_name + '</a></li>';
+    }
+    template = resolve_includes(template).replace(/\{\{slide-walks\}\}/g, template_slideout_walks);
 }());
-
-
 
 (function(){
     for(var i = 0; i < walks_paths.length; i++){
@@ -314,7 +333,7 @@ var share_social_details = {
             walk_fullpath = path.join(approot, "walks", walk_name),
             location_id_mapping = {
                 "LakeWaikaremoana":"Lake Waikaremoana",
-                "WellingtonWaterfront":"Wellington",
+                "Wellington":"Wellington",
                 "TongariroNorthernCircuit":"Tongariro Northern Circuit",
                 "TongariroNationalPark":"Tongariro Northern Circuit",
                 "WhanganuiJourney":"Whanganui Journey",
@@ -336,7 +355,7 @@ var share_social_details = {
         if(ignore_names.indexOf(walk_name) !== -1) continue;
 
         if(!fs.statSync(walk_fullpath).isDirectory() && walk_name.endsWith(".csv")){
-            process.stdout.write("Found a CSV: " + walk_name + "\n");
+            process.stdout.write(" - Found a CSV: " + walk_name + "\n");
             was_able_to_read_a_line = false;
             locations_data = fs.readFileSync(walk_fullpath, 'utf8').toString().CSVMap();
             //throw JSON.stringify(locations_data); //DEBUG
@@ -370,9 +389,9 @@ var share_social_details = {
                 }
             }
             if(was_able_to_read_a_line === false) {
-                process.stdout.write("  - WARNING read no row from this CSV\n");
+                process.stdout.write("   - WARNING no valid rows read from this CSV\n");
             } else {
-                process.stdout.write("  - SUCCESS was able to read long/lat rows\n");
+                process.stdout.write("   - SUCCESS was able to read long/lat rows\n");
             }
         }
     }
@@ -494,7 +513,7 @@ var share_social_details = {
             new_path = path.join(greatwalks_repo, new_filename);
             great_walks.walks.push({"id": walk_sanitised_name, "name": walk_name, "map_filename":new_filename, "walk_filename": "walk-" + walk_sanitised_name + ".html"});
             fs.writeFileSync(new_path, html_page);
-            process.stdout.write("Building map: " + new_filename + "\n" + recoverable_errors);
+            process.stdout.write(" - Building map: " + new_filename + "\n" + recoverable_errors);
             recoverable_errors = "";
         }
         html_page = undefined;
@@ -502,10 +521,10 @@ var share_social_details = {
         locations_data = undefined;
     }
     if(some_locations_were_out_of_bounds){
-        process.stdout.write("WARNING: Some map locations were out of bounds. See walks/" + path.basename(out_of_bounds_path) + " for more details.\n");
+        process.stdout.write(" - WARNING: Some map locations were out of bounds.\n            See walks/" + path.basename(out_of_bounds_path) + " for more details.\n");
     }
     if(some_locations_were_too_close) {
-        process.stdout.write("WARNING: Some map locations were too close to one another. See walks/" + path.basename(too_close_locations_path) + " for more details.\n");
+        process.stdout.write(" - WARNING: Some map locations were too close to one another.\n            See walks/" + path.basename(too_close_locations_path) + " for more details.\n");
     }
 }());
 
@@ -549,7 +568,7 @@ var share_social_details = {
             html_page = process_page(htmlf_fullpath, "", {}, basename_without_extension);
         }
         if(html_page !== undefined) {
-            process.stdout.write("Building: " + htmlf_path + " to " + new_path + "\n");
+            process.stdout.write(" - Building Page: " + htmlf_path + "\n");
             fs.writeFileSync(new_path, html_page);
         }
         html_page = undefined;
@@ -739,3 +758,5 @@ function execSync(cmd) {
     }
 }
 
+
+process.stdout.write("Success\n\n");

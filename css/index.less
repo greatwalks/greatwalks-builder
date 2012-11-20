@@ -115,6 +115,22 @@ body.index {
 			width:394px;
 			height: 227px;
 			margin: 0px auto -227px auto;
+
+			label,
+			a {
+				display:block;
+				width:100%;
+				text-indent: -10000px;
+			}
+
+			.great-walks {
+				height:120px;
+				margin-bottom: 0px;
+			}
+
+			.find-an-adventure {
+				height: 80px;
+			}
 		}
 	}
 }
@@ -128,12 +144,21 @@ body.index {
 				width:299px;
 				height: 172px;
 				margin: 0px auto -172px auto;
+
+				.great-walks {
+					height:94px;
+					margin-bottom: 0px;
+				}
+
+				.find-an-adventure {
+					height: 60px;
+				}
 			}
 		}
 	}
 }
 
-@media (max-height: 400px) {
+@media  (max-width: 300px), (max-height: 400px) {
 	body.index #wrapper .navbar-fixed-bottom .navbar-inner {
 		min-height: auto;
 

@@ -30,6 +30,8 @@ var fs = require('fs'),
       return fs.closeSync(fdw);
     };
 
+process.stdout.write("Generating Images\n");
+
 (function(){
     fs.mkdir(path.join(greatwalks_repo, "img")); //probably already exists
     fs.mkdir(path.join(greatwalks_repo, "img/walks"));//probably already exists
@@ -40,7 +42,7 @@ var fs = require('fs'),
         i,
         icon,
         icon_sanitised_name;
-    process.stdout.write("Copying images (ones that don't need processing)\n");
+    process.stdout.write(" - Copying images");
     copyFileSync(path.join(approot, "images/bootstrap-images/glyphicons-halflings.png"), path.join(greatwalks_repo, "img/glyphicons-halflings.png"));
     copyFileSync(path.join(approot, "images/bootstrap-images/glyphicons-halflings-white.png"), path.join(greatwalks_repo, "img/glyphicons-halflings-white.png"));
     copyFileSync(path.join(approot, "images/header-icons.png"), path.join(greatwalks_repo, "img/header-icons.png"));
@@ -71,26 +73,26 @@ var fs = require('fs'),
         if(ignore_names.indexOf(icon) !== -1) continue;
         copyFileSync(path.join(approot, "images/content-icons", icon), path.join(greatwalks_repo, "img/icon-content-" + icon_sanitised_name));
     }
-    process.stdout.write(" - Complete.\n");
+    process.stdout.write("...complete.\n");
 }());
 
 (function () {
     var svg_source;
-    process.stdout.write("Generating Phonegap Android icons\n");
+    process.stdout.write(" - Generating Phonegap Android icons");
     svg_source = path.join(approot, "images/great-walks-icon.svg");
     execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_repo, "res/drawable-hdpi/ic_launcher.png") + " --export-width=72");
     execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_repo, "res/drawable-ldpi/ic_launcher.png") + " --export-width=36");
     execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_repo, "drawable-mdpi/ic_launcher.png") + " --export-width=48");
     execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_repo, "drawable-xhdpi/ic_launcher.png") + " --export-width=96");
-    process.stdout.write(" - Complete.\n");
-    process.stdout.write("Generating logos\n");
+    process.stdout.write("...complete.\n");
+    process.stdout.write(" - Generating logos");
     svg_source = path.join(approot, "images/great-walks-logo.svg");
     execSync("inkscape \"" + svg_source + "\" -z --export-png=\"" + path.join(greatwalks_repo, "img/logo-x150.png") + "\" --export-width=150");
     execSync("inkscape \"" + svg_source + "\" -z --export-png=\"" + path.join(greatwalks_repo, "img/logo-x225.png") + "\" --export-width=225");
     execSync("inkscape \"" + svg_source + "\" -z --export-png=\"" + path.join(greatwalks_repo, "img/logo-x300.png") + "\" --export-width=300");
     execSync("inkscape \"" + svg_source + "\" -z --export-png=\"" + path.join(greatwalks_repo, "img/logo-x600.png") + "\" --export-width=600");
     execSync("inkscape \"" + svg_source + "\" -z --export-png=\"" + path.join(greatwalks_repo, "img/logo-x1200.png") + "\" --export-width=1200");
-    process.stdout.write(" - Complete.\n");
+    process.stdout.write("...complete.\n");
 }());
 
 (function(){
@@ -105,7 +107,7 @@ var fs = require('fs'),
         y,
         dimension,
         sanitised_name;
-    process.stdout.write("Generating carousel\n - Processing");
+    process.stdout.write(" - Generating carousel:\n");
     for(i = 0; i < carousel_images.length; i++) {
         carousel_image = carousel_images[i];
         sanitised_name = carousel_image.toLowerCase().replace(/ /g, "-");
@@ -114,16 +116,14 @@ var fs = require('fs'),
             dimension = dimensions[y];
             carousel_destination_path = path.join(greatwalks_repo, "img/homepage-carousel-x" + dimension + "-" + sanitised_name);
             resize_command = "convert \"" + carousel_image_path + "\" -resize " + dimension + "x \"" + carousel_destination_path + "\"";
-            process.stdout.write("..");
-
             execSync(resize_command);
         }
+        process.stdout.write("   - " + carousel_image + "\n");
     }
-    process.stdout.write("complete. Carousel images resized.\n");
 }());
 
 (function(){
-    process.stdout.write("Generating maps\n");
+    process.stdout.write(" - Generating maps\n");
     for(var i = 0; i < walks_paths.length; i++){
         var walk_name = walks_paths[i],
             walk_sanitised_name = walk_name.toLowerCase().replace(/ /g, "-"),
@@ -139,7 +139,7 @@ var fs = require('fs'),
             resize_command;
         if(fs.statSync(walk_fullpath).isDirectory()) {
             fs.mkdir(path.join(greatwalks_repo, "img/walks", walk_sanitised_name)); //probably already exists
-            process.stdout.write(" - Generating " + walk_name + " map ");
+            process.stdout.write("   - Generating " + walk_name + " map ");
             map_dimensions_json_string = execSync(command);
             if(map_dimensions_json_string.toString().indexOf("{\"width") >= 0) {
                 map_dimensions_json = JSON.parse(map_dimensions_json_string);
@@ -188,3 +188,5 @@ function execSync(cmd) {
         } catch(e) { } //readFileSync will fail until file exists
     }
 }
+
+process.stdout.write("Success.\n\n");
