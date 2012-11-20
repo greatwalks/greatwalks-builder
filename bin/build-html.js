@@ -27,7 +27,6 @@ var fs = require('fs'),
     too_close_locations_path = path.join(approot, "walks/too-close-locations.log"),
     some_locations_were_too_close = false,
     great_walks = {"walks":[]},
-    template_slideout_walks = "",
     PIx = 3.141592653589793,
     degrees_to_radians = function(degrees) {
         return degrees * PIx / 180;
@@ -70,7 +69,7 @@ String.prototype.CSV = function(overrideStrDelimiter) {
         strMatchedValue,
         csv_string = this.replace(/,,/g, ", ,").removeNonStandardCharacters(),
         arrMatches = null;
-     while (arrMatches = objPattern.exec(csv_string)) {
+     while (arrMatches = objPattern.exec(csv_string)) { /*JSLINT IGNORE*/
          strMatchedDelimiter = arrMatches[1];
          if(strMatchedDelimiter.length && (strMatchedDelimiter != strDelimiter)) {
              arrData.push([]);
@@ -286,14 +285,29 @@ process.stdout.write("Generating HTML\n");
 (function(){
     // Delete any per-walk CSVs while leaving source file(s)
     // Also build up a list of walks (each walk has a directory under 'walks')
-    for(var i = 0; i < walks_paths.length; i++){
-        var walk_name = walks_paths[i],
-            walk_fullpath = path.join(approot, "walks", walk_name),
-            walk_sanitised_name = walk_name.toLowerCase().replace(/ /g, "-"),
-            walk_csv_path;
+    var walks_in_order = [
+        "Lake Waikaremoana",
+        "Tongariro Northern Circuit",
+        "Whanganui Journey",
+        "Abel Tasman Coast Track",
+        "Heaphy Track",
+        "Kepler Track",
+        "Milford Track",
+        "Routeburn Track",
+        "Rakiura Track - Stewart Island"],
+        i,
+        walk_name,
+        walk_fullpath,
+        walk_sanitised_name,
+        walk_csv_path,
+        template_slideout_walks = "";
+            
+    for(i = 0; i < walks_paths.length; i++){
+        walk_name = walks_paths[i];
+        walk_fullpath = path.join(approot, "walks", walk_name);
+        walk_sanitised_name = walk_name.toLowerCase().replace(/ /g, "-");
         if(ignore_names.indexOf(walk_name) !== -1) continue;
         if(fs.statSync(walk_fullpath).isDirectory()) {
-            template_slideout_walks += '<li><a href="walk-' + walk_sanitised_name + '.html">' + walk_name + '</a></li>';
             walk_csv_path = path.join(walk_fullpath, "locations.csv");
             try {
                 fs.unlinkSync(walk_csv_path);
@@ -303,6 +317,12 @@ process.stdout.write("Generating HTML\n");
             // Write the header line of the CSV
             fs.writeFileSync(walk_csv_path, "Name,Description,Type,Long,Lat,PixelOffsetLeft,PixelOffsetTop\n");
         }
+    }
+
+    for(i = 0; i < walks_in_order.length; i++){
+        walk_name = walks_in_order[i],
+        walk_sanitised_name = walk_name.toLowerCase().replace(/ /g, "-");
+        template_slideout_walks += '<li><a href="walk-' + walk_sanitised_name + '.html">' + walk_name + '</a></li>';
     }
     template = resolve_includes(template).replace(/\{\{slide-walks\}\}/g, template_slideout_walks);
 }());

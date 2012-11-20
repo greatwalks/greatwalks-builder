@@ -19,7 +19,10 @@
 <div class="navbar navbar-fixed-bottom">
     <div class="navbar-inner">
         <div class="container-fluid">
-            <a id="doc-sign" href="walks.html"></a>
+            <div id="doc-sign">
+              <label for="show_slideout_navigation" class="great-walks">Great Walks</label>
+              <a href="find-an-adventure.html" class="find-an-adventure">Find an adventure</a>
+            </div>
             <ul class="options">
               <li><a href="maps.html" class="maps">Maps</a></li>
               <li><a href="offers.html" class="offers">Offers</a></li>
