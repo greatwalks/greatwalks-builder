@@ -58,6 +58,7 @@
             open_tooltip,
             last_known_position = localStorage["geolocation-last-known-position"],
             one_second_in_milliseconds = 1000,
+            geolocationWatchId,
             geolocationSettings = {
                 maximumAge:600000,
                 enableHighAccuracy: true,
@@ -68,6 +69,12 @@
                 return {
                     longitude: map_details.longitude + (map_x / map_details.degrees_per_pixel),
                     latitude: map_details.latitude + (map_y / map_details.degrees_per_pixel)
+                };
+            },
+            longitude_latitude_to_pixels = function(longitude, latitude){
+                return {
+                    left: (longitude - map_details.longitude) * map_details.degrees_per_pixel,
+                    top: (latitude - map_details.latitude) * map_details.degrees_per_pixel
                 };
             },
             geolocationSuccess = function(position){
@@ -328,13 +335,27 @@
                     var $photo = user_actions.$photo_preview;
                     $photo.hide();
                 },
-                add_photo_to_map: function(imageURI, latitude, longitude, display_immediately){
-                    var $photo_icon = $("<a/>").addClass("location user-photo").data(user_actions.data_photo_uri_key, imageURI).click(user_actions.show_user_photo);
+                add_photo_to_map: function(imageURI, latitude, longitude, display_immediately, add_to_localStorage){
+                    var user_photo_data = {
+                        "longitude": longitude,
+                        "latitude": latitude
+                        },
+                        user_photo_style = {
+                        };
+                    if(latitude !== undefined && longitude !== undefined) {
+                        user_photo_style = longitude_latitude_to_pixels(longitude, latitude);
+                        user_photo_style.position = "absolute";
+                    }
+                    user_photo_data[user_actions.data_photo_uri_key] = imageURI;
+                    var $photo_icon = $("<a/>").addClass("location location-icon location-user-photo").data(user_photo_data);
+                    $photo_icon.click(user_actions.show_user_photo); //TODO: click and hammerjs
                     $("#map").append($photo_icon);
                     if(display_immediately) {
                         $photo_icon.click();
                     }
-                    //TODO: store in localStorage too
+                    if(add_to_localStorage) {
+                        //TODO
+                    }
                 },
                 take_photo: function(){
                     var camera_success = function(imageURI) {
@@ -343,8 +364,11 @@
                             last_known_position = localStorage["geolocation-last-known-position"];
                             if(last_known_position !== undefined) {
                                 last_known_position = JSON.parse(last_known_position);
-                                user_actions.add_photo_to_map(imageURI, last_known_position.coords.latitude, last_known_position.coords.longitude, true);
+                                user_actions.add_photo_to_map(imageURI, last_known_position.coords.latitude, last_known_position.coords.longitude, true, true);
+                            } else {
+                                user_actions.add_photo_to_map(imageURI, undefined, undefined, true, true);
                             }
+                            user_actions.$user_actions_panel.addClass("hidden");
                         },
                         camera_fail = function onFail(message) {
                             alert('Failed because: ' + message);
