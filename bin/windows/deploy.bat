@@ -15,7 +15,7 @@ git merge origin
 git push origin gh-pages
 git checkout master
 cd ../greatwalks-android
-git submodule update
+git submodule foreach git pull origin master
 git add -A
 git commit -m "Automated commit"
 git push
