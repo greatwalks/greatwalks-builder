@@ -103,7 +103,7 @@ process.stdout.write("Generating Images\n");
         carousel_destination_path,
         i,
         resize_command,
-        dimensions = [1024, 2048],
+        dimensions = [1024], //Previously we also exported images at 2048 but it added 30mb to the package
         y,
         dimension,
         sanitised_name;
