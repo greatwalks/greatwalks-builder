@@ -88,7 +88,7 @@
     height:128px;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 600px),  (max-height:500px) {
     #logo {
         margin-left: -112px;
         background-image: url("../img/logo-x225.png");
@@ -97,7 +97,7 @@
     }
 }
 
-@media (max-width: 400px), (max-height: 300px) { /* Note: this is an OR http://stackoverflow.com/questions/11404744/media-queries-max-width-or-max-height */
+@media (max-width: 400px), (max-height: 400px) {
     #logo {
         margin-left: -75px;
         background-image: url("../img/logo-x150.png");
