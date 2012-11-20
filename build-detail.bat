@@ -1,1 +1,0 @@
-node build-detail.js
