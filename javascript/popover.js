@@ -22,6 +22,9 @@
                     window.hide_all_popovers_no_bubbling(event);
                 }
             });
+            $("body").on("click", ".popover", function(event){
+                window.hide_all_popovers_no_bubbling(event);
+            });
         },
         get_distance = function(latitude, longitude, include_description){
             var last_known_position = localStorage["geolocation-last-known-position"],

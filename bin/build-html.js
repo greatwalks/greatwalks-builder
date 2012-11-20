@@ -456,6 +456,7 @@ process.stdout.write("Generating HTML\n");
                 map_details.degrees_per_pixel = parseFloat(extract_value_between(map_data_array, 0, 2) / scale_by);
                 map_details.extent_latitude = map_details.latitude - (mustache_data.map_pixel_height * map_details.degrees_per_pixel);
                 map_details.extent_longitude = map_details.longitude + (mustache_data.map_pixel_width * map_details.degrees_per_pixel);
+                map_details.map_id = walk_sanitised_name;
                 mustache_data.map_details = JSON.stringify(map_details);
             }
             try {
