@@ -71,54 +71,6 @@ body.index {
 			}
 		}
 
-		.navbar-fixed-bottom .navbar-inner {
-			padding-top:0px;
-			background: #427630;
-
-			.container-fluid * {
-				width:auto;
-				text-align:center;
-				float:none;
-			}
-
-			ul.options {
-				margin: 0px auto;
-
-				li {
-					display:inline;
-
-					a {
-						display:inline-block;
-						background: url("../img/homepage-buttons.png") no-repeat;
-						background-size: 258px 44px;
-						width: 100px;
-						padding-top: 60px;
-						padding-bottom:5px;
-						text-transform:uppercase;
-						text-align:center;
-						color:white;
-						font-weight:bold;
-
-						&:hover {
-							text-decoration:none;
-						}
-
-						&.maps {
-							background-position: 30px 10px;
-						}
-
-						&.offers {
-							background-position: -80px 10px;
-						}
-
-						&.booknow {
-							background-position: -193px 10px;
-						}
-					}
-				}
-			}
-		}
-
 		#doc-sign {
 			display:block;
 			text-decoration:none;
@@ -173,6 +125,56 @@ body.index {
 		}
 	}
 }
+
+.navbar-fixed-bottom .navbar-inner {
+	/* Also used on book.html and offers.html */
+	padding-top:0px;
+	background: #427630;
+
+	.container-fluid * {
+		width:auto;
+		text-align:center;
+		float:none;
+	}
+
+	ul.options {
+		margin: 0px auto;
+
+		li {
+			display:inline;
+
+			a {
+				display:inline-block;
+				background: url("../img/homepage-buttons.png") no-repeat;
+				background-size: 258px 44px;
+				width: 100px;
+				padding-top: 60px;
+				padding-bottom:5px;
+				text-transform:uppercase;
+				text-align:center;
+				color:white;
+				font-weight:bold;
+
+				&:hover {
+					text-decoration:none;
+				}
+
+				&.maps {
+					background-position: 30px 10px;
+				}
+
+				&.offers {
+					background-position: -80px 10px;
+				}
+
+				&.booknow {
+					background-position: -193px 10px;
+				}
+			}
+		}
+	}
+}
+
 
 @media  (max-width: 300px), (max-height: 400px) {
 	body.index #wrapper .navbar-fixed-bottom .navbar-inner {

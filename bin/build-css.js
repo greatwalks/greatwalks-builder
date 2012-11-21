@@ -39,7 +39,7 @@ var fs = require('fs'),
         parser.parse(source_less, function(e, tree){
             if(e) {
                 console.log(e);
-                process.exit();
+                throw e;
             }
             fs.writeFileSync(to_path, tree.toCSS());
         });
@@ -53,6 +53,7 @@ process.stdout.write("Generating CSS\n");
 }());
 
 (function(){
+  copyFileSync(path.join(approot, "bin/misc/greatwalks-README.md"), path.join(greatwalks_repo, "README.md")); //Nothing to do with CSS but we want to copy it somewhere
   copyFileSync(path.join(approot, "css/normalize.css"), path.join(greatwalks_repo, "css/normalize.css"));
   process.stdout.write(" - Copying CSS that doesn't need processing\n");
   render_to_file(path.join(approot, "css/bootstrap-css/bootstrap.less"), path.join(greatwalks_repo, "css/bootstrap.css"));

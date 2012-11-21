@@ -41,24 +41,22 @@ process.stdout.write("Generating Images\n");
     var icons,
         i,
         icon,
-        icon_sanitised_name;
+        icon_sanitised_name,
+        images,
+        image,
+        image_sanitised_name,
+        image_path;
     process.stdout.write(" - Copying images");
-    copyFileSync(path.join(approot, "images/bootstrap-images/glyphicons-halflings.png"), path.join(greatwalks_repo, "img/glyphicons-halflings.png"));
-    copyFileSync(path.join(approot, "images/bootstrap-images/glyphicons-halflings-white.png"), path.join(greatwalks_repo, "img/glyphicons-halflings-white.png"));
-    copyFileSync(path.join(approot, "images/header-icons.png"), path.join(greatwalks_repo, "img/header-icons.png"));
-    copyFileSync(path.join(approot, "images/slideout-menu.png"), path.join(greatwalks_repo, "img/slideout-menu.png"));
-    copyFileSync(path.join(approot, "images/social-buttons.png"), path.join(greatwalks_repo, "img/social-buttons.png"));
-    copyFileSync(path.join(approot, "images/table.png"), path.join(greatwalks_repo, "img/table.png"));
-    copyFileSync(path.join(approot, "images/weta_land.png"), path.join(greatwalks_repo, "img/weta_land.png"));
-    copyFileSync(path.join(approot, "images/weta_twitch.png"), path.join(greatwalks_repo, "img/weta_twitch.png"));
-    copyFileSync(path.join(approot, "images/youarehere.png"), path.join(greatwalks_repo, "img/youarehere.png"));
-    copyFileSync(path.join(approot, "images/camera-placeholder.jpg"), path.join(greatwalks_repo, "img/camera-placeholder.jpg"));
-    copyFileSync(path.join(approot, "images/missing-icon.png"), path.join(greatwalks_repo, "img/missing-icon.png"));
-    copyFileSync(path.join(approot, "images/homepage-sign.png"), path.join(greatwalks_repo, "img/homepage-sign.png"));
-    copyFileSync(path.join(approot, "images/homepage-buttons.png"), path.join(greatwalks_repo, "img/homepage-buttons.png"));
-    copyFileSync(path.join(approot, "images/content-buttons.png"), path.join(greatwalks_repo, "img/content-buttons.png"));
-    copyFileSync(path.join(approot, "images/walk-icons.png"), path.join(greatwalks_repo, "img/walk-icons.png"));
-    copyFileSync(path.join(approot, "images/new-zealand-map.png"), path.join(greatwalks_repo, "img/new-zealand-map.png"));
+    images = fs.readdirSync(path.join(approot, "images"));
+    for(i = 0; i < images.length; i++){
+        image = images[i];
+        image_sanitised_name = image.toLowerCase().replace(/ /g, "-");
+        image_path = path.join(approot, "images", image);
+        if(ignore_names.indexOf(image) !== -1) continue;
+        if(!fs.statSync(image_path).isDirectory()) {
+            copyFileSync(image_path, path.join(greatwalks_repo, "img", image_sanitised_name));
+        }
+    }
     icons = fs.readdirSync(path.join(approot, "images/map-icons"));
     for(i = 0; i < icons.length; i++){
         icon = icons[i];

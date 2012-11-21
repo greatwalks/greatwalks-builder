@@ -13,3 +13,15 @@
       </li>
     </ul>
 </div>
+
+<div class="navbar navbar-fixed-bottom">
+    <div class="navbar-inner">
+        <div class="container-fluid">
+            <ul class="options">
+              <li><a href="maps.html" class="maps">Maps</a></li>
+              <li><a href="offers.html" class="offers">Offers</a></li>
+              <li><a href="book.html" class="booknow">Book Now</a></li>
+            </ul>
+        </div>
+   </div>
+</div>
