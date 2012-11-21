@@ -31,8 +31,12 @@ body.find-an-adventure {
 
     .resetFinder {
         margin-top:0.5em;
-        display:block;
+        display:inline-block;
         text-align:center;
+    }
+
+    #warning-1-2-days {
+        display:none;
     }
 
     ol.chooser {
@@ -75,6 +79,11 @@ body.find-an-adventure {
                 background-image: url("../img/find-an-adventure-icons.png");
                 background-size: 60px 750px;
                 background-repeat: no-repeat;
+                text-decoration:none;
+
+                &:hover {
+                    text-decoration:none;
+                }
             }
         }
 
@@ -100,7 +109,7 @@ body.find-an-adventure {
 
             a {
                 padding-left:80px;
-                background-position: 30px -95px;
+                background-position: 30px -94px;
             }
         }
 
@@ -174,13 +183,16 @@ body.find-an-adventure {
                     }
                 }
 
-
                 a {
                     display:block;
                     padding: 15px 15px 15px 50px;
-                    
                     color:black;
                     font-weight:bold;
+                    text-decoration:none;
+
+                    &:hover {
+                       text-decoration:none;
+                    }
                 }
             }
 
@@ -208,7 +220,7 @@ body.find-an-adventure {
                a {
                     display:block;
                     background: url("../img/find-an-adventure-icons.png");
-                    background-size: 50px 750px;
+                    background-size: 60px 750px;
                     background-repeat: no-repeat;
                     background-position: right -683px;
                     color: #fff;
@@ -218,6 +230,7 @@ body.find-an-adventure {
 
                     &:hover {
                         background-color: #78b15f;
+                        border-radius: 5px;
                     }
                }
             }

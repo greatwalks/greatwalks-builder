@@ -18,7 +18,8 @@
                 $results = $("#results"),
                 $no_results = $("#no-results"),
                 $results_search = $results.find("li"),
-                $modals = $(".modal");
+                $modals = $(".modal"),
+                $warning_one_two_days = $("#warning-1-2-days");
                 
             if(modal_id === "where" || modal_id === "time") {
                 $list_item.toggleClass("active").siblings().removeClass("active");
@@ -33,8 +34,9 @@
                 $modal.modal('hide');
             }, 250);
             
-            //$("#debug").text($results_search.length + " ");
+            
             $results_search.show();
+            $warning_one_two_days.hide();
             $modals.each(function(index){
                 var $modal = $(this),
                     modal_id = $modal.attr("id"),
@@ -46,7 +48,9 @@
                         selector = "." + active_selection_id;
                     $results_search.not(selector).hide();
                     $results_search = $results_search.filter(selector);
-                    //$("#debug").append("\"" + selector + "\"=" + $results_search.length + ", ");
+                    if(active_selection_id === "time-1-2-days") {
+                        $warning_one_two_days.show();
+                    }
                 });
             });
             //$("#debug").append(". " + $results_search.filter(":visible").length);
