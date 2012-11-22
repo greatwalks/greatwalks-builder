@@ -17,13 +17,15 @@
             drag_min_distance: 0
         },
         popover_init = function(event){
-            $("body,#wrapper,#map").click(function(event){
+            var $html = $("html");
+            $("body.map, #wrapper,#map").click(function(event){
                 if($(event.target).is(this)) { //if we reached this event directly without bubbling...
                     window.hide_all_popovers_no_bubbling(event);
                 }
             });
             $("body").on("click", ".popover", function(event){
                 window.hide_all_popovers_no_bubbling(event);
+                $html.trigger("popover-click");
             });
         },
         get_distance = function(latitude, longitude, include_description){
@@ -54,6 +56,7 @@
 
     window.hide_all_popovers_no_bubbling = function(event, except_this_one){
         window.hide_all_popovers(event, except_this_one);
+        if(!event) return;
         event.preventDefault();
         event.stopPropagation();
         if(event.originalEvent) {
@@ -97,13 +100,14 @@
 
     window.show_popover = function(event, override_content){
         var $this = $(this),
-            options = {html: true};
+            options = {html: true, trigger: "manual"};
         window.hide_all_popovers(event, $this);
         if(override_content !== undefined) {
             options.content = override_content;
         }
         $this.popover(options).popover('show');
         existing_popovers.push($this);
+        if(!event) return;
         event.stopPropagation();
         if(event.originalEvent) {
             event.originalEvent.stopPropagation();
