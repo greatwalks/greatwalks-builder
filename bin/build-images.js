@@ -1,8 +1,9 @@
-/*global process require __dirname Buffer*/
+/*global process require __dirname Buffer console */
 "use strict"; /* Ignore this JSLint complaint, it's a bit stupid*/
 
 var fs = require('fs'),
     path = require('path'),
+    child_process = require('child_process'),
     approot = path.dirname(__dirname),
     greatwalks_phonegap_repo = path.join(path.dirname(approot), "greatwalks-android"),
     greatwalks_repo = path.join(path.dirname(approot), "greatwalks"),
@@ -28,6 +29,14 @@ var fs = require('fs'),
       }
       fs.closeSync(fdr);
       return fs.closeSync(fdw);
+    },
+    debug_exec_response = function(error, stdout, stderr){
+        if(error) {
+            console.log(error);
+            console.log(stdout);
+            console.log(stderr);
+            process.exit();
+        }
     };
 
 process.stdout.write("Generating Images\n");
@@ -108,12 +117,14 @@ process.stdout.write("Generating Images\n");
     process.stdout.write(" - Generating carousel:\n");
     for(i = 0; i < carousel_images.length; i++) {
         carousel_image = carousel_images[i];
+        if(ignore_names.indexOf(carousel_image) !== -1) continue;
         sanitised_name = carousel_image.toLowerCase().replace(/ /g, "-");
         carousel_image_path = path.join(approot, "images/homepage-carousel", carousel_image);
         for(y = 0; y < dimensions.length; y++) {
             dimension = dimensions[y];
             carousel_destination_path = path.join(greatwalks_repo, "img/homepage-carousel-x" + dimension + "-" + sanitised_name);
             resize_command = "convert \"" + carousel_image_path + "\" -resize " + dimension + "x \"" + carousel_destination_path + "\"";
+            //child_process.exec(resize_command, debug_response); //enable for easier debug although it will run exec asynchronously and fork a lot of processes so don't leave it enabled
             execSync(resize_command);
         }
         process.stdout.write("   - " + carousel_image + "\n");
@@ -134,7 +145,12 @@ process.stdout.write("Generating Images\n");
             command = "identify -format {\\\"width\\\":%w,\\\"height\\\":%h} \"" + map_path + "\"",
             map_dimensions_json_string,
             map_dimensions_json,
-            resize_command;
+            resize_command,
+            dont_miss_directory = path.join(walk_fullpath, "Don't miss"),
+            dont_miss_files,
+            dont_miss_file,
+            dont_miss_path,
+            y;
         if(fs.statSync(walk_fullpath).isDirectory()) {
             fs.mkdir(path.join(greatwalks_repo, "img/walks", walk_sanitised_name)); //probably already exists
             process.stdout.write("   - Generating " + walk_name + " map ");
@@ -151,6 +167,20 @@ process.stdout.write("Generating Images\n");
                 process.stdout.write("ERROR parsing image dimensions. Command I tried to run was \n" + command + "\nIs ImageMagick installed?\n");
             }
             copyFileSync(national_path, national_destination_path);
+            if(fs.statSync(dont_miss_directory).isDirectory()) {
+                dont_miss_files = fs.readdirSync(dont_miss_directory);
+                for(y = 0; y < dont_miss_files.length; y++){
+                    dont_miss_file = dont_miss_files[y];
+                    if(ignore_names.indexOf(dont_miss_file) !== -1) continue;
+                    dont_miss_path = path.join(dont_miss_directory, dont_miss_file);
+                    if((!fs.statSync(dont_miss_path).isDirectory())){
+                        copyFileSync(
+                            dont_miss_path,
+                            path.join(greatwalks_repo, "img/walks", walk_sanitised_name, "dont-miss-" + dont_miss_file)
+                        );
+                    }
+                }
+            }
             process.stdout.write(".\n");
         } else {
             //process.stdout.write("Not a directory " + walk_fullpath + "\n");
@@ -163,7 +193,7 @@ function execSync(cmd) {
     // full credit (and blame!) for this function goes to
     // http://stackoverflow.com/questions/4443597/node-js-execute-system-command-synchronously/9051718#9051718
 
-    var exec  = require('child_process').exec;
+    var exec = child_process.exec;
     var fs = require('fs');
     //execute your command followed by a simple echo
     //to file to indicate process is finished

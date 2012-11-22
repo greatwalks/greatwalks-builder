@@ -4,6 +4,13 @@
     background: linear-gradient(to right,  @left 0%,@right 100%); /* W3C */
 }
 
+.vertical-gradient(@top, @bottom) {
+    background: @top; /* Old browsers */
+    background: -webkit-linear-gradient(top, @top 0%,@bottom 100%); /* Chrome10+,Safari5.1+ */
+    background: linear-gradient(to bottom,  @top 0%,@bottom 100%); /* W3C */
+}
+
+
 .drop-shadow(@radius:10px, @color:#8d8874) {
   -moz-box-shadow:    3px 3px @radius @color;
   -webkit-box-shadow: 3px 3px @radius @color;
@@ -48,6 +55,14 @@
             }
         }
 
+
+        .intro {
+            clear:both;
+            line-height:300%;
+            font-family:serif;
+            font-size:small;
+        }
+
         .youtube {
             text-align:center;
         }
@@ -64,7 +79,7 @@
                 background-image: url("../img/walk-icons.png");
                 background-position: right -90px;
                 background-repeat: no-repeat;
-                background-size: 40px 119px;
+                background-size: 40px 200px;
             }
 
             &.open span span {
@@ -72,7 +87,7 @@
                 background-image: url("../img/walk-icons.png");
                 background-repeat: no-repeat;
                 background-position: right -41px;
-                background-size: 40px 119px;
+                background-size: 40px 200px;
             }
 
             &.dont-miss {
@@ -104,7 +119,7 @@
                 background-image: url("../img/walk-icons.png");
                 background-repeat: no-repeat;
                 background-position: left 5px;
-                background-size: 40px 119px;
+                background-size: 40px 200px;
             }
 
 
@@ -132,11 +147,49 @@
 
         .walk-detail {
             display:none;
-            background: white;
+            
             padding: 0.5em 1em;
             margin-top: -10px;
-            .drop-shadow();
+
+            &.dont-miss {
+                background: transparent;
+                position:relative;
+                width: 100%;
+
+                p {
+                    margin:0px;
+                    padding:0px;
+
+                    img {
+                        width:100%;
+                    }
+
+                    a {
+                        display:block;
+                        position:absolute;
+                        left:0px;
+                        top:0px;
+
+                        img {
+                            image-rendering:-webkit-optimize-contrast;
+                            max-width:100%;
+                            height:auto;
+
+                        }
+                    }
+                }
+            }
+
+            &.offers,
+            &.before-you-go,
+            &.getting-there,
+            &.where-to-stay,
+            &.on-the-track {
+                .drop-shadow();    
+            }
         }
+
+
 
         &.lake-waikaremoana {
             h1 {
@@ -198,7 +251,165 @@
             }
         }
 
+        .icon-map,
+        .icon-maps-blue {
+            display:inline-block;
+            background-position: 0px 0px;            
+            background-image: url("../img/icon-content-maps_blue.png");
+            background-size: 52px 50px;
+            width:52px;
+            height:50px;
+            float:right;
+            margin-right:50px;
+            text-indent: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .icon-maps-gold {
+            display:inline-block;
+            background-position: 0px 0px;            
+            background-image: url("../img/icon-content-maps_gold.png");
+            background-size: 52px 50px;
+            width:52px;
+            height:50px;
+            float:right;
+            margin-right:50px;
+            text-indent: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .icon {
+            display:inline-block;
+            background-position: 0px 0px;            
+            border: solid 10px red; /* Used to identify unstyled icons */
+            vertical-align:top;
+            
+            &.icon-lake,
+            &.icon-lake2,
+            &.icon-lakes {
+                background-image: url("../img/icon-content-lakes.png");
+                background-size: 58px 40px;
+                width:58px;
+                height:40px;
+                border:none;
+            }
+
+            &.icon-canoe {
+                background-image: url("../img/icon-content-canoe.png");
+                background-size: 58px 40px;
+                width:58px;
+                height:40px;
+                border:none;
+            }
+
+            &.icon-specials {
+                background-image: url("../img/icon-content-specials.png");
+                background-size: 58px 40px;
+                width:58px;
+                height:40px;
+                border:none;
+            }
+
+            &.icon-calendar {
+                background-image: url("../img/icon-content-calendar.png");
+                background-size: 58px 40px;
+                width:58px;
+                height:40px;
+                border:none;
+            }
+
+            &.icon-culture {
+                background-image: url("../img/icon-content-culture.png");
+                background-size: 58px 40px;
+                width:58px;
+                height:40px;
+                border:none;
+            }
+
+            &.icon-forest,
+            &.icon-plants-trees {
+                background-image: url("../img/icon-content-plants_trees.png");
+                background-size: 58px 40px;
+                width:58px;
+                height:40px;
+                border:none;
+            }
+
+            &.icon-volcano {
+                background-image: url("../img/icon-content-volcano.png");
+                background-size: 58px 40px;
+                width:58px;
+                height:40px;
+                border:none;
+            }
+
+            &.icon-kiwi {
+                background-image: url("../img/icon-content-kiwi.png");
+                background-size: 58px 40px;
+                width:58px;
+                height:40px;
+                border:none;
+            }
+
+            &.icon-river {
+                background-image: url("../img/icon-content-river.png");
+                background-size: 58px 40px;
+                width:58px;
+                height:40px;
+                border:none;
+            }
+        }
+
+
+        &.abel-tasman-coast-track {
+
+            div.dont-miss {
+                .camping {
+                    left:5%;
+                    top: 5%;
+                    width:45%;
+                }
+
+                .cleopatraspool {
+                    right:8%;
+                    top: 5%;
+                    width:45%;
+                }
+
+                .tongamarine-reserve {
+                    left:10%;
+                    top:36%;
+                    width:80%;
+                }
+
+                .awesomeviews {
+                    left:5%;
+                    bottom: 2%;
+                    width:50%;
+                }
+
+                .swimming {
+                    right:5px;
+                    bottom:3.2%;
+                    width:50%;
+                }
+               
+            }
+        }
     }
+
+    .popover {
+        background:white;
+
+        .popover-inner {
+            border-radius:6px;
+            .vertical-gradient(#80c1dd, #e3eef4);
+        }
+        
+    }
+
 }
 
 

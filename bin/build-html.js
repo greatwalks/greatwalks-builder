@@ -133,7 +133,11 @@ String.prototype.toCased = function() {
        in a short lived build script it's relatively harmless */
     for(i = 0; i < parts.length; i++){
         part = parts[i];
-        concatenated += part.substr(0, 1).toUpperCase() + part.substr(1) + " ";
+        if(i === 0) {
+            concatenated += part.substr(0, 1).toUpperCase() + part.substr(1) + " ";
+        } else {
+            concatenated += part + " ";
+        }
     }
     return concatenated.trim();
 };
@@ -156,7 +160,7 @@ function resolve_includes(html, using_includes_directory){
             data = fs.readFileSync(include_path, 'utf8').toString();
             if(special_includes.indexOf(include_filename) !== -1) {
                 basename = path.basename(include_filename, ".mustache");
-                data = '<!-- included from build-html.js. Just search for this string --><h2 class="walk-detail-header ' + basename.toId() + '"><span><span>' + basename.toCased() + '</span></span></h2><div class="walk-detail">' + data + "</div>";
+                data = '<!-- included from build-html.js. Just search for this string --><h2 class="walk-detail-header ' + basename.toId() + '"><span><span>' + basename.toCased() + '</span></span></h2><div class="walk-detail ' + basename.toId() + '">' + data + "</div>";
             }
             return data;
         });
@@ -539,6 +543,7 @@ process.stdout.write("Generating HTML\n");
             youtube_path,
             content_data,
             new_path = path.join(greatwalks_repo, "walk-" + walk_sanitised_name + ".html"),
+            map_filename = "map-" + walk_sanitised_name + ".html",
             mustache_data;
 
         if(ignore_names.indexOf(walk_name) !== -1) continue;
@@ -549,6 +554,7 @@ process.stdout.write("Generating HTML\n");
         if(fs.statSync(walk_path).isDirectory()) {
             mustache_data = {"walk-id":walk_sanitised_name};
             mustache_data["youtube-id"] = fs.readFileSync(youtube_path, 'utf8');
+            mustache_data["map_filename"] = map_filename;
             content_data = process_page(content_path, walk_name, mustache_data, "walk");
             fs.writeFileSync(new_path, content_data);
         }
