@@ -143,7 +143,7 @@ String.prototype.toCased = function() {
     return concatenated.trim();
 };
 
-function resolve_includes(html, using_includes_directory){
+function resolve_includes(html, using_includes_directory, from_page){
     var special_includes = ["don't-miss.mustache", "offers.mustache", "before-you-go.mustache", "getting-there.mustache", "where-to-stay.mustache", "on-the-track.mustache"];
     if(using_includes_directory === undefined) {
         using_includes_directory = default_include_directory;
@@ -163,26 +163,29 @@ function resolve_includes(html, using_includes_directory){
                 basename = path.basename(include_filename, ".mustache");
                 data = '<!-- included from build-html.js. Just search for this string --><h2 class="walk-detail-header ' + basename.toId() + '"><span><span>' + basename.toCased() + '</span></span></h2><div class="walk-detail ' + basename.toId() + '">' + data + "</div>";
             }
-            data = insert_audio(data, include_path);
+            data = insert_audio(data, from_page);
             return data;
         });
 }
 
-function insert_audio(htmlf, include_path){
+function insert_audio(htmlf, page_id){
     var maori_speech_id,
-        replace_with_audio = function(match, contents, offset, s){
+        replace_with_audio = function(match, maori_word, following_character, offset, s){
             var is_a_text_node = (htmlf.lastIndexOf("<", offset) < htmlf.lastIndexOf(">", offset)),
-                maori_speech_item = maori_speech[contents.toString().toLowerCase()];
-            if(!is_a_text_node) return contents;
+                maori_speech_item = maori_speech[maori_word.toString().toLowerCase()];
             if(maori_speech_item === undefined) {
-                throw "Problem accessing Maori speech item of '" + contents + "'";
+                throw "Problem accessing Maori speech item of '" + maori_word + "'";
             }
-            //console.log(contents + " in " + include_path + "\n");
-            return '<a href="#' + contents + '" data-audio="audio/speech-' + maori_speech_item.file + '" class="audio">' + contents + "</a>";
+            if(!is_a_text_node || maori_speech_item.used_in_pages.indexOf(page_id) !== -1) {
+                return maori_word + following_character;
+            }
+            maori_speech_item.used_in_pages.push(page_id); //ensure that each word is only used once per page id.
+            //console.log(maori_speech_id + " " + page_id + "\n");
+            return '<a href="#' + maori_word + '" data-audio="audio/speech-' + maori_speech_item.file + '" class="audio">' + maori_word + "</a>" + following_character;
         };
     for(maori_speech_id in maori_speech){
         htmlf = htmlf.replace(
-            new RegExp("(" + maori_speech_id + ")", "gi"),
+            new RegExp("(" + maori_speech_id + ")([ \\.,])", "gi"), //ensure that maori speech id of "awa" (river) doesn't match "aware" by checking for following space, fullstop, or comma.
             replace_with_audio
         );
     }
@@ -621,7 +624,7 @@ process.stdout.write("Generating HTML\n");
 
 function process_page(htmlf_path, page_title, mustache_data, page_id){
     var raw_htmlf_data = fs.readFileSync(htmlf_path, 'utf8').toString(),
-        htmlf_data = resolve_includes(raw_htmlf_data, path.dirname(htmlf_path)),
+        htmlf_data = resolve_includes(raw_htmlf_data, path.dirname(htmlf_path), htmlf_path),
         htmlf_path_extension = htmlf_path.substr(htmlf_path.lastIndexOf(".") + 1),
         htmlf_filename = path.basename(htmlf_path),
         html_page,
