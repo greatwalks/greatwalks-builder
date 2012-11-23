@@ -47,7 +47,7 @@
                 onError = function onError(error) {
                     alert('code: '    + error.code    + '\nmessage: ' + error.message + '\n');
                 },
-                audio_path = "/android_asset/" + $this.data("audio");
+                audio_path = "/android_asset/www/" + $this.data("audio");
             console.log("Trying to play " + audio_path);
             var my_media = new Media(audio_path, onSuccess, onError);
             my_media.play();
