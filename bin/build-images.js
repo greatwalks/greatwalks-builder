@@ -140,6 +140,8 @@ process.stdout.write("Generating Images\n");
             map_path = path.join(approot, "walks", walk_name, "map.png"),
             national_path = path.join(approot, "walks", walk_name, "national.gif"),
             national_destination_path = path.join(greatwalks_repo, "img/walks", walk_sanitised_name, "national.gif"),
+            elevation_profile_path = path.join(approot, "walks", walk_name, "profile.jpg"),
+            elevation_profile_destination_path = path.join(greatwalks_repo, "img/walks", walk_sanitised_name, "profile.jpg"),
             width = 0,
             height = 0,
             command = "identify -format {\\\"width\\\":%w,\\\"height\\\":%h} \"" + map_path + "\"",
@@ -167,6 +169,10 @@ process.stdout.write("Generating Images\n");
                 process.stdout.write("ERROR parsing image dimensions. Command I tried to run was \n" + command + "\nIs ImageMagick installed?\n");
             }
             copyFileSync(national_path, national_destination_path);
+            resize_command = "convert \"" + elevation_profile_path + "\" -resize x300 \"" + elevation_profile_destination_path + "\"";
+            process.stdout.write(resize_command + "\n");
+            execSync(resize_command);
+        
             if(fs.statSync(dont_miss_directory).isDirectory()) {
                 dont_miss_files = fs.readdirSync(dont_miss_directory);
                 for(y = 0; y < dont_miss_files.length; y++){

@@ -15,7 +15,12 @@
                 }
                 $shadow.removeClass("shadow-visible");
             },
-            $html = $("html").bind("popover-click", disable_all_dont_miss);
+            $html = $("html").bind("popover-click", disable_all_dont_miss),
+            $elevation_profile = $("#elevation-profile");
+
+        $elevation_profile.click(function(){
+            $elevation_profile.modal("hide");
+        });
 
         $("body").on("click", ".audio", function(event){
             var $this = $(this),

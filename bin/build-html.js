@@ -579,6 +579,12 @@ process.stdout.write("Generating HTML\n");
         var walk_name = walks_paths[i],
             walk_sanitised_name = walk_name.toLowerCase().replace(/ /g, "-"),
             walk_path = path.join(approot, "walks", walk_name),
+            elevation_profile_image = "img/walks/" + walk_sanitised_name + "/profile.jpg",
+            elevation_profile_image_fullpath = path.join(greatwalks_repo, elevation_profile_image),
+            elevation_profile_image_dimensions,
+            dimensions_command = "identify -format {\\\"width\\\":%w,\\\"height\\\":%h} \"" + elevation_profile_image_fullpath + "\"",
+            elevation_dimensions_json_string,
+            elevation_dimensions_json,
             content_path,
             youtube_path,
             content_data,
@@ -593,8 +599,21 @@ process.stdout.write("Generating HTML\n");
 
         if(fs.statSync(walk_path).isDirectory()) {
             mustache_data = {"walk-id":walk_sanitised_name};
+            //process.stdout.write("\n" + dimensions_command + "\n");
+            elevation_dimensions_json_string = execSync(dimensions_command);
+            
+            if(elevation_dimensions_json_string.indexOf("{\"width") >= 0) {
+                elevation_dimensions_json = JSON.parse(elevation_dimensions_json_string);
+                //console.log(elevation_dimensions_json);
+                mustache_data["elevation-profile-image-width"] = elevation_dimensions_json.width;
+                mustache_data["elevation-profile-image-halfwidth"] = elevation_dimensions_json.width / 2;
+                mustache_data["elevation-profile-image-height"] = elevation_dimensions_json.height;
+            }
+           
             mustache_data["youtube-id"] = fs.readFileSync(youtube_path, 'utf8');
             mustache_data["map_filename"] = map_filename;
+            mustache_data["elevation-profile-image"] = elevation_profile_image;
+
             content_data = process_page(content_path, walk_name, mustache_data, "walk");
             fs.writeFileSync(new_path, content_data);
         }
