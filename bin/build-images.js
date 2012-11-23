@@ -170,7 +170,6 @@ process.stdout.write("Generating Images\n");
             }
             copyFileSync(national_path, national_destination_path);
             resize_command = "convert \"" + elevation_profile_path + "\" -resize x300 \"" + elevation_profile_destination_path + "\"";
-            process.stdout.write(resize_command + "\n");
             execSync(resize_command);
         
             if(fs.statSync(dont_miss_directory).isDirectory()) {
