@@ -1,4 +1,4 @@
-/*global require process __dirname*/
+/*global require process __dirname console*/
 /*
  *  Builds HTML for the site.
  *
@@ -35,7 +35,8 @@ var fs = require('fs'),
     metres_to_feet = 3.28084,
     kilograms_to_pounds = 2.20462,
     one_hour_in_milliseconds = 60 * 60 * 1000,
-    points_of_interest = {};
+    points_of_interest = {},
+    maori_speech = {};
 
 String.prototype.removeNonStandardCharacters = function(){
     var current_string = this;
@@ -162,8 +163,30 @@ function resolve_includes(html, using_includes_directory){
                 basename = path.basename(include_filename, ".mustache");
                 data = '<!-- included from build-html.js. Just search for this string --><h2 class="walk-detail-header ' + basename.toId() + '"><span><span>' + basename.toCased() + '</span></span></h2><div class="walk-detail ' + basename.toId() + '">' + data + "</div>";
             }
+            data = insert_audio(data, include_path);
             return data;
         });
+}
+
+function insert_audio(htmlf, include_path){
+    var maori_speech_id,
+        replace_with_audio = function(match, contents, offset, s){
+            var is_a_text_node = (htmlf.lastIndexOf("<", offset) < htmlf.lastIndexOf(">", offset)),
+                maori_speech_item = maori_speech[contents.toString().toLowerCase()];
+            if(!is_a_text_node) return contents;
+            if(maori_speech_item === undefined) {
+                throw "Problem accessing Maori speech item of '" + contents + "'";
+            }
+            //console.log(contents + " in " + include_path + "\n");
+            return '<a href="#' + contents + '" data-audio="audio/speech-' + maori_speech_item.file + '" class="audio">' + contents + "</a>";
+        };
+    for(maori_speech_id in maori_speech){
+        htmlf = htmlf.replace(
+            new RegExp("(" + maori_speech_id + ")", "gi"),
+            replace_with_audio
+        );
+    }
+    return htmlf;
 }
 
 function difference_between_positions_in_kilometers(lat1, lon1, lat2, lon2){
@@ -270,6 +293,20 @@ var share_social_details = {
  */
 
 process.stdout.write("Generating HTML\n");
+
+(function(){
+    var files = fs.readdirSync(path.join(approot, "audio")),
+        file,
+        speech_id,
+        i;
+    for(i = 0; i < files.length; i++){
+        file = files[i];
+        speech_id = path.basename(file, ".mp3").replace(/_/g, " ");
+        maori_speech[speech_id] = {"file": file, "used_in_any_page": false, "used_in_pages":[]};
+    }
+}());
+
+
 
 (function(){
     //  Delete log of out of bounds
@@ -593,6 +630,7 @@ function process_page(htmlf_path, page_title, mustache_data, page_id){
         chosen_share_social_key,
         social_item_key,
         page_key = htmlf_path;
+       
 
     if(mustache_data && mustache_data.map_id !== undefined) {
         page_key = mustache_data.map_id;
@@ -644,16 +682,16 @@ function process_page(htmlf_path, page_title, mustache_data, page_id){
                         .replace(/\{\{twitter_url\}\}/g, encodeURIComponent(chosen_share_social.twitter_url).replace(/'/g, "%27"))
                         .replace(/\{\{facebook_image\}\}/g, encodeURIComponent(chosen_share_social.facebook_image).replace(/'/g, "%27"))
                         .replace(/\{\{facebook_url\}\}/g, encodeURIComponent(chosen_share_social.facebook_url).replace(/'/g, "%27"))
-                        .replace(/&Auml;/g, "&#256;")  //macronised A
-                        .replace(/&auml;/g, "&#257;")  //macronised a
-                        .replace(/&Euml;/g, "&#274;")  //macronised E
-                        .replace(/&euml;/g, "&#275;")  //macronised e
-                        .replace(/&Iuml;/g, "&#298;")  //macronised I
-                        .replace(/&iuml;/g, "&#399;")  //macronised i
-                        .replace(/&Ouml;/g, "&#332;")  //macronised O
-                        .replace(/&ouml;/g, "&#333;")  //macronised o
-                        .replace(/&Uuml;/g, "&#362;")  //macronised U
-                        .replace(/&uuml;/g, "&#363;") //macronised u
+                        .replace(/&Auml;/g, "\u0100")  //macronised A
+                        .replace(/&auml;/g, "\u0101")  //macronised a
+                        .replace(/&Euml;/g, "\u0112")  //macronised E
+                        .replace(/&euml;/g, "\u0113")  //macronised e
+                        .replace(/&Iuml;/g, "\u012A")  //macronised I
+                        .replace(/&iuml;/g, "\u012B")  //macronised i
+                        .replace(/&Ouml;/g, "\u014C")  //macronised O
+                        .replace(/&ouml;/g, "\u014D")  //macronised o
+                        .replace(/&Uuml;/g, "\u016A")  //macronised U
+                        .replace(/&uuml;/g, "\u016B") //macronised u
                         .replace(/Maori/gi, "M&#257;ori") //may be too broad, may cause problems if the word Maori is in a URL or something
                         .replace(/([0-9.]+) km/gi, function(match, contents, offset, s){
                             return format_kilometres(parseFloat(contents));
@@ -664,7 +702,6 @@ function process_page(htmlf_path, page_title, mustache_data, page_id){
                         .replace(/([0-9.]+) kg/gi, function(match, contents, offset, s){
                             return format_kilograms(parseFloat(contents));
                         });
-                        
     }
     return html_page;
 }
@@ -698,10 +735,10 @@ function retain_precision(value1, units1, value2, units2) {
     var position_of_dot = value1.toString().indexOf("."),
         factor;
     if(position_of_dot === -1){
-        return value1 + units1 + " / " + Math.round(value2) + units2 + " ";
+        return value1 + units1 + " / " + Math.round(value2) + units2;
     }
     factor = Math.pow(10, value1.toString().length - position_of_dot - 1);
-    return (Math.round(value1 * factor) / factor) + units1 + " / " + (Math.round(value2 * kilometres_to_miles * factor) / factor) + units2 + " ";
+    return (Math.round(value1 * factor) / factor) + units1 + " / " + (Math.round(value2 * kilometres_to_miles * factor) / factor) + units2;
 }
 
 function pixel_location(map_latitude, map_longitude, map_pixel_width, map_pixel_height, degrees_per_pixel_scaled_by, location_latitude, location_longitude, map_name, location_name){
