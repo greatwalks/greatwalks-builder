@@ -28,30 +28,73 @@
      .text-column1 {
         font-famiy:serif;
         line-height:120%;
+        background-repeat: no-repeat;
+        background-size: 63px 91px;
         
         h1 {
-            background-repeat: no-repeat;
-            background-size: 63px 91px;
             padding-top:10px;
             padding-left:80px;
-            min-height:91px;
             text-transform:uppercase;
             font-weight:bold;
             font-size:36px;
+            line-height:100%;
         }
 
-        &.tongariro-northern-circuit h1,
-        &.abel-tasman-coast-track h1 {
-            font-size: 27px;
+        &.lake-waikaremoana {
+            background-image: url("../img/walks/lake-waikaremoana/national.gif");
         }
 
-        &.rakiura-track---stewart-island h1 {
-            font-size: 26px;
+        &.wellington {
+            background-image: url("../img/walks/wellington/national.gif");
+        }
+
+        &.tongariro-northern-circuit {
+            background-image: url("../img/walks/tongariro-northern-circuit/national.gif");
+
+            h1 {
+                font-size: 27px;
+            }
+        }
+
+        &.whanganui-journey {
+            background-image: url("../img/walks/whanganui-journey/national.gif");
+        }
+
+        &.abel-tasman-coast-track {
+            background-image: url("../img/walks/abel-tasman-coast-track/national.gif");
+
+            h1 {
+                font-size: 27px;
+            }
+        }
+
+        &.heaphy-track {
+            background-image: url("../img/walks/heaphy-track/national.gif");
+        }
+
+        &.routeburn-track {
+            background-image: url("../img/walks/routeburn-track/national.gif");
+        }
+
+        &.milford-track {
+            background-image: url("../img/walks/milford-track/national.gif");
+        }
+
+        &.kepler-track {
+            background-image: url("../img/walks/kepler-track/national.gif");
+        }
+
+        &.rakiura-track---stewart-island {
+            background-image: url("../img/walks/rakiura-track---stewart-island/national.gif");
+
+            h1 {
+                font-size: 26px;
+            }
         }
 
         .info {
             padding-left:80px;
-            margin-top:-55px;
+            margin-top:-5px;
             text-transform:uppercase;
             font-weight:bold;
             margin-bottom: 1em;
@@ -64,7 +107,6 @@
                 }
             }
         }
-
 
         .intro {
             clear:both;
@@ -153,7 +195,7 @@
                 .horizontal-gradient(#004c3f, #479387);
             }
 
-        } 
+        }
 
         .walk-detail {
             display:none;
@@ -238,66 +280,6 @@
         }
 
 
-
-        &.lake-waikaremoana {
-            h1 {
-                background-image: url("../img/walks/lake-waikaremoana/national.gif");
-            }
-        }
-
-        &.wellington {
-            h1 {            
-                background-image: url("../img/walks/wellington/national.gif");
-            }
-        }
-
-        &.tongariro-northern-circuit {
-            h1 {
-                background-image: url("../img/walks/tongariro-northern-circuit/national.gif");
-            }
-        }
-
-        &.whanganui-journey {
-            h1 {
-                background-image: url("../img/walks/whanganui-journey/national.gif");
-            }
-        }
-
-        &.abel-tasman-coast-track {
-            h1 {
-                background-image: url("../img/walks/abel-tasman-coast-track/national.gif");
-            }
-        }
-
-        &.heaphy-track {
-            h1 {
-                background-image: url("../img/walks/heaphy-track/national.gif");
-            }
-        }
-
-        &.routeburn-track {
-            h1 {
-                background-image: url("../img/walks/routeburn-track/national.gif");
-            }
-        }
-
-        &.milford-track {
-            h1 {
-                background-image: url("../img/walks/milford-track/national.gif");
-            }
-        }
-
-        &.kepler-track {
-            h1 {
-                background-image: url("../img/walks/kepler-track/national.gif");
-            }
-        }
-
-        &.rakiura-track---stewart-island {
-            h1 {
-                background-image: url("../img/walks/rakiura-track---stewart-island/national.gif");
-            }
-        }
 
         .icon-map,
         .icon-maps-blue {
@@ -721,6 +703,30 @@
 
         }
     }
+
+     .below-fold {
+        background: #e5dfbd;
+        padding-bottom: 50px;
+
+        .text-column1 {
+            margin-top:20px;
+            padding-top:20px;
+
+            &.lake-waikaremoana,
+            &.wellington,
+            &.tongariro-northern-circuit,
+            &.whanganui-journey,
+            &.abel-tasman-coast-track,
+            &.heaphy-track,
+            &.routeburn-track,
+            &.milford-track,
+            &.kepler-track,
+            &.rakiura-track---stewart-island {
+                background-image:none;
+            }
+        }
+    }
+
 
     .popover {
         background:white;
