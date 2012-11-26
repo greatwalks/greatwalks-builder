@@ -609,6 +609,7 @@ process.stdout.write("Generating HTML\n");
                 mustache_data["elevation-profile-image-halfwidth"] = elevation_dimensions_json.width / 2;
                 mustache_data["elevation-profile-image-height"] = elevation_dimensions_json.height;
             }
+            mustache_data["walk-image-directory"] = path.join("img/walks/", walk_sanitised_name) + "/";
            
             mustache_data["youtube-id"] = fs.readFileSync(youtube_path, 'utf8');
             mustache_data["map_filename"] = map_filename;
@@ -621,6 +622,15 @@ process.stdout.write("Generating HTML\n");
 }());
 
 (function(){
+    var nz_map_path = path.join(approot, "images", "new-zealand-map.png"),
+        dimensions_command = "identify -format {\\\"width\\\":%w,\\\"height\\\":%h} \"" + nz_map_path + "\"",
+        nz_map_dimensions_string,
+        nz_map_dimensions;
+    nz_map_dimensions_string = execSync(dimensions_command);
+    if(nz_map_dimensions_string.indexOf("{\"width") >= 0) {
+        nz_map_dimensions = JSON.parse(nz_map_dimensions_string);
+        nz_map_dimensions.ratio = nz_map_dimensions.width / nz_map_dimensions.height;
+    }
     for(var i = 0; i < htmlf_paths.length; i++){
         var htmlf_path = htmlf_paths[i],
             htmlf_fullpath = path.join(approot, "html", htmlf_path),
@@ -629,9 +639,10 @@ process.stdout.write("Generating HTML\n");
             html_page,
             basename = path.basename(htmlf_path),
             filename_extension = path.extname(htmlf_path),
-            basename_without_extension = path.basename(htmlf_path, filename_extension);
+            basename_without_extension = path.basename(htmlf_path, filename_extension),
+            mustache_data = {"nz_map_dimensions": JSON.stringify(nz_map_dimensions)};
         if(!fs.statSync(htmlf_fullpath).isDirectory()){
-            html_page = process_page(htmlf_fullpath, "", {}, basename_without_extension);
+            html_page = process_page(htmlf_fullpath, "", mustache_data, basename_without_extension);
         }
         if(html_page !== undefined) {
             process.stdout.write(" - Building Page: " + htmlf_path + "\n");

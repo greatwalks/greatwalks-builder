@@ -13,6 +13,7 @@ var fs = require('fs'),
                   // The reason for the difference is that build-html.js will display the images at 0.5
                   // but we still want the source images to be large for high DPI displays (e.g. 'retina display')
     ignore_names = ["Thumbs.db", ".DS_Store"],
+    reserved_image_names = ["map.png"], //images from each Walks directory are copied over as-is, so 
     copyFileSync = function(srcFile, destFile) {
       //via http://procbits.com/2011/11/15/synchronous-file-copy-in-node-js/
       var BUF_LENGTH, buff, bytesRead, fdr, fdw, pos;
@@ -38,6 +39,10 @@ var fs = require('fs'),
             process.exit();
         }
     };
+
+String.prototype.endsWith = function(suffix) {
+    return this.substr(this.length - suffix.length) === suffix;
+};
 
 process.stdout.write("Generating Images\n");
 
@@ -152,7 +157,11 @@ process.stdout.write("Generating Images\n");
             dont_miss_files,
             dont_miss_file,
             dont_miss_path,
-            y;
+            y,
+            image_files,
+            image_file,
+            image_file_path,
+            image_destination_path;
         if(fs.statSync(walk_fullpath).isDirectory()) {
             fs.mkdir(path.join(greatwalks_repo, "img/walks", walk_sanitised_name)); //probably already exists
             process.stdout.write("   - Generating " + walk_name + " map ");
@@ -171,7 +180,21 @@ process.stdout.write("Generating Images\n");
             copyFileSync(national_path, national_destination_path);
             resize_command = "convert \"" + elevation_profile_path + "\" -resize x300 \"" + elevation_profile_destination_path + "\"";
             execSync(resize_command);
-        
+            image_files = fs.readdirSync(walk_fullpath);
+            for(y = 0; y < image_files.length; y++){
+                image_file = image_files[y];
+                image_file_path = path.join(walk_fullpath, image_file);
+                if(image_file.endsWith(".png")){
+                    if(reserved_image_names.indexOf(image_file) === -1){
+                        image_destination_path = path.join(greatwalks_repo, "img/walks", walk_sanitised_name, image_file);
+                        copyFileSync(image_file_path, image_destination_path);
+                        //console.log(" - " + image_destination_path + "\n");
+                    }
+                } else {
+                    //console.log("Not a PNG: " + image_file + "\n");
+                }
+            }
+
             if(fs.statSync(dont_miss_directory).isDirectory()) {
                 dont_miss_files = fs.readdirSync(dont_miss_directory);
                 for(y = 0; y < dont_miss_files.length; y++){

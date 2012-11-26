@@ -3,8 +3,6 @@ body.maps {
     height:100%;
 
     #wrapper {
-        padding-top:150px;
-
         @from-color: #79ccec;
         @to-color: #eaf6fc;
 
@@ -20,12 +18,16 @@ body.maps {
 
         #new-zealand-map {
             position:relative;
-            margin: 0px auto;
-            width:752px;
-            height:1056px;
-            background: url("../img/new-zealand-map.png");
-            background-size: 100%;
-
+            padding:0px;
+            margin:0px auto;
+            
+            img {
+                margin:0px;
+                padding:0px;   
+                width:auto;
+                height:auto;
+            }
+            
             .map-location {
                 position:absolute;
                 padding:0px;
@@ -35,11 +37,9 @@ body.maps {
                 color:black;
             }
 
-            h2.map-location {
-                font-size:13px;
+             h2.map-location {
                 font-weight:bold;
                 text-transform:uppercase;
-                line-height:23px;
 
                 a.secret-link  {
                     color:black;
@@ -51,7 +51,6 @@ body.maps {
             }
 
             a.map-location {
-                font-size:18px;
                 font-weight:bold;
                 text-decoration:none;
 
@@ -60,245 +59,267 @@ body.maps {
                 }
             }
 
-            .map-icon-bottom {
-                padding-bottom:60px;
+
+            &.size800,
+            &.size700,
+            &.size600 {
+                h2.map-location {
+                    font-size:13px;
+                    line-height:15px;
+                }
+
+                a.map-location {
+                    font-size:18px;
+                }
+
+                .map-icon-bottom {
+                    padding-bottom:50px;
+                }
+
+                .map-icon-bottom2 {
+                    padding-bottom:45px;
+                }
+
+                .map-icon-left {
+                    padding-left: 50px;
+                }
+
+                .map-icon-right {
+                    padding-right: 50px;
+                }
+
+                .map-icon-height {
+                    min-height:50px;
+                    line-height:50px;
+                }
+
+                .map-icon-height2 {
+                    min-height:40px;
+                    line-height:70px;
+                }
+
+                .map-icon-height3 {
+                    min-height:50px;
+                    line-height:normal;
+                }
             }
 
-            .map-icon-bottom2 {
-                padding-bottom:55px;
+            &.size500 {
+                h2.map-location {
+                    font-size:10px;
+                    line-height:16px;
+                    font-weight:normal;
+                }
+
+                a.map-location {
+                    font-size:16px;
+                }
+
+                .map-icon-bottom {
+                    padding-bottom:30px;
+                }
+
+                .map-icon-bottom2 {
+                    padding-bottom:27px;
+                }
+
+                .map-icon-left {
+                    padding-left: 40px;
+                }
+
+                .map-icon-right {
+                    padding-right: 40px;
+                }
+
+                .map-icon-height {
+                    min-height:20px;
+                    line-height:25px;
+                }
+
+                .map-icon-height2 {
+                    min-height:20px;
+                    line-height:30px;
+                }
+
+                .map-icon-height3 {
+                    min-height:15px;
+                    line-height:35px;
+                }
             }
 
-            .map-icon-left {
-                padding-left: 60px;
+            &.size400 {
+                h2.map-location {
+                    font-size:9px;
+                    line-height:12px;
+                    font-weight:normal;
+                }
+
+                a.map-location {
+                    font-size:13px;
+                }
+
+                .map-icon-bottom {
+                    padding-bottom:30px;
+                }
+
+                .map-icon-bottom2 {
+                    padding-bottom:27px;
+                }
+
+                .map-icon-left {
+                    padding-left: 35px;
+                }
+
+                .map-icon-right {
+                    padding-right: 35px;
+                }
+
+                .map-icon-height {
+                    min-height:25px;
+                    line-height:25px;
+                }
+
+                .map-icon-height2 {
+                    min-height:20px;
+                    line-height:40px;
+                }
+
+                .map-icon-height3 {
+                    min-height:25px;
+                    line-height:normal;
+                }
             }
 
-            .map-icon-right {
-                padding-right: 60px;
+            &.size300 {
+                h2.map-location {
+                    font-size:8px;
+                    line-height:10px;
+                    font-weight:normal;
+                }
+
+                a.map-location {
+                    font-size:11px;
+                }
+
+                .map-icon-bottom {
+                    padding-bottom:20px;
+                }
+
+                .map-icon-bottom2 {
+                    padding-bottom:20px;
+                }
+
+                .map-icon-left {
+                    padding-left: 25px;
+                    line-height:10px;
+                }
+
+                .map-icon-right {
+                    padding-right: 20px;
+                }
+
+                .map-icon-height {
+                    min-height:25px;
+                    line-height:25px;
+                }
+
+                .map-icon-height2 {
+                    min-height:20px;
+                    line-height:40px;
+                }
+
+                .map-icon-height3 {
+                    min-height:25px;
+                    line-height:normal;
+                }
             }
 
-            .map-icon-height {
-                min-height:50px;
-                line-height:50px;
+            &.size200 {
+                h2.map-location {
+                    font-size:7px;
+                    line-height:6px;
+                    font-weight:normal;
+                }
+
+                a.map-location {
+                    font-size:7px;
+                }
+
+                .map-icon-bottom {
+                    padding-bottom:18px;
+                }
+
+                .map-icon-bottom2 {
+                    padding-bottom:15px;
+                }
+
+                .map-icon-left {
+                    padding-left: 18px;
+                }
+
+                .map-icon-right {
+                    padding-right:18px;
+                }
+
+                .map-icon-height {
+                    min-height:12px;
+                    line-height:12px;
+                }
+
+                .map-icon-height2 {
+                    min-height:20px;
+                    line-height:25px;
+                }
+
+                .map-icon-height3 {
+                    min-height:12px;
+                    line-height:normal;
+                }
             }
 
-            .map-icon-height2 {
-                min-height:40px;
-                line-height:70px;
-            }
+            &.size100 {
+                h2.map-location {
+                    font-size:5px;
+                    line-height:6px;
+                    font-weight:normal;
+                }
 
-            .map-icon-height3 {
-                min-height:50px;
-                line-height:normal;
+                a.map-location {
+                    font-size:6px;
+                }
+
+                .map-icon-bottom {
+                    padding-bottom:7px;
+                }
+
+                .map-icon-bottom2 {
+                    padding-bottom:7px;
+                }
+
+                .map-icon-left {
+                    padding-left: 10px;
+                }
+
+                .map-icon-right {
+                    padding-right:10px;
+                }
+
+                .map-icon-height {
+                    min-height:12px;
+                    line-height:12px;
+                }
+
+                .map-icon-height2 {
+                    min-height:20px;
+                    line-height:25px;
+                }
+
+                .map-icon-height3 {
+                    min-height:12px;
+                    line-height:normal;
+                }
             }
         }
     }
 }
 
-@media (max-width: 800px), (max-height:1000px) {
-    body.maps #wrapper {
-        padding-top:140px;
-
-        #new-zealand-map {
-            width:496px;
-            height:697px;
-
-            h2.map-location {
-                font-size:11px;
-                line-height:12px;
-                font-weight:normal;
-            }
-
-            a.map-location {
-                font-size:15px;
-            }
-
-            .map-icon-bottom {
-                padding-bottom:40px;
-            }
-
-            .map-icon-bottom2 {
-                padding-bottom:40px;
-            }
-
-            .map-icon-left {
-                padding-left: 40px;
-            }
-
-            .map-icon-right {
-                padding-right: 40px;
-            }
-
-            .map-icon-height {
-                min-height:25px;
-                line-height:25px;
-            }
-
-            .map-icon-height2 {
-                min-height:20px;
-                line-height:45px;
-            }
-
-            .map-icon-height3 {
-                min-height:25px;
-                line-height:normal;
-            }
-        }
-    }
-}
-
-@media (max-width: 500px), (max-height:800px) {
-    body.maps #wrapper {
-        padding-top:120px;
-
-        #new-zealand-map {
-            width:376px;
-            height:528px;
-
-            h2.map-location {
-                font-size:9px;
-                line-height:12px;
-                font-weight:normal;
-            }
-
-            a.map-location {
-                font-size:13px;
-            }
-
-            .map-icon-bottom {
-                padding-bottom:30px;
-            }
-
-            .map-icon-bottom2 {
-                padding-bottom:27px;
-            }
-
-            .map-icon-left {
-                padding-left: 30px;
-            }
-
-            .map-icon-right {
-                padding-right: 30px;
-            }
-
-            .map-icon-height {
-                min-height:25px;
-                line-height:25px;
-            }
-
-            .map-icon-height2 {
-                min-height:20px;
-                line-height:40px;
-            }
-
-            .map-icon-height3 {
-                min-height:25px;
-                line-height:normal;
-            }
-        }
-    }
-}
-
-@media (max-width: 450px), (max-height:500px) {
-    body.maps #wrapper {
-        padding-top:80px;
-
-        #new-zealand-map {
-            width:376px;
-            height:528px;
-
-            h2.map-location {
-                font-size:9px;
-                line-height:12px;
-                font-weight:normal;
-            }
-
-            a.map-location {
-                font-size:13px;
-            }
-
-            .map-icon-bottom {
-                padding-bottom:30px;
-            }
-
-            .map-icon-bottom2 {
-                padding-bottom:27px;
-            }
-
-            .map-icon-left {
-                padding-left: 30px;
-            }
-
-            .map-icon-right {
-                padding-right: 30px;
-            }
-
-            .map-icon-height {
-                min-height:25px;
-                line-height:25px;
-            }
-
-            .map-icon-height2 {
-                min-height:20px;
-                line-height:40px;
-            }
-
-            .map-icon-height3 {
-                min-height:25px;
-                line-height:normal;
-            }
-        }
-    }
-}
-
-
-@media (max-width: 400px), (max-height:400px) {
-    body.maps #wrapper {
-        padding-top:80px;
-
-        #new-zealand-map {
-            width:251px;
-            height:352px;
-
-            h2.map-location {
-                font-size:7px;
-                line-height:6px;
-                font-weight:normal;
-            }
-
-            a.map-location {
-                font-size:7px;
-            }
-
-            .map-icon-bottom {
-                padding-bottom:20px;
-            }
-
-            .map-icon-bottom2 {
-                padding-bottom:20px;
-            }
-
-            .map-icon-left {
-                padding-left: 20px;
-            }
-
-            .map-icon-right {
-                padding-right: 20px;
-            }
-
-            .map-icon-height {
-                min-height:12px;
-                line-height:12px;
-            }
-
-            .map-icon-height2 {
-                min-height:20px;
-                line-height:25px;
-            }
-
-            .map-icon-height3 {
-                min-height:12px;
-                line-height:normal;
-            }
-        }
-    }
-}
