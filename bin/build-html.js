@@ -501,7 +501,11 @@ process.stdout.write("Generating HTML\n");
                 map_details.extent_latitude = map_details.latitude - (mustache_data.map_pixel_height * map_details.degrees_per_pixel);
                 map_details.extent_longitude = map_details.longitude + (mustache_data.map_pixel_width * map_details.degrees_per_pixel);
                 map_details.map_id = walk_sanitised_name;
+                map_details.map_initial_scale = 0.1;
+                mustache_data.map_initial_scale = map_details.map_initial_scale;
                 mustache_data.map_details = JSON.stringify(map_details);
+                mustache_data.half_map_pixel_width = map_details.map_pixel_width / 2;
+                mustache_data.quarter_map_pixel_width = map_details.map_pixel_width / 4;
             }
             try {
                 locations_data = fs.readFileSync(locations_path, 'utf8').toString();
