@@ -685,7 +685,7 @@ function process_page(htmlf_path, page_title, mustache_data, page_id){
         }
     }
 
-    page_title = page_title || htmlf_path;
+    page_title = page_title || path.basename(htmlf_path);
 
     switch(htmlf_path_extension){
         case "html":

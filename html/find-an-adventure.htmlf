@@ -7,58 +7,6 @@
     <li class="time"><span>3.</span><a href="#time" role="button" data-toggle="modal">How much time do you have?</a></li>
   </ol>
 
-  <div id="where" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
-    <ol>
-      <li id="where-northisland">
-        <a href="#">North Island</a>
-      </li>
-      <li id="where-southisland">
-        <a href="#">South Island</a>
-      </li>
-      <li id="where-surpriseme">
-        <a href="#">Surprise me!</a>
-      </li>
-    </ol>
-  </div>
-
-  <div id="see" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
-    <ol>
-      <li id="see-native-bush">
-        <a href="#">Native bush</a>
-      </li>
-      <li id="see-birds">
-        <a href="#">Birds</a>
-      </li>
-      <li id="see-beaches">
-        <a href="#">Beaches</a>
-      </li>
-      <li id="see-mountains">
-        <a href="#">Mountains</a>
-      </li>
-      <li id="see-volcanos">
-        <a href="#">Volcanos</a>
-      </li>
-      <li id="see-lakes">
-        <a href="#">Lakes</a>
-      </li>
-      <li id="see-culture">
-        <a href="#">Cultural experience</a>
-      </li>
-    </ol>
-  </div>
-
- 
-
-  <div id="time" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
-    <ol>
-      <li id="time-1-2-days">
-        <a href="#">1-2 days</a>
-      </li>
-      <li id="time-3-5-days">
-        <a href="#">3-5 days</a>
-      </li>
-    </ol>
-  </div>
 
   <div id="results">
     <h2>We think you'll like</h2>
@@ -113,3 +61,57 @@
 
 
 </div>
+
+
+  <div id="where" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <ol>
+      <li id="where-northisland">
+        <a href="#">North Island</a>
+      </li>
+      <li id="where-southisland">
+        <a href="#">South Island</a>
+      </li>
+      <li id="where-surpriseme">
+        <a href="#">Surprise me!</a>
+      </li>
+    </ol>
+  </div>
+
+  <div id="see" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <ol>
+      <li id="see-native-bush">
+        <a href="#">Native bush</a>
+      </li>
+      <li id="see-birds">
+        <a href="#">Birds</a>
+      </li>
+      <li id="see-beaches">
+        <a href="#">Beaches</a>
+      </li>
+      <li id="see-mountains">
+        <a href="#">Mountains</a>
+      </li>
+      <li id="see-volcanos">
+        <a href="#">Volcanos</a>
+      </li>
+      <li id="see-lakes">
+        <a href="#">Lakes</a>
+      </li>
+      <li id="see-culture">
+        <a href="#">Cultural experience</a>
+      </li>
+    </ol>
+  </div>
+
+ 
+
+  <div id="time" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <ol>
+      <li id="time-1-2-days">
+        <a href="#">1-2 days</a>
+      </li>
+      <li id="time-3-5-days">
+        <a href="#">3-5 days</a>
+      </li>
+    </ol>
+  </div>
