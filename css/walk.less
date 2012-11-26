@@ -37,7 +37,7 @@
             min-height:91px;
             text-transform:uppercase;
             font-weight:bold;
-            white-space: nowrap;
+            font-size:36px;
         }
 
         &.tongariro-northern-circuit h1,
@@ -737,5 +737,29 @@
 
 
 
+@media (max-height: 400px), (max-width: 400px) {
+    body.walk .text-column1 {
+        h1 {
+            font-size: 16px;
+
+            &.tongariro-northern-circuit h1,
+            &.abel-tasman-coast-track h1 {
+                font-size: 15px;
+            }
+
+            &.rakiura-track---stewart-island h1 {
+                font-size: 14px;
+            }
+        }
+
+        .info {
+            font-size: 14px;
+
+            span.duration {
+                margin-left:10px;
+            }
+        }
+    }
+}
 
 
