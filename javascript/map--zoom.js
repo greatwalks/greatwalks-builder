@@ -82,6 +82,8 @@
 
             redraw();
 
+            $image.show();
+
             width = $image.width();
             height = $image.height();
             
