@@ -25,6 +25,11 @@ body.map {
 
     #map {
         border: solid 8px #201e1e;
+
+        .have-transition {
+             transition: .2s ease-in;
+            -webkit-transition: .2s ease-in;
+        }
     }
 
     #no-touch-zoom {
@@ -86,7 +91,7 @@ body.map {
             position:absolute;
             left:0px;
             top:0px;
-            width:120px;
+            width:10em;
             font-size:x-small;
             background: #666666;
             color:#fff;
@@ -182,7 +187,6 @@ body.map {
         }
 
     }
-
 
     .location-animal,
     .location-birdwatching {

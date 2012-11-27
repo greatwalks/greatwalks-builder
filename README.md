@@ -6,3 +6,4 @@
 
 * NodeJS
 * ImageMagick
+* Inkscape

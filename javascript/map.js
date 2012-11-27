@@ -291,7 +291,6 @@
                     user_actions.$camera_error.fadeOut();
                 }
             },
-            $locations = $(".location"),
             youarehere_hammer;
 
         if(last_known_position !== undefined) {
