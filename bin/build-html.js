@@ -125,6 +125,10 @@ String.prototype.toId = function() {
     return this.toLowerCase().replace(/['.,]/g, "").replace(/ /g, "-");
 };
 
+String.prototype.toNormalizedFilename = function(){
+    return this.toLowerCase().replace(/[,\(\)]/g, "").replace(/ /g, "-");
+};
+
 String.prototype.toCased = function() {
     var concatenated = "",
         parts = this.split("-"),
@@ -594,7 +598,13 @@ process.stdout.write("Generating HTML\n");
             content_data,
             new_path = path.join(greatwalks_repo, "walk-" + walk_sanitised_name + ".html"),
             map_filename = "map-" + walk_sanitised_name + ".html",
-            mustache_data;
+            mustache_data,
+            carousel_path = path.join(walk_path, "Carousel"),
+            carousel_files,
+            carousel_deck_index,
+            carousel_web_path,
+            y,
+            thumbnails_per_slide = 3;
 
         if(ignore_names.indexOf(walk_name) !== -1) continue;
 
@@ -614,11 +624,33 @@ process.stdout.write("Generating HTML\n");
                 mustache_data["elevation-profile-image-height"] = elevation_dimensions_json.height;
             }
             mustache_data["walk-image-directory"] = path.join("img/walks/", walk_sanitised_name) + "/";
-           
             mustache_data["youtube-id"] = fs.readFileSync(youtube_path, 'utf8');
             mustache_data["map_filename"] = map_filename;
             mustache_data["elevation-profile-image"] = elevation_profile_image;
-
+            mustache_data.carousel = [];
+            mustache_data.carousel_thumbnails = [];
+            if(fs.statSync(carousel_path).isDirectory()){
+                carousel_files = fs.readdirSync(carousel_path);
+                for(y = 0; y < carousel_files.length; y++){
+                    carousel_web_path = "img/walks/" + walk_sanitised_name + "/carousel-" + carousel_files[y].toNormalizedFilename();
+                    mustache_data.carousel.push({
+                        "path": carousel_web_path,
+                        "id": carousel_files[y].toId()
+                    });
+                    carousel_deck_index = Math.floor(y / thumbnails_per_slide);
+                    if(mustache_data.carousel_thumbnails[carousel_deck_index] === undefined){
+                        mustache_data.carousel_thumbnails[carousel_deck_index] = {
+                            "thumbnails":[],
+                            "active": carousel_deck_index === 0 ? "active":""
+                        };
+                    }
+                    mustache_data.carousel_thumbnails[carousel_deck_index].thumbnails.push({
+                        "path": carousel_web_path,
+                        "id": carousel_files[y].toId(),
+                        "width": Math.floor(100 / thumbnails_per_slide)
+                    });
+                }
+            }
             content_data = process_page(content_path, walk_name, mustache_data, "walk");
             fs.writeFileSync(new_path, content_data);
         }

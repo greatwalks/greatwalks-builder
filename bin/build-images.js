@@ -13,7 +13,8 @@ var fs = require('fs'),
                   // The reason for the difference is that build-html.js will display the images at 0.5
                   // but we still want the source images to be large for high DPI displays (e.g. 'retina display')
     ignore_names = ["Thumbs.db", ".DS_Store"],
-    reserved_image_names = ["map.png"], //images from each Walks directory are copied over as-is, so 
+    reserved_image_names = ["map.png"], //PNG images from each Walks directory are copied over as-is except for these ones...
+    resize_quality = 50,
     copyFileSync = function(srcFile, destFile) {
       //via http://procbits.com/2011/11/15/synchronous-file-copy-in-node-js/
       var BUF_LENGTH, buff, bytesRead, fdr, fdw, pos;
@@ -42,6 +43,10 @@ var fs = require('fs'),
 
 String.prototype.endsWith = function(suffix) {
     return this.substr(this.length - suffix.length) === suffix;
+};
+
+String.prototype.toNormalizedFilename = function(){
+    return this.toLowerCase().replace(/[,\(\)]/g, "").replace(/ /g, "-");
 };
 
 process.stdout.write("Generating Images\n");
@@ -128,7 +133,7 @@ process.stdout.write("Generating Images\n");
         for(y = 0; y < dimensions.length; y++) {
             dimension = dimensions[y];
             carousel_destination_path = path.join(greatwalks_repo, "img/homepage-carousel-x" + dimension + "-" + sanitised_name);
-            resize_command = "convert \"" + carousel_image_path + "\" -resize " + dimension + "x \"" + carousel_destination_path + "\"";
+            resize_command = "convert \"" + carousel_image_path + "\" -resize " + dimension + "x -quality " + resize_quality + " \"" + carousel_destination_path + "\"";
             //child_process.exec(resize_command, debug_response); //enable for easier debug although it will run exec asynchronously and fork a lot of processes so don't leave it enabled
             execSync(resize_command);
         }
@@ -157,6 +162,11 @@ process.stdout.write("Generating Images\n");
             dont_miss_files,
             dont_miss_file,
             dont_miss_path,
+            carousel_directory = path.join(walk_fullpath, "Carousel"),
+            carousel_files,
+            carousel_file,
+            carousel_source_path,
+            carousel_destination_path,
             y,
             image_files,
             image_file,
@@ -171,14 +181,14 @@ process.stdout.write("Generating Images\n");
                 process.stdout.write("(source parsed ");
                 width = parseInt(map_dimensions_json.width * scale_by, 10);
                 height = parseInt(map_dimensions_json.height * scale_by, 10);
-                resize_command = "convert \"" + map_path + "\" -resize " + width + "x" + height + " \"" + path.join(greatwalks_repo, "img/walks", walk_sanitised_name, "map.jpg") + "\"";
+                resize_command = "convert \"" + map_path + "\" -resize " + width + "x" + height + " -quality " + resize_quality + " \"" + path.join(greatwalks_repo, "img/walks", walk_sanitised_name, "map.jpg") + "\"";
                 execSync(resize_command);
                 process.stdout.write("and resized)");
             } else {
                 process.stdout.write("ERROR parsing image dimensions. Command I tried to run was \n" + command + "\nIs ImageMagick installed?\n");
             }
             copyFileSync(national_path, national_destination_path);
-            resize_command = "convert \"" + elevation_profile_path + "\" -resize x300 \"" + elevation_profile_destination_path + "\"";
+            resize_command = "convert \"" + elevation_profile_path + "\" -resize x300 -quality " + resize_quality + " \"" + elevation_profile_destination_path + "\"";
             execSync(resize_command);
             image_files = fs.readdirSync(walk_fullpath);
             for(y = 0; y < image_files.length; y++){
@@ -209,6 +219,24 @@ process.stdout.write("Generating Images\n");
                     }
                 }
             }
+
+            if(fs.statSync(carousel_directory).isDirectory()) {
+                carousel_files = fs.readdirSync(carousel_directory);
+                for(y = 0; y < carousel_files.length; y++){
+                    carousel_file = carousel_files[y];
+                    if(ignore_names.indexOf(carousel_file) !== -1) continue;
+                    if(!carousel_file.endsWith(".jpg") && !carousel_file.endsWith(".jpeg")) continue;
+                    carousel_source_path = path.join(carousel_directory, carousel_file);
+                    if((!fs.statSync(carousel_source_path).isDirectory())){
+                        carousel_destination_path = path.join(greatwalks_repo, "img/walks", walk_sanitised_name, "carousel-" + carousel_file.toNormalizedFilename());
+                        resize_command = "convert \"" + carousel_source_path + "\" -resize x768 -quality " + resize_quality + " \"" + carousel_destination_path + "\"";
+                        //console.log(resize_command + "\n") ;
+                        execSync(resize_command);
+                    }
+                }
+            }
+
+
             process.stdout.write(".\n");
         } else {
             //process.stdout.write("Not a directory " + walk_fullpath + "\n");
