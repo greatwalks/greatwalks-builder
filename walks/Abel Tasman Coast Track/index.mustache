@@ -13,7 +13,7 @@
       taxi or kayak between different locations at any time of the year.
     </p>
     <div class="youtube" data-youtube-id="{{youtube-id}}"></div>   
-    <div id="carousel" class="carousel slide">
+    <div id="carousel" class="carousel slide" data-interval="1000">
       <!-- Carousel items -->
       <div class="carousel-inner">
         {{#carousel_thumbnails}}
@@ -24,6 +24,8 @@
           </div>
         {{/carousel_thumbnails}}
       </div>
+      <a class="carousel-control left" href="#carousel" data-slide="prev">&#8249;</a>
+      <a class="carousel-control right" href="#carousel" data-slide="next">&#8250;</a>
     </div>
   </div>
 
