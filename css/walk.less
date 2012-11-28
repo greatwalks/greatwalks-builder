@@ -17,13 +17,6 @@
   box-shadow:         3px 3px @radius @color;
 }
 
-#elevation-profile {
-    top: 10px;
-    left: 10px;
-    position:absolute;
-    margin: 0px 0px;
-}
-
 body.walk {
     background:white;
 
@@ -93,6 +86,8 @@ body.walk {
                 font-size: 26px;
             }
         }
+
+     
 
         .info {
             padding-left:80px;
@@ -783,23 +778,51 @@ body.walk {
         
     }
 
+
+   .modal {
+        position:absolute;
+        left:10px;
+        top:10px;
+        margin: 0px;
+        overflow:hidden;
+    }
+
 }
 
+
+@media (max-height: 400px), (max-width: 500px) {
+    body.walk .text-column1 {
+        h1 {
+            font-size: 20px;
+
+            &.rakiura-track---stewart-island h1,
+            &.tongariro-northern-circuit h1,
+            &.abel-tasman-coast-track h1 {
+                font-size: 18px;
+            }
+        }
+
+        .info {
+            font-size: 14px;
+
+            span.duration {
+                margin-left:10px;
+            }
+        }
+    }
+}
 
 
 
 @media (max-height: 400px), (max-width: 400px) {
     body.walk .text-column1 {
         h1 {
-            font-size: 16px;
+            font-size: 13px;
 
+            &.rakiura-track---stewart-island h1,
             &.tongariro-northern-circuit h1,
             &.abel-tasman-coast-track h1 {
-                font-size: 15px;
-            }
-
-            &.rakiura-track---stewart-island h1 {
-                font-size: 14px;
+                font-size: 12px;
             }
         }
 
