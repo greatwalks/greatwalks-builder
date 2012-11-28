@@ -18,8 +18,8 @@
             $html = $("html").bind("popover-click", disable_all_dont_miss),
             $elevation_profile = $("#elevation-profile");
 
-        $elevation_profile.click(function(){
-            $elevation_profile.modal("hide");
+        $(".modal").click(function(){
+            $(this).modal("hide");
         });
 
         $("body").on("click", ".audio", function(event){
@@ -39,7 +39,7 @@
                     audio_element;
                 audio_path = $this.data("audio");
                 if($audio.length === 0) {
-                    $audio = $("<audio src=\"" + $this.data("audio") + "\" />");
+                    $audio = $("<audio/>").attr("src", audio_path);
                     $("body").append($audio);
                 } else {
                     $audio.attr("src", audio_path);

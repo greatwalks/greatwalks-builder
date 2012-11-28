@@ -147,6 +147,17 @@ String.prototype.toCased = function() {
     return concatenated.trim();
 };
 
+function get_image_dimensions(path) {
+    var dimensions_command = "identify -format {\\\"width\\\":%w,\\\"height\\\":%h} \"" + path + "\"",
+        json_string;
+    process.stdout.write("\n" + dimensions_command + "\n");
+    json_string = execSync(dimensions_command);
+    if(json_string.indexOf("{\"width") >= 0) {
+        return JSON.parse(json_string);
+    }
+    return {"width":undefined,"height":undefined};
+}
+
 function resolve_includes(html, using_includes_directory, from_page){
     var special_includes = ["don't-miss.mustache", "offers.mustache", "before-you-go.mustache", "getting-there.mustache", "where-to-stay.mustache", "on-the-track.mustache"];
     if(using_includes_directory === undefined) {
@@ -604,7 +615,8 @@ process.stdout.write("Generating HTML\n");
             carousel_deck_index,
             carousel_web_path,
             y,
-            thumbnails_per_slide = 3;
+            thumbnails_per_slide = 3,
+            dimensions;
 
         if(ignore_names.indexOf(walk_name) !== -1) continue;
 
@@ -633,9 +645,17 @@ process.stdout.write("Generating HTML\n");
                 carousel_files = fs.readdirSync(carousel_path);
                 for(y = 0; y < carousel_files.length; y++){
                     carousel_web_path = "img/walks/" + walk_sanitised_name + "/carousel-" + carousel_files[y].toNormalizedFilename();
+                    dimensions = get_image_dimensions(path.join(carousel_path, carousel_files[y]));
+                    dimensions.ratio = dimensions.width / dimensions.height;
+                    dimensions.height = 768; //resized as per build-images.js
+                    dimensions.width = dimensions.height * dimensions.ratio;
+                    
                     mustache_data.carousel.push({
                         "path": carousel_web_path,
-                        "id": carousel_files[y].toId()
+                        "id": carousel_files[y].toId(),
+                        "half-image-width": dimensions.width / 2,
+                        "image-width": dimensions.width,
+                        "image-height": dimensions.height
                     });
                     carousel_deck_index = Math.floor(y / thumbnails_per_slide);
                     if(mustache_data.carousel_thumbnails[carousel_deck_index] === undefined){
@@ -644,10 +664,11 @@ process.stdout.write("Generating HTML\n");
                             "active": carousel_deck_index === 0 ? "active":""
                         };
                     }
+                    //process.stdout.write(carousel_files[y] + "\n" + carousel_files[y].toNormalizedFilename() + "\n" + carousel_web_path + "\n\n");
+                    
                     mustache_data.carousel_thumbnails[carousel_deck_index].thumbnails.push({
                         "path": carousel_web_path,
-                        "id": carousel_files[y].toId(),
-                        "width": Math.floor(100 / thumbnails_per_slide)
+                        "id": carousel_files[y].toId()
                     });
                 }
             }
