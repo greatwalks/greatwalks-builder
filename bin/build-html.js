@@ -313,7 +313,7 @@ var share_social_details = {
 process.stdout.write("Generating HTML\n");
 
 (function(){
-    var files = fs.readdirSync(path.join(approot, "audio")),
+    var files = fs.readdirSync(path.join(approot, "misc", "audio")),
         file,
         speech_id,
         i;
