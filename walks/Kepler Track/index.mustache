@@ -15,14 +15,13 @@
       <div class="carousel-inner">
         {{#carousel_thumbnails}}
           <div class="item {{active}}">
-            {{#thumbnails}}<a href="#carousel-{{id}}" role="button" data-toggle="modal"><img src="{{{path}}}" width="{{width}}%"></a>{{/thumbnails}}
+            <ul>
+              {{#thumbnails}}<li><a href="#carousel-{{id}}" role="button" data-toggle="modal" style="background-image: url('{{{path}}}');"><img src="img/magnify-glass.png"></a></li>{{/thumbnails}}
+            </ul>
           </div>
         {{/carousel_thumbnails}}
       </div>
-      <a class="carousel-control left" href="#carousel" data-slide="prev">&lsaquo;</a>
-      <a class="carousel-control right" href="#carousel" data-slide="next">&rsaquo;</a>
     </div>
-  </div>
 </div>
 <div class="below-fold">
     <div class="text-column1 {{walk-id}}">
@@ -39,7 +38,7 @@
 </div>
 
 {{#carousel}}
-<div id="carousel-{{id}}" style="width:{{image-width}}px; height:{{image-height}}px;" class="modal hide fade" tabindex="-1" role="dialog">
+<div id="carousel-{{id}}" style="width:{{image-width}}px; height:{{image-height}}px; margin-left: -{{half-image-width}}px" class="modal hide fade" tabindex="-1" role="dialog">
   <img src="{{path}}" style="width:{{image-width}}px; height:{{image-height}}px">
 </div>
 {{/carousel}}

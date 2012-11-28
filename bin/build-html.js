@@ -150,7 +150,7 @@ String.prototype.toCased = function() {
 function get_image_dimensions(path) {
     var dimensions_command = "identify -format {\\\"width\\\":%w,\\\"height\\\":%h} \"" + path + "\"",
         json_string;
-    process.stdout.write("\n" + dimensions_command + "\n");
+    //process.stdout.write("\n" + dimensions_command + "\n");
     json_string = execSync(dimensions_command);
     if(json_string.indexOf("{\"width") >= 0) {
         return JSON.parse(json_string);

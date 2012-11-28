@@ -124,7 +124,7 @@ process.stdout.write("Generating Images\n");
         y,
         dimension,
         sanitised_name;
-    process.stdout.write(" - Generating carousel:\n");
+    process.stdout.write(" - Generating homepage carousel:\n");
     for(i = 0; i < carousel_images.length; i++) {
         carousel_image = carousel_images[i];
         if(ignore_names.indexOf(carousel_image) !== -1) continue;
@@ -225,12 +225,12 @@ process.stdout.write("Generating Images\n");
                 for(y = 0; y < carousel_files.length; y++){
                     carousel_file = carousel_files[y];
                     if(ignore_names.indexOf(carousel_file) !== -1) continue;
-                    if(!carousel_file.endsWith(".jpg") && !carousel_file.endsWith(".jpeg")) continue;
+                    if(!carousel_file.toLowerCase().endsWith(".jpg") && !carousel_file.toLowerCase().endsWith(".jpeg") && !carousel_file.toLowerCase().endsWith(".gif") && !carousel_file.toLowerCase().endsWith(".png")) continue;
                     carousel_source_path = path.join(carousel_directory, carousel_file);
                     if((!fs.statSync(carousel_source_path).isDirectory())){
                         carousel_destination_path = path.join(greatwalks_repo, "img/walks", walk_sanitised_name, "carousel-" + carousel_file.toNormalizedFilename());
                         resize_command = "convert \"" + carousel_source_path + "\" -resize x768 -quality " + resize_quality + " \"" + carousel_destination_path + "\"";
-                        //console.log(resize_command + "\n") ;
+                        console.log(resize_command + "\n") ;
                         execSync(resize_command);
                     }
                 }
