@@ -194,7 +194,8 @@ function insert_audio(htmlf, page_id){
             if(!is_a_text_node || maori_speech_item.used_in_pages.indexOf(page_id) !== -1) {
                 return maori_word + following_character;
             }
-            maori_speech_item.used_in_pages.push(page_id); //ensure that each word is only used once per page id.
+            maori_speech_item.used_in_any_page = true;
+            maori_speech_item.used_in_pages.push(page_id); //ensure that each audio link is only used once per page id.
             //console.log(maori_speech_id + " " + page_id + "\n");
             return '<a href="#' + maori_word + '" data-audio="audio/speech-' + maori_speech_item.file + '" class="audio">' + maori_word + "</a>" + following_character;
         };
