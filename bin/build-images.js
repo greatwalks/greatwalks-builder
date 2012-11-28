@@ -96,49 +96,58 @@ process.stdout.write("Generating Images\n");
 
 (function () {
     var svg_source;
-    process.stdout.write(" - Generating Phonegap Android icons");
+    
     svg_source = path.join(approot, "images/great-walks-icon.svg");
 
-    // android icons
-    execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_repo, "res/drawable-hdpi/ic_launcher.png") + " --export-width=72");
-    execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_repo, "res/drawable-ldpi/ic_launcher.png") + " --export-width=36");
-    execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_repo, "drawable-mdpi/ic_launcher.png") + " --export-width=48");
-    execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_repo, "drawable-xhdpi/ic_launcher.png") + " --export-width=96");
-    process.stdout.write("...complete.\n");
+    process.stdout.write(" - Generating Phonegap Android icons");
+    if(fs.existsSync(greatwalks_phonegap_repo) && fs.statSync(greatwalks_phonegap_repo).isDirectory()) {
+        // android icons
+        execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_repo, "res/drawable-hdpi/ic_launcher.png") + " --export-width=72");
+        execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_repo, "res/drawable-ldpi/ic_launcher.png") + " --export-width=36");
+        execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_repo, "drawable-mdpi/ic_launcher.png") + " --export-width=48");
+        execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_repo, "drawable-xhdpi/ic_launcher.png") + " --export-width=96");
+        process.stdout.write("...complete.\n");
+    } else {
+        process.stdout.write("\n   - WARNING bypassed because there's no " + path.basename(greatwalks_phonegap_repo) + " directory.\n");
+    }
 
     // iOS icon and launcher files as per http://developer.apple.com/library/ios/#documentation/userexperience/conceptual/mobilehig/IconsImages/IconsImages.html#//apple_ref/doc/uid/TP40006556-CH14-SW1
     process.stdout.write(" - Generating Phonegap iOS icons and launcher images");
-    // icons
-    execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/icons/iTunesArtwork") + " --export-width=512");
-    execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/icons/icon.png") + " --export-width=57");
-    execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/icons/icon@2x.png") + " --export-width=114");
-    execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/icons/icon-72.png") + " --export-width=72");
-    execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/icons/icon-72@2x.png") + " --export-width=144");
-    execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/icons/icon-small.png") + " --export-width=29");
-    execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/icons/icon-small@2x.png") + " --export-width=58");
-    execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/icons/icon-small-50.png") + " --export-width=50");
+    if(fs.existsSync(greatwalks_phonegap_ios_repo) && fs.statSync(greatwalks_phonegap_ios_repo).isDirectory()) {
+        // icons
+        execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/icons/iTunesArtwork") + " --export-width=512");
+        execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/icons/icon.png") + " --export-width=57");
+        execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/icons/icon@2x.png") + " --export-width=114");
+        execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/icons/icon-72.png") + " --export-width=72");
+        execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/icons/icon-72@2x.png") + " --export-width=144");
+        execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/icons/icon-small.png") + " --export-width=29");
+        execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/icons/icon-small@2x.png") + " --export-width=58");
+        execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/icons/icon-small-50.png") + " --export-width=50");
 
-    // launcher images
-    // step 1: create from svg
-    svg_source = path.join(approot, "images/great-walks-logo.svg");
-    execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/splash/Default~iphone.png") + " --export-width=320");
-    execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/splash/Default@2x~iphone.png") + " --export-width=640");
-    execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/splash/Default-Landscape~ipad.png") + " --export-width=1024");
-    execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/splash/Default-Landscape@2x~ipad.png") + " --export-width=2048");
-    execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/splash/Default-Portrait~ipad.png") + " --export-width=768");
-    execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/splash/Default-Portrait@2x~ipad.png") + " --export-width=1536");
-    execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/splash/Default-568h@2x~iphone.png") + " --export-width=640");
+        // launcher images
+        // step 1: create from svg
+        svg_source = path.join(approot, "images/great-walks-logo.svg");
+        execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/splash/Default~iphone.png") + " --export-width=320");
+        execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/splash/Default@2x~iphone.png") + " --export-width=640");
+        execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/splash/Default-Landscape~ipad.png") + " --export-width=1024");
+        execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/splash/Default-Landscape@2x~ipad.png") + " --export-width=2048");
+        execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/splash/Default-Portrait~ipad.png") + " --export-width=768");
+        execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/splash/Default-Portrait@2x~ipad.png") + " --export-width=1536");
+        execSync("inkscape \"" + svg_source + "\" -z --export-png=" + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/splash/Default-568h@2x~iphone.png") + " --export-width=640");
 
-    // step 2: mogrify correct dimensions and background colour
-    execSync("mogrify -background \"#356359\" -gravity center -extent 320x480 " + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/splash/Default~iphone.png"));
-    execSync("mogrify -background \"#356359\" -gravity center -extent 640x960 " + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/splash/Default@2x~iphone.png"));
-    execSync("mogrify -background \"#356359\" -gravity center -extent 1024x748 " + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/splash/Default-Landscape~ipad.png"));
-    execSync("mogrify -background \"#356359\" -gravity center -extent 2048x1496 " + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/splash/Default-Landscape@2x~ipad.png"));
-    execSync("mogrify -background \"#356359\" -gravity center -extent 768x1004 " + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/splash/Default-Portrait~ipad.png"));
-    execSync("mogrify -background \"#356359\" -gravity center -extent 1536x2008 " + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/splash/Default-Portrait@2x~ipad.png"));
-    execSync("mogrify -background \"#356359\" -gravity center -extent 640x1136 " + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/splash/Default-568h@2x~iphone.png"));
+        // step 2: mogrify correct dimensions and background colour
+        execSync("mogrify -background \"#356359\" -gravity center -extent 320x480 " + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/splash/Default~iphone.png"));
+        execSync("mogrify -background \"#356359\" -gravity center -extent 640x960 " + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/splash/Default@2x~iphone.png"));
+        execSync("mogrify -background \"#356359\" -gravity center -extent 1024x748 " + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/splash/Default-Landscape~ipad.png"));
+        execSync("mogrify -background \"#356359\" -gravity center -extent 2048x1496 " + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/splash/Default-Landscape@2x~ipad.png"));
+        execSync("mogrify -background \"#356359\" -gravity center -extent 768x1004 " + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/splash/Default-Portrait~ipad.png"));
+        execSync("mogrify -background \"#356359\" -gravity center -extent 1536x2008 " + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/splash/Default-Portrait@2x~ipad.png"));
+        execSync("mogrify -background \"#356359\" -gravity center -extent 640x1136 " + path.join(greatwalks_phonegap_ios_repo, "GreatWalksiOS/Resources/splash/Default-568h@2x~iphone.png"));
 
-    process.stdout.write("...complete.\n");
+        process.stdout.write("...complete.\n");
+    } else {
+        process.stdout.write("\n   - WARNING bypassed because there's no " + path.basename(greatwalks_phonegap_ios_repo) + " directory.\n");
+    }
 
     process.stdout.write(" - Generating logos");
     svg_source = path.join(approot, "images/great-walks-logo.svg");
@@ -268,7 +277,7 @@ process.stdout.write("Generating Images\n");
                     if((!fs.statSync(carousel_source_path).isDirectory())){
                         carousel_destination_path = path.join(greatwalks_repo, "img/walks", walk_sanitised_name, "carousel-" + carousel_file.toNormalizedFilename());
                         resize_command = "convert \"" + carousel_source_path + "\" -resize x768 -quality " + resize_quality + " \"" + carousel_destination_path + "\"";
-                        console.log(resize_command + "\n") ;
+                        //console.log(resize_command + "\n") ;
                         execSync(resize_command);
                     }
                 }
