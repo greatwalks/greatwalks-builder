@@ -54,8 +54,7 @@
         if(window.map_details === undefined) { //are we on a map page? If not, there's nothing to do so just return
             return;
         }
-        var centered_once_upon_load = false,
-            open_tooltip,
+        var open_tooltip,
             hammer_defaults = {
                 prevent_default: true,
                 scale_treshold: 0,
@@ -143,16 +142,6 @@
                     $youarehere_offmap.css(youarehere_offmap_css).show();
                 }
                 $youarehere.css(youarehere_css).show();
-                if(centered_once_upon_load === false) {
-                    var $map = $("#map"),
-                        $window = $(window),
-                        map_offset = $map.offset(),
-                        x = Math.abs(youarehere_pixels.left),
-                        y = Math.abs(youarehere_pixels.top);
-                    
-                    centered_once_upon_load = true;
-                    window.centerMap(x, y);
-                }
                 last_known_position = position;
                 localStorage["geolocation-last-known-position"] = JSON.stringify(position);
             },
@@ -301,13 +290,7 @@
         if(last_known_position !== undefined) {
             last_known_position = JSON.parse(last_known_position);
             current_time_in_epoch_milliseconds = (new Date()).getTime();
-            if(last_known_position.timestamp < current_time_in_epoch_milliseconds - position_expires_after_milliseconds) {
-                window.centerMap();
-            } else {
-                geolocationSuccess(last_known_position);
-            }
-        } else {
-            window.centerMap();
+            geolocationSuccess(last_known_position);
         }
 
         if (navigator.geolocation) {

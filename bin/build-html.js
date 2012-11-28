@@ -616,8 +616,7 @@ process.stdout.write("Generating HTML\n");
             carousel_deck_index,
             carousel_web_path,
             y,
-            thumbnails_per_slide = 3,
-            dimensions;
+            thumbnails_per_slide = 3;
 
         if(ignore_names.indexOf(walk_name) !== -1) continue;
 
@@ -646,17 +645,10 @@ process.stdout.write("Generating HTML\n");
                 carousel_files = fs.readdirSync(carousel_path);
                 for(y = 0; y < carousel_files.length; y++){
                     carousel_web_path = "img/walks/" + walk_sanitised_name + "/carousel-" + carousel_files[y].toNormalizedFilename();
-                    dimensions = get_image_dimensions(path.join(carousel_path, carousel_files[y]));
-                    dimensions.ratio = dimensions.width / dimensions.height;
-                    dimensions.height = 768; //resized as per build-images.js
-                    dimensions.width = dimensions.height * dimensions.ratio;
-                    
+                   
                     mustache_data.carousel.push({
                         "path": carousel_web_path,
-                        "id": carousel_files[y].toId(),
-                        "half-image-width": dimensions.width / 2,
-                        "image-width": dimensions.width,
-                        "image-height": dimensions.height
+                        "id": carousel_files[y].toId()
                     });
                     carousel_deck_index = Math.floor(y / thumbnails_per_slide);
                     if(mustache_data.carousel_thumbnails[carousel_deck_index] === undefined){
