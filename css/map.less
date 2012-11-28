@@ -153,7 +153,7 @@ body.map {
     #camera_error {
         display:none;
         position:fixed;
-        top:150px;
+        top:110px;
         left:50%;
         margin-left:-100px;
         width: 200px;
@@ -165,6 +165,52 @@ body.map {
         text-align:center;
         font-weight:bold;
     }
+
+    #toggle-map-key {
+        position:fixed;
+        right:20px;
+        top:60px;
+        background: #666666;
+        width:50px;
+        color:#fff;
+        text-align:center;
+    }
+
+    #map-key {
+        display:none;
+        border: solid 2px #cccccc;
+        background: rgba(100,100,100,.9);
+        position:absolute;
+        top:150px;
+        left:50%;
+        margin-left:-175px;
+        width: 350px;
+        padding:10px;
+        color: #ffffff;
+        border-radius:10px;
+        text-align:center;
+
+        table {
+            margin: 0px auto;
+        
+            td {
+                font-weight:bold;
+                vertical-align:top;
+                text-align:left;
+                padding-bottom:5px;
+
+                &:first-child {
+                    padding-right:20px;
+                }
+
+                img {
+                    width:30px;
+                    height:30px;
+                    margin-right:10px;
+                }
+            }
+        }
+   }
 
     .location-icon {
         display: block;
