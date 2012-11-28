@@ -4,7 +4,8 @@ var fs = require('fs'),
     path = require('path'),
     approot = path.dirname(__dirname),
     greatwalks_repo = path.join(path.dirname(approot), "greatwalks"),
-    audio_files = fs.readdirSync(path.join(approot, "audio")),
+    audio_directory = path.join(approot, "misc", "audio"),
+    audio_files = fs.readdirSync(audio_directory),
     audio_file,
     audio_path,
     ignore_names = ["Thumbs.db", ".DS_Store"],
@@ -36,7 +37,7 @@ process.stdout.write("Generating Audio\n");
 (function(){
   for(i = 0; i < audio_files.length; i++){
       audio_file = audio_files[i];
-      audio_path = path.join(approot, "audio", audio_file);
+      audio_path = path.join(audio_directory, audio_file);
       if(ignore_names.indexOf(audio_file) !== -1) continue;
       if(!fs.statSync(audio_path).isDirectory()) {
         copyFileSync(audio_path, path.join(greatwalks_repo, "audio/speech-" + audio_file));
