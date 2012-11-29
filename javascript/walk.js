@@ -15,14 +15,13 @@
                 }
                 $shadow.removeClass("shadow-visible");
             },
-            $html = $("html").bind("popover-click", disable_all_dont_miss),
-            $elevation_profile = $("#elevation-profile");
+            $html = $("html").bind("popover-click", disable_all_dont_miss);
 
         $(".modal").click(function(){
             $(this).modal("hide");
         });
         setInterval(function(){
-            console.log($("#elevation-profile").css("z-index"));
+            console.log($("#elevation-profile").css("z-index") + " vs " + $(".modal-backdrop").css("z-index"));
         }, 2000);
         //$('#carousel').carousel();
 
