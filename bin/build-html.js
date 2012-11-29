@@ -634,6 +634,7 @@ process.stdout.write("Generating HTML\n");
                 mustache_data["elevation-profile-image-width"] = elevation_dimensions_json.width;
                 mustache_data["elevation-profile-image-halfwidth"] = elevation_dimensions_json.width / 2;
                 mustache_data["elevation-profile-image-height"] = elevation_dimensions_json.height;
+                mustache_data["elevation-profile-modal-height"] = elevation_dimensions_json.height + 20;
             }
             mustache_data["walk-image-directory"] = path.join("img/walks/", walk_sanitised_name) + "/";
             mustache_data["youtube-id"] = fs.readFileSync(youtube_path, 'utf8');
