@@ -21,7 +21,7 @@
             $(this).modal("hide");
         });
         setInterval(function(){
-            console.log($("#elevation-profile").css("z-index") + " vs " + $(".modal-backdrop").css("z-index"));
+            console.log($("#elevation-profile").css("z-index") + " vs " + $(".modal-backdrop").css("z-index") + " amount=" + $(".modal-backdrop").length);
         }, 2000);
         //$('#carousel').carousel();
 
