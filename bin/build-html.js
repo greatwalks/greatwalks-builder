@@ -122,11 +122,11 @@ String.prototype.toId = function() {
     // Sanitises an arbitrary string into an valid id (for the purposes of HTML id or CSS class)
     /* Normally I wouldn't extend a prototype but
        in a short lived build script it's relatively harmless */
-    return this.toLowerCase().replace(/['.,]/g, "").replace(/ /g, "-");
+    return this.toLowerCase().replace(/['.,\(\)]/g, "").replace(/ /g, "-");
 };
 
 String.prototype.toNormalizedFilename = function(){
-    return this.toLowerCase().replace(/[,\(\)]/g, "").replace(/ /g, "-");
+    return this.toLowerCase().replace(/[,\(\)]/g, "").replace(/ /g, "-").replace(/[^a-z\-0-9\.]/g, "");
 };
 
 String.prototype.toCased = function() {
@@ -775,7 +775,14 @@ function process_page(htmlf_path, page_title, mustache_data, page_id){
                         .replace(/&ouml;/g, "\u014D")  //macronised o
                         .replace(/&Uuml;/g, "\u016A")  //macronised U
                         .replace(/&uuml;/g, "\u016B") //macronised u
-                        .replace(/Maori/gi, "M&#257;ori") //may be too broad, may cause problems if the word Maori is in a URL or something
+                        .replace(/Maori/gi, function(match, offset){
+                            var is_a_text_node = (html_page.lastIndexOf("<", offset) < html_page.lastIndexOf(">", offset));
+                            if(is_a_text_node) {
+                                return "M&#257;ori";
+                            } else {
+                                return match;
+                            }
+                        }) //may be too broad, may cause problems if the word Maori is in a URL or something
                         .replace(/([0-9.]+) km/gi, function(match, contents, offset, s){
                             return format_kilometres(parseFloat(contents));
                         })

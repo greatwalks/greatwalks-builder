@@ -15,7 +15,7 @@ var fs = require('fs'),
                   // but we still want the source images to be large for high DPI displays (e.g. 'retina display')
     ignore_names = ["Thumbs.db", ".DS_Store"],
     reserved_image_names = ["map.png"], //PNG images from each Walks directory are copied over as-is except for these ones...
-    resize_quality = 50,
+    resize_quality = 60,
     copyFileSync = function(srcFile, destFile) {
       //via http://procbits.com/2011/11/15/synchronous-file-copy-in-node-js/
       var BUF_LENGTH, buff, bytesRead, fdr, fdw, pos;
@@ -47,7 +47,7 @@ String.prototype.endsWith = function(suffix) {
 };
 
 String.prototype.toNormalizedFilename = function(){
-    return this.toLowerCase().replace(/[,\(\)]/g, "").replace(/ /g, "-");
+    return this.toLowerCase().replace(/[,\(\)]/g, "").replace(/ /g, "-").replace(/[^a-z\-0-9\.]/g, "");
 };
 
 process.stdout.write("Generating Images\n");
