@@ -21,7 +21,9 @@
         $(".modal").click(function(){
             $(this).modal("hide");
         });
-
+        setInterval(function(){
+            console.log($("#elevation-profile").css("z-index"));
+        }, 2000);
         //$('#carousel').carousel();
 
         $("body").on("click", ".audio", function(event){
