@@ -39,13 +39,12 @@
         <!--#include file="on-the-track.mustache" -->
   </div>
 </div>
-<div id="elevation-profile" style="width:98%; height:{{elevation-profile-modal-height}}px;" class="modal hide fade horizscroll" tabindex="-1" role="dialog">
-  <img src="{{elevation-profile-image}}" style="width:{{elevation-profile-image-width}}px; max-width:{{elevation-profile-image-width}}px; height:{{elevation-profile-image-height}}px; max-height:{{elevation-profile-image-height}}px;">
+<div id="elevation-profile" style="height:{{elevation-profile-modal-height}}px;" class="modal hide fade horizscroll" tabindex="-1" role="dialog">
+  <img src="{{{elevation-profile-image}}}" style="width:{{elevation-profile-image-width}}px; max-width:{{elevation-profile-image-width}}px; height:{{elevation-profile-image-height}}px; max-height:{{elevation-profile-image-height}}px;">
 </div>
-
 
 {{#carousel}}
 <div id="carousel-{{id}}" style="width:98%;" class="modal hide fade" tabindex="-1" role="dialog">
-  <img src="{{path}}" style="width:100%">
+  <img src="{{{path}}}" style="width:100%">
 </div>
 {{/carousel}}
