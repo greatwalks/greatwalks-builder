@@ -28,10 +28,11 @@ var fs = require('fs'),
     },
     i;
 
-process.stdout.write("Generating Audio\n");
+process.stdout.write("Generating Audio (and Fonts)\n");
 
 (function(){
     fs.mkdir(path.join(greatwalks_repo, "audio")); //probably already exists
+    fs.mkdir(path.join(greatwalks_repo, "fonts")); //probably already exists
 }());
 
 (function(){
@@ -43,7 +44,13 @@ process.stdout.write("Generating Audio\n");
         copyFileSync(audio_path, path.join(greatwalks_repo, "audio/speech-" + audio_file));
       }
   }
-  process.stdout.write(" - Copied static files\n");
+  process.stdout.write(" - Copied static audio files\n");
 }());
+
+copyFileSync(
+  path.join(approot, "misc", "fonts", "copse.woff"),
+  path.join(greatwalks_repo, "fonts", "copse.woff")
+);
+process.stdout.write(" - Copied static font files\n");
 
 process.stdout.write("Success\n\n");
