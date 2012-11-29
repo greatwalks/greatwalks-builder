@@ -1,9 +1,7 @@
 /*globals alert Modernizr*/
 (function($){
     "use strict";
-    alert(window.location.pathname);
     if(window.location.pathname.substr(-1, 1) === "/") {
-
         window.location = window.location.pathname + "index.html";
     }
     
@@ -43,7 +41,6 @@
             }
         },
         index_init = function(event){
-            alert("index init");
             $carousel = $('#carousel').carousel();
             $carousel_items = $carousel.find(".item");
             $navbar_bottom = $(".navbar-fixed-bottom");
@@ -62,8 +59,6 @@
             $carousel_items.hammer(hammer_defaults).bind('drag', drag_carousel);
             $carousel_items.hammer(hammer_defaults).bind('dragend', dragend_carousel);
         };
-
-
     window.pageload(index_init, "/index.html");
 }(jQuery));
 
