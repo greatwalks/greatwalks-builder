@@ -182,8 +182,46 @@
     }
 }
 
+@media (max-height: 420px) {
+    #slideout_navigation {
+        font-size:11px;
 
-@media (max-height: 380px) {
+        ul.menu li:first-child label {
+            display:none;
+        }
+ 
+        ul.menu,
+        ul.walks,
+        ul.maps {
+            font-size:13px;
+
+            li {
+                line-height:normal;
+
+                a {
+                    padding-top: 5px;
+                    padding-bottom:5px;
+                }
+            }
+        }
+
+        ul.menu li {
+            background-position: right 4px; 
+        }
+
+        ul.walks li {
+            background-position: right -247px; 
+        }
+
+        ul.maps li {
+            background-position: right -47px; 
+        }
+    }
+}
+
+
+
+@media (max-height: 320px) {
     #slideout_navigation {
         font-size:8px;
 
