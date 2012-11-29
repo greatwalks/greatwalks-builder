@@ -1,7 +1,9 @@
 /*globals alert Modernizr*/
 (function($){
     "use strict";
+    alert(window.location.pathname);
     if(window.location.pathname.substr(-1, 1) === "/") {
+
         window.location = window.location.pathname + "index.html";
     }
     
@@ -41,6 +43,7 @@
             }
         },
         index_init = function(event){
+            alert("index init");
             $carousel = $('#carousel').carousel();
             $carousel_items = $carousel.find(".item");
             $navbar_bottom = $(".navbar-fixed-bottom");
