@@ -1,7 +1,7 @@
 /* Looking for the homepage's bottom navbar? Try index.less */
 
 .navbar-fixed-top {
-	z-index:1000;
+    position:fixed;
 
 	.header-sprite {
 		display: inline-block;
@@ -29,10 +29,25 @@
 	.header-share {
 		background-position: 0px -150px;
 	}
+
+    label {
+        display:block;
+        padding: 10px 15px 10px;
+    }
 }
+
 
 .navbar .nav {
 	margin: 0px;
+}
+
+.navbar-fixed-top {
+    margin-left:0px;
+    margin-right:0px;
+}
+
+.navbar-fixed-bottom {
+    margin-top:0px;    
 }
 
 .popover.social {
