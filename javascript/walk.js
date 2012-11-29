@@ -1,7 +1,7 @@
 /*global navigator document alert console */
 (function($){
     "use strict";
-    if(window.location.pathname.toString().indexOf("walk-") === -1) return;
+
     var walk_init = function(){
         var $dont_miss = $(".dont-miss"),
             $shadow = $dont_miss.find(".shadow"),
@@ -17,11 +17,11 @@
                 $shadow.removeClass("shadow-visible");
             },
             $html = $("html").bind("popover-click", disable_all_dont_miss);
-
+        
         $(".modal").click(function(){
             $(this).modal("hide");
         });
-       
+
         $('#carousel').carousel();
 
         $("body").on("click", ".audio", function(event){
@@ -51,10 +51,13 @@
                 audio_element.play();
             }
         });
-        $(".walk-detail-header").click(function(){
-            $(this).toggleClass("open").next(".walk-detail").slideToggle();
+        $(".walk-detail-header a").fastPress(function(){
+            $(this).parent().toggleClass("open").next(".walk-detail").slideToggle();
+            return false;
         });
-        $(".dont-miss").click();
+        $(".dont-miss a").fastPress();
+        
+        
         $("a.icon").click(window.toggle_popover);
 
         $dont_miss.find("a").click(function(){
@@ -74,9 +77,5 @@
         $shadow.click(disable_all_dont_miss);
     };
 
-    if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
-        document.addEventListener("deviceready", walk_init, false);
-    } else {
-        $(document).ready(walk_init);
-    }
+    window.pageload(walk_init, "/walk-");
 }(jQuery));

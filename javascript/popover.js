@@ -147,9 +147,6 @@
         }
     };
 
-    if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
-        document.addEventListener("deviceready", popover_init, false);
-    } else {
-        $(document).ready(popover_init);
-    }
+
+    window.pageload(popover_init);
 }(jQuery));

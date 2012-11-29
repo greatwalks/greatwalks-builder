@@ -1,7 +1,6 @@
 /*global alert nz_map_dimensions console*/
 (function($){
     "use strict";
-    if(window.location.pathname.toString().indexOf("maps.html") === -1) return;
     var $wrapper,
         $new_zealand_map_wrapper,
         $new_zealand_map_img,
@@ -54,10 +53,7 @@
             setTimeout(adjust_maps_height, 200);
         };
 
-    if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
-        document.addEventListener("deviceready", maps_init, false);
-    } else {
-        $(document).ready(maps_init);
-    }
+
+    window.pageload(maps_init, "/maps.html");
 }(jQuery));
 

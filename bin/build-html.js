@@ -176,7 +176,7 @@ function resolve_includes(html, using_includes_directory, from_page){
             data = fs.readFileSync(include_path, 'utf8').toString();
             if(special_includes.indexOf(include_filename) !== -1) {
                 basename = path.basename(include_filename, ".mustache");
-                data = '<!-- included from build-html.js. Just search for this string --><h2 class="walk-detail-header ' + basename.toId() + '"><span><span>' + basename.toCased() + '</span></span></h2><div class="walk-detail ' + basename.toId() + '">' + data + "</div>";
+                data = '<!-- included from build-html.js. Just search for this string --><h2 class="walk-detail-header ' + basename.toId() + '"><a href="#expand-walk-detail"><span>' + basename.toCased() + '</span></a></h2><div class="walk-detail ' + basename.toId() + '">' + data + "</div>";
             }
             data = insert_audio(data, from_page);
             return data;

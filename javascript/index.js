@@ -1,7 +1,10 @@
 /*globals alert Modernizr*/
 (function($){
     "use strict";
-    if(window.location.pathname.toString() !== "/" && window.location.pathname.toString().indexOf("index.html") === -1) return;
+    if(window.location.pathname.substr(-1, 1) === "/") {
+        window.location = window.location.pathname + "index.html";
+    }
+    
     var $carousel,
         $carousel_items,
         $navbar_bottom,
@@ -58,10 +61,6 @@
         };
 
 
-    if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
-        document.addEventListener("deviceready", index_init, false);
-    } else {
-        $(document).ready(index_init);
-    }
+    window.pageload(index_init, "/index.html");
 }(jQuery));
 

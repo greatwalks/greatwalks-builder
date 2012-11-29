@@ -10,7 +10,7 @@
  * ========================================================== */
 (function($){
     "use strict";
-    if(window.location.pathname.toString().indexOf("map-") === -1) return;
+    
     var drag_offset = {base_x:0,base_y:0,x:0,y:0},
         map__zoom_init = function(event){
             //based on code from http://eightmedia.github.com/hammer.js/zoom/index2.html
@@ -157,9 +157,5 @@
             });
         };
 
-    if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
-        document.addEventListener("deviceready", map__zoom_init, false);
-    } else {
-        $(document).ready(map__zoom_init);
-    }
+    window.pageload(map__zoom_init, "/map-");
 }(jQuery));

@@ -181,21 +181,26 @@ body.walk {
         }
 
         .walk-detail-header {
-            color:white;
+            
             padding: 0.4em 0.5em;
             margin-bottom: 10px;
             font-size:25px;
             .drop-shadow();
 
-            span span {
+            a {
+                text-decoration:none;
+            }
+
+            a span {
                 display:block;
+                color:white;
                 background-image: url("../img/walk-icons.png");
                 background-position: right -90px;
                 background-repeat: no-repeat;
                 background-size: 40px 200px;
             }
 
-            &.open span span {
+            &.open a span {
                 display:block;
                 background-image: url("../img/walk-icons.png");
                 background-repeat: no-repeat;
