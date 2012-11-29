@@ -189,8 +189,8 @@ body.map {
         position:absolute;
         top:150px;
         left:50%;
-        margin-left:-175px;
-        width: 350px;
+        margin-left:-165px;
+        width: 330px;
         padding:10px;
         color: #ffffff;
         border-radius:10px;
@@ -211,9 +211,8 @@ body.map {
                     background: url("../img/map-lines.png") no-repeat;
                     float:right;
                     display:block;
-                    width:200px;
+                    width:160px;
                     height:18px;
-                    
                 }
 
                 &.greatwalk span {
@@ -410,7 +409,25 @@ body.map {
 
 @media (max-width: 400px), (max-height: 500px) {
     body.map #map-key {
-        top:80px;
+        top:110px;
     }
 }
 
+@media (max-width: 400px) {
+    body.map #map-key {
+        padding:0px;
+    }
+}
+
+@media (max-width: 330px) {
+    body.map #map-key {
+        width:200px;
+        margin-left:-100px;
+
+        table,
+        tr,
+        td {
+            display:block;
+        }
+    }
+}
