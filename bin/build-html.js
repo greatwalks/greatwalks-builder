@@ -44,8 +44,9 @@ String.prototype.removeNonStandardCharacters = function(){
     // but I can't seem to when Node.js is running on Windows.
     // Not sure why (loading file as Windows-1252 or something I'd guess but parsing as Windows-1252 doesn't
     // fix it, and hence the following code...
-    return this.replace(/([^a-zA-Z.,'"<>\s0-9&\-()!\/\?])/g, function(match, contents, offset, s){
-        throw "At offset " + offset + " found a non-standard character (unicode:" + current_string.charCodeAt(offset) + "): " + match.toString() + "\nSurrounding text: " + current_string.substr(offset - 10, 20) + " \nThis is probably a problem with MS SmartQuotes or emdash/endashes in your CSV file so replace them with conventional ASCII or UTF-8 characters.";
+    return this.replace(/([^a-zA-Z.,'":<>_\@\s0-9&\-()!\/\?])/g, function(match, contents, offset, s){
+        var line_number = current_string.substr(0, offset).split("\n").length;
+        throw "At offset " + offset + " (approx line #" + line_number + ") found a non-standard character (unicode:" + current_string.charCodeAt(offset) + "): " + match.toString() + "\nSurrounding text: " + current_string.substr(offset - 10, 20) + " \nThis is probably a problem with MS SmartQuotes or emdash/endashes in your CSV file so replace them with conventional ASCII or UTF-8 characters.";
     });
 };
 
@@ -674,15 +675,18 @@ process.stdout.write("Generating HTML\n");
 
 (function(){
     var nz_map_path = path.join(approot, "images", "new-zealand-map.png"),
-        dimensions_command = "identify -format {\\\"width\\\":%w,\\\"height\\\":%h} \"" + nz_map_path + "\"",
-        nz_map_dimensions_string,
-        nz_map_dimensions;
-    nz_map_dimensions_string = execSync(dimensions_command);
-    if(nz_map_dimensions_string.indexOf("{\"width") >= 0) {
-        nz_map_dimensions = JSON.parse(nz_map_dimensions_string);
-        nz_map_dimensions.ratio = nz_map_dimensions.width / nz_map_dimensions.height;
+        nz_map_dimensions = get_image_dimensions(nz_map_path),
+        visitor_centers_path = path.join(approot, "misc", "VisitorCentres.csv"),
+        visitor_centres_original_csv = fs.readFileSync(visitor_centers_path, 'utf8').toString().CSVMap(),
+        visitor_centres = [],
+        i;
+    for(i = 0; i < visitor_centres_original_csv.length; i++){
+        if(visitor_centres_original_csv[i].PHONE !== undefined){
+            visitor_centres_original_csv[i].PHONE_SANITISED = visitor_centres_original_csv[i].PHONE.toString().replace(/ /g, "");
+            visitor_centres.push(visitor_centres_original_csv[i]);
+        }
     }
-    for(var i = 0; i < htmlf_paths.length; i++){
+    for(i = 0; i < htmlf_paths.length; i++){
         var htmlf_path = htmlf_paths[i],
             htmlf_fullpath = path.join(approot, "html", htmlf_path),
             htmlf_path_extension = htmlf_path.substr(htmlf_path.lastIndexOf(".") + 1),
@@ -691,7 +695,10 @@ process.stdout.write("Generating HTML\n");
             basename = path.basename(htmlf_path),
             filename_extension = path.extname(htmlf_path),
             basename_without_extension = path.basename(htmlf_path, filename_extension),
-            mustache_data = {"nz_map_dimensions": JSON.stringify(nz_map_dimensions)};
+            mustache_data = {
+                "nz_map_dimensions": JSON.stringify(nz_map_dimensions),
+                "visitor_centres": visitor_centres
+            };
         if(!fs.statSync(htmlf_fullpath).isDirectory()){
             html_page = process_page(htmlf_fullpath, "", mustache_data, basename_without_extension);
         }
