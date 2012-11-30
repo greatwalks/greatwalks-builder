@@ -83,8 +83,8 @@ process.stdout.write("Generating JavaScript\n");
 
         $tip
           .detach()
-          .css({ top: 0, left: 0, display: 'block' })
-          .insertAfter($("body"))
+          .css({ top: 0, left: 0, display: 'block' });
+        $("body").append($tip);
 
       AND if you get an exception when clicking a popover about
       'cannot read currentTarget of undefined' then replace,
