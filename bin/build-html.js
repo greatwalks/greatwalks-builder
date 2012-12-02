@@ -44,8 +44,9 @@ String.prototype.removeNonStandardCharacters = function(){
     // but I can't seem to when Node.js is running on Windows.
     // Not sure why (loading file as Windows-1252 or something I'd guess but parsing as Windows-1252 doesn't
     // fix it, and hence the following code...
-    return this.replace(/([^a-zA-Z.,'"<>\s0-9&\-()!\/\?])/g, function(match, contents, offset, s){
-        throw "At offset " + offset + " found a non-standard character (unicode:" + current_string.charCodeAt(offset) + "): " + match.toString() + "\nSurrounding text: " + current_string.substr(offset - 10, 20) + " \nThis is probably a problem with MS SmartQuotes or emdash/endashes in your CSV file so replace them with conventional ASCII or UTF-8 characters.";
+    return this.replace(/([^a-zA-Z.,'":<>_\@\s0-9&\-()!\/\?])/g, function(match, contents, offset, s){
+        var line_number = current_string.substr(0, offset).split("\n").length;
+        throw "At offset " + offset + " (approx line #" + line_number + ") found a non-standard character (unicode:" + current_string.charCodeAt(offset) + "): " + match.toString() + "\nSurrounding text: " + current_string.substr(offset - 10, 20) + " \nThis is probably a problem with MS SmartQuotes or emdash/endashes in your CSV file so replace them with conventional ASCII or UTF-8 characters.";
     });
 };
 
@@ -122,11 +123,11 @@ String.prototype.toId = function() {
     // Sanitises an arbitrary string into an valid id (for the purposes of HTML id or CSS class)
     /* Normally I wouldn't extend a prototype but
        in a short lived build script it's relatively harmless */
-    return this.toLowerCase().replace(/['.,]/g, "").replace(/ /g, "-");
+    return this.toLowerCase().replace(/['.,\(\)]/g, "").replace(/ /g, "-");
 };
 
 String.prototype.toNormalizedFilename = function(){
-    return this.toLowerCase().replace(/[,\(\)]/g, "").replace(/ /g, "-");
+    return this.toLowerCase().replace(/[,\(\)]/g, "").replace(/ /g, "-").replace(/[^a-z\-0-9\.]/g, "");
 };
 
 String.prototype.toCased = function() {
@@ -176,7 +177,7 @@ function resolve_includes(html, using_includes_directory, from_page){
             data = fs.readFileSync(include_path, 'utf8').toString();
             if(special_includes.indexOf(include_filename) !== -1) {
                 basename = path.basename(include_filename, ".mustache");
-                data = '<!-- included from build-html.js. Just search for this string --><h2 class="walk-detail-header ' + basename.toId() + '"><span><span>' + basename.toCased() + '</span></span></h2><div class="walk-detail ' + basename.toId() + '">' + data + "</div>";
+                data = '<!-- included from build-html.js. Just search for this string --><h2 class="walk-detail-header ' + basename.toId() + '"><a href="#expand-walk-detail"><span>' + basename.toCased() + '</span></a></h2><div class="walk-detail ' + basename.toId() + '">' + data + "</div>";
             }
             data = insert_audio(data, from_page);
             return data;
@@ -194,7 +195,8 @@ function insert_audio(htmlf, page_id){
             if(!is_a_text_node || maori_speech_item.used_in_pages.indexOf(page_id) !== -1) {
                 return maori_word + following_character;
             }
-            maori_speech_item.used_in_pages.push(page_id); //ensure that each word is only used once per page id.
+            maori_speech_item.used_in_any_page = true;
+            maori_speech_item.used_in_pages.push(page_id); //ensure that each audio link is only used once per page id.
             //console.log(maori_speech_id + " " + page_id + "\n");
             return '<a href="#' + maori_word + '" data-audio="audio/speech-' + maori_speech_item.file + '" class="audio">' + maori_word + "</a>" + following_character;
         };
@@ -313,7 +315,7 @@ var share_social_details = {
 process.stdout.write("Generating HTML\n");
 
 (function(){
-    var files = fs.readdirSync(path.join(approot, "audio")),
+    var files = fs.readdirSync(path.join(approot, "misc", "audio")),
         file,
         speech_id,
         i;
@@ -615,8 +617,7 @@ process.stdout.write("Generating HTML\n");
             carousel_deck_index,
             carousel_web_path,
             y,
-            thumbnails_per_slide = 3,
-            dimensions;
+            thumbnails_per_slide = 3;
 
         if(ignore_names.indexOf(walk_name) !== -1) continue;
 
@@ -634,6 +635,7 @@ process.stdout.write("Generating HTML\n");
                 mustache_data["elevation-profile-image-width"] = elevation_dimensions_json.width;
                 mustache_data["elevation-profile-image-halfwidth"] = elevation_dimensions_json.width / 2;
                 mustache_data["elevation-profile-image-height"] = elevation_dimensions_json.height;
+                mustache_data["elevation-profile-modal-height"] = elevation_dimensions_json.height + 20;
             }
             mustache_data["walk-image-directory"] = path.join("img/walks/", walk_sanitised_name) + "/";
             mustache_data["youtube-id"] = fs.readFileSync(youtube_path, 'utf8');
@@ -645,17 +647,10 @@ process.stdout.write("Generating HTML\n");
                 carousel_files = fs.readdirSync(carousel_path);
                 for(y = 0; y < carousel_files.length; y++){
                     carousel_web_path = "img/walks/" + walk_sanitised_name + "/carousel-" + carousel_files[y].toNormalizedFilename();
-                    dimensions = get_image_dimensions(path.join(carousel_path, carousel_files[y]));
-                    dimensions.ratio = dimensions.width / dimensions.height;
-                    dimensions.height = 768; //resized as per build-images.js
-                    dimensions.width = dimensions.height * dimensions.ratio;
-                    
+                   
                     mustache_data.carousel.push({
                         "path": carousel_web_path,
-                        "id": carousel_files[y].toId(),
-                        "half-image-width": dimensions.width / 2,
-                        "image-width": dimensions.width,
-                        "image-height": dimensions.height
+                        "id": carousel_files[y].toId()
                     });
                     carousel_deck_index = Math.floor(y / thumbnails_per_slide);
                     if(mustache_data.carousel_thumbnails[carousel_deck_index] === undefined){
@@ -680,15 +675,19 @@ process.stdout.write("Generating HTML\n");
 
 (function(){
     var nz_map_path = path.join(approot, "images", "new-zealand-map.png"),
-        dimensions_command = "identify -format {\\\"width\\\":%w,\\\"height\\\":%h} \"" + nz_map_path + "\"",
-        nz_map_dimensions_string,
-        nz_map_dimensions;
-    nz_map_dimensions_string = execSync(dimensions_command);
-    if(nz_map_dimensions_string.indexOf("{\"width") >= 0) {
-        nz_map_dimensions = JSON.parse(nz_map_dimensions_string);
-        nz_map_dimensions.ratio = nz_map_dimensions.width / nz_map_dimensions.height;
+        nz_map_dimensions = get_image_dimensions(nz_map_path),
+        visitor_centers_path = path.join(approot, "misc", "VisitorCentres.csv"),
+        visitor_centres_original_csv = fs.readFileSync(visitor_centers_path, 'utf8').toString().CSVMap(),
+        visitor_centres = [],
+        i;
+    for(i = 0; i < visitor_centres_original_csv.length; i++){
+        if(visitor_centres_original_csv[i].PHONE !== undefined){
+            visitor_centres_original_csv[i].PHONE_SANITISED = visitor_centres_original_csv[i].PHONE.toString().replace(/ /g, "");
+            visitor_centres.push(visitor_centres_original_csv[i]);
+        }
     }
-    for(var i = 0; i < htmlf_paths.length; i++){
+    nz_map_dimensions.ratio = nz_map_dimensions.width / nz_map_dimensions.height;
+    for(i = 0; i < htmlf_paths.length; i++){
         var htmlf_path = htmlf_paths[i],
             htmlf_fullpath = path.join(approot, "html", htmlf_path),
             htmlf_path_extension = htmlf_path.substr(htmlf_path.lastIndexOf(".") + 1),
@@ -697,7 +696,10 @@ process.stdout.write("Generating HTML\n");
             basename = path.basename(htmlf_path),
             filename_extension = path.extname(htmlf_path),
             basename_without_extension = path.basename(htmlf_path, filename_extension),
-            mustache_data = {"nz_map_dimensions": JSON.stringify(nz_map_dimensions)};
+            mustache_data = {
+                "nz_map_dimensions": JSON.stringify(nz_map_dimensions),
+                "visitor_centres": visitor_centres
+            };
         if(!fs.statSync(htmlf_fullpath).isDirectory()){
             html_page = process_page(htmlf_fullpath, "", mustache_data, basename_without_extension);
         }
@@ -782,7 +784,14 @@ function process_page(htmlf_path, page_title, mustache_data, page_id){
                         .replace(/&ouml;/g, "\u014D")  //macronised o
                         .replace(/&Uuml;/g, "\u016A")  //macronised U
                         .replace(/&uuml;/g, "\u016B") //macronised u
-                        .replace(/Maori/gi, "M&#257;ori") //may be too broad, may cause problems if the word Maori is in a URL or something
+                        .replace(/Maori/gi, function(match, offset){
+                            var is_a_text_node = (html_page.lastIndexOf("<", offset) < html_page.lastIndexOf(">", offset));
+                            if(is_a_text_node) {
+                                return "M&#257;ori";
+                            } else {
+                                return match;
+                            }
+                        }) //may be too broad, may cause problems if the word Maori is in a URL or something
                         .replace(/([0-9.]+) km/gi, function(match, contents, offset, s){
                             return format_kilometres(parseFloat(contents));
                         })

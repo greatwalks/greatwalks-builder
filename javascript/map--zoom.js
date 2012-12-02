@@ -10,7 +10,7 @@
  * ========================================================== */
 (function($){
     "use strict";
-    if(window.location.pathname.toString().indexOf("map-") === -1) return;
+    
     var drag_offset = {base_x:0,base_y:0,x:0,y:0},
         map__zoom_init = function(event){
             //based on code from http://eightmedia.github.com/hammer.js/zoom/index2.html
@@ -133,8 +133,8 @@
             hammer.bind('transform', function(event) {
                 var newHeight, newWidth;
                 scale = prevScale * event.scale;
-
-               
+                console.log(event.position);
+                
 
                 newWidth = $image.width() * scale;
                 newHeight = $image.height() * scale;
@@ -157,44 +157,5 @@
             });
         };
 
-    window.centerMap = function(x, y){
-            return;
-            var $map = $("#map"),
-                $window = $(window),
-                window_width = $window.width(),
-                window_height = $window.height(),
-                map_offset = $map.offset(),
-                map_css;
-            if(x === undefined && y === undefined) { //if no coordinates are given then center on middle of map
-                x = -(map_offset.left + (map_details.map_pixel_width / 2) - (window_width / 2));
-                y = -(map_offset.top + (map_details.map_pixel_height / 2) - (window_height / 2));
-                
-            }
-            if(x > 0 && x < window_width / 2) {
-                x = -map_offset.left;
-            } else if(x > window_width / 2 && x < map_details.map_pixel_width - (window_width / 2)) {
-                x = -map_offset.left - (x / 2);
-            } else {
-                x =  -map_details.map_pixel_width + window_width;
-                
-            }
-
-            if(y > 0 && y < window_height / 2) {
-                y = 0;
-            } else if(y > window_height / 2 && y < map_details.map_pixel_height - (window_height / 2)) {
-                y = -map_offset.top - (y / 2);
-            } else {
-                y = -map_offset.top - map_details.map_pixel_height + window_height;
-            }
-            
-            map_css = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
-            $map.css('-webkit-transform', map_css);
-            drag_offset.base_x = x;
-            drag_offset.base_y = y;
-        };
-    if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
-        document.addEventListener("deviceready", map__zoom_init, false);
-    } else {
-        $(document).ready(map__zoom_init);
-    }
+    window.pageload(map__zoom_init, "/map-");
 }(jQuery));

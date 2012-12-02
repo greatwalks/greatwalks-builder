@@ -3,10 +3,12 @@
 body.index {
 
 	#wrapper {
-		padding-top:50px;
+		padding-top:61px;
 		color: #fff;
 
 		#carousel {
+			margin-bottom: 0px;
+
 			.item {
 				background-size: cover;
 				background-repeat: no-repeat;
@@ -45,7 +47,7 @@ body.index {
 				display:none;
 			}
 
-			&:after { /* Preload images to prevent flicker http://www.ajaxera.com/image-preloading-through-css3-caching/ */
+			&:after{ /*Preload images to prevent flicker */
 				content: url("../img/homepage-carousel-x1024-_default.jpg")
 						 url("../img/homepage-carousel-x1024-abel-tasman-coast-track.jpg")
 						 url("../img/homepage-carousel-x1024-heaphy-track.jpg")
@@ -89,7 +91,7 @@ body.index {
 	}
 }
 
-@media (max-width: 600px), (max-height: 400px) {
+@media (max-width: 600px), (max-height: 600px) {
 	body.index {
 		#wrapper {
 			#doc-sign {

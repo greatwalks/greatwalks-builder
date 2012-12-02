@@ -10,7 +10,7 @@
  * ========================================================== */
 (function($){
     "use strict";
-    if(window.location.pathname.toString().indexOf("map-") === -1) return;
+    
     (function(){
         var PIx = 3.141592653589793,
             degrees_to_radians = function(degrees) {
@@ -50,12 +50,11 @@
         window.position_expires_after_milliseconds = one_hour_in_milliseconds;
     }());
 
-    var map_start = function(){
+    var map_init = function(){
         if(window.map_details === undefined) { //are we on a map page? If not, there's nothing to do so just return
             return;
         }
-        var centered_once_upon_load = false,
-            open_tooltip,
+        var open_tooltip,
             hammer_defaults = {
                 prevent_default: true,
                 scale_treshold: 0,
@@ -143,16 +142,6 @@
                     $youarehere_offmap.css(youarehere_offmap_css).show();
                 }
                 $youarehere.css(youarehere_css).show();
-                if(centered_once_upon_load === false) {
-                    var $map = $("#map"),
-                        $window = $(window),
-                        map_offset = $map.offset(),
-                        x = Math.abs(youarehere_pixels.left),
-                        y = Math.abs(youarehere_pixels.top);
-                    
-                    centered_once_upon_load = true;
-                    window.centerMap(x, y);
-                }
                 last_known_position = position;
                 localStorage["geolocation-last-known-position"] = JSON.stringify(position);
             },
@@ -291,18 +280,17 @@
                     user_actions.$camera_error.fadeOut();
                 }
             },
-            youarehere_hammer;
+            youarehere_hammer,
+            toggle_map_key = function(event){
+                var $map_key = $("#map-key");
+                $map_key.toggle();
+                return false;
+            };
 
         if(last_known_position !== undefined) {
             last_known_position = JSON.parse(last_known_position);
             current_time_in_epoch_milliseconds = (new Date()).getTime();
-            if(last_known_position.timestamp < current_time_in_epoch_milliseconds - position_expires_after_milliseconds) {
-                window.centerMap();
-            } else {
-                geolocationSuccess(last_known_position);
-            }
-        } else {
-            window.centerMap();
+            geolocationSuccess(last_known_position);
         }
 
         if (navigator.geolocation) {
@@ -312,29 +300,17 @@
         }
         
         
-        if(Modernizr.touch) {
-            $("#weta").hammer(hammer_defaults).bind('touchstart', window.toggle_popover);
-            $("#map .location").hammer(hammer_defaults).bind('touchstart', window.toggle_popover);
-            $("#take-photo").hammer(hammer_defaults).bind('touchstart', user_actions.take_photo);
-            $("#photo-preview").hammer(hammer_defaults).bind('touchstart', user_actions.hide_user_photo);
-            //touch devices
-        } else {
-            $("#weta").click(window.toggle_popover);
-            $("#map .location").click(window.toggle_popover);
-            //anything for desktop browsers
-            $("#take-photo").click(user_actions.take_photo);
-            $("#photo-preview").click(user_actions.hide_user_photo);
-            
-        }
-        youarehere_hammer = $("#youarehere, #no_gps").hammer(hammer_defaults);
-        youarehere_hammer.bind("tap", user_actions.panel_toggle);
+        
+        $("#weta").fastPress(window.toggle_popover);
+        $("#map .location").fastPress(window.toggle_popover);
+        $("#take-photo").fastPress(user_actions.take_photo);
+        $("#photo-preview").fastPress(user_actions.hide_user_photo);
+        $("#toggle-map-key, #map-key").fastPress(toggle_map_key);
+        $("#youarehere, #no_gps").fastPress(user_actions.panel_toggle);
         user_actions.initialize_user_photos();
-        user_actions.$camera_error.click(user_actions.camera_error_hide);
+        user_actions.$camera_error.fastPress(user_actions.camera_error_hide);
+
     };
 
-    if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
-        document.addEventListener("deviceready", map_start, false);
-    } else {
-        $(document).ready(map_start);
-    }
+    window.pageload(map_init, "/map-");
 }(jQuery));

@@ -1,7 +1,10 @@
 /*globals alert Modernizr*/
 (function($){
     "use strict";
-    if(window.location.pathname.toString() !== "/" && window.location.pathname.toString().indexOf("index.html") === -1) return;
+    if(window.location.pathname.substr(-1, 1) === "/") {
+        window.location = window.location.pathname + "index.html";
+    }
+    
     var $carousel,
         $carousel_items,
         $navbar_bottom,
@@ -30,7 +33,7 @@
         },
         adjust_carousel_height = function(event){
             var $window = $(window),
-                height = $window.height() - $navbar_top.height() - $navbar_bottom.height() + 2,
+                height = $window.height() - $navbar_top.height() - $navbar_bottom.height() + 0,
                 width = $window.width() + 1;
             if(height > 0) {
                 $carousel.height(height);
@@ -56,12 +59,6 @@
             $carousel_items.hammer(hammer_defaults).bind('drag', drag_carousel);
             $carousel_items.hammer(hammer_defaults).bind('dragend', dragend_carousel);
         };
-
-
-    if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
-        document.addEventListener("deviceready", index_init, false);
-    } else {
-        $(document).ready(index_init);
-    }
+    window.pageload(index_init, "/index.html");
 }(jQuery));
 

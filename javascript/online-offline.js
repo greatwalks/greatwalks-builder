@@ -32,10 +32,6 @@
                 $this.empty();
             });
         };
-
-    if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
-        document.addEventListener("deviceready", going_online_offline_init, false);
-    } else {
-        $(document).ready(going_online_offline_init);
-    }
+    
+    window.pageload(going_online_offline_init);
 }(jQuery));

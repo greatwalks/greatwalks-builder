@@ -40,9 +40,5 @@
 		});
 	};
 
-	if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
-        document.addEventListener("deviceready", navbar_init, false);
-    } else {
-        $(document).ready(navbar_init);
-    }
+    window.pageload(navbar_init);
 }(jQuery));

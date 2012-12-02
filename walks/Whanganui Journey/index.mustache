@@ -25,6 +25,8 @@
           </div>
         {{/carousel_thumbnails}}
       </div>
+      <a class="carousel-control left" href="#carousel" data-slide="prev">&#8249;</a>
+      <a class="carousel-control right" href="#carousel" data-slide="next">&#8250;</a>
     </div>
 </div>
 <div class="below-fold">
@@ -37,10 +39,11 @@
         <!--#include file="on-the-track.mustache" -->
     </div>
 </div>
+
 <!-- No elevation profile -->
 
 {{#carousel}}
-<div id="carousel-{{id}}" style="width:{{image-width}}px; height:{{image-height}}px;" class="modal hide fade" tabindex="-1" role="dialog">
-  <img src="{{path}}" style="width:{{image-width}}px; height:{{image-height}}px">
+<div id="carousel-{{id}}" style="width:98%;" class="modal hide fade" tabindex="-1" role="dialog">
+  <img src="{{path}}" style="width:100%">
 </div>
 {{/carousel}}

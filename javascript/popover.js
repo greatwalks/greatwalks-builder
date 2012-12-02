@@ -23,7 +23,9 @@
                     window.hide_all_popovers_no_bubbling(event);
                 }
             });
+
             $("body").on("click", ".popover", function(event){
+                
                 window.hide_all_popovers_no_bubbling(event);
                 $html.trigger("popover-click");
             });
@@ -94,8 +96,7 @@
             event.originalEvent.stopPropagation();
         }
     };
-
-    
+   
 
     window.hide_popover = function(event){
         $(this).popover('hide');
@@ -147,9 +148,6 @@
         }
     };
 
-    if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
-        document.addEventListener("deviceready", popover_init, false);
-    } else {
-        $(document).ready(popover_init);
-    }
+
+    window.pageload(popover_init);
 }(jQuery));

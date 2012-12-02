@@ -1,7 +1,7 @@
 /*globals alert Modernizr window navigator document setTimeout clearTimeout*/
 (function($){
     "use strict";
-    if(window.location.pathname.toString().indexOf("find-an-adventure.html") === -1) return;
+    
     var find_init = function(){
         var close_modal_timer,
             $last_modal,
@@ -67,9 +67,5 @@
         });
     };
 
-    if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
-        document.addEventListener("deviceready", find_init, false);
-    } else {
-        $(document).ready(find_init);
-    }
+    window.pageload(find_init, "/find-an-adventure.html");
 }(jQuery));

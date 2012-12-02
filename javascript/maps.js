@@ -1,7 +1,6 @@
 /*global alert nz_map_dimensions console*/
 (function($){
     "use strict";
-    if(window.location.pathname.toString().indexOf("maps.html") === -1) return;
     var $wrapper,
         $new_zealand_map_wrapper,
         $new_zealand_map_img,
@@ -29,7 +28,6 @@
             }
             $new_zealand_map_wrapper.width(target_dimensions.width).height(target_dimensions.height);
             $new_zealand_map_img.width(target_dimensions.width).height(target_dimensions.height);
-            console.log(fixed_dimension);
             target_dimensions.chosen_text_size = Math.round(target_dimensions.width / 100) * 100;
             if(target_dimensions.chosen_text_size > 800) {
                 target_dimensions.chosen_text_size = 800;
@@ -54,10 +52,7 @@
             setTimeout(adjust_maps_height, 200);
         };
 
-    if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
-        document.addEventListener("deviceready", maps_init, false);
-    } else {
-        $(document).ready(maps_init);
-    }
+
+    window.pageload(maps_init, "/maps.html");
 }(jQuery));
 
