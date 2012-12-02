@@ -686,6 +686,7 @@ process.stdout.write("Generating HTML\n");
             visitor_centres.push(visitor_centres_original_csv[i]);
         }
     }
+    nz_map_dimensions.ratio = nz_map_dimensions.width / nz_map_dimensions.height;
     for(i = 0; i < htmlf_paths.length; i++){
         var htmlf_path = htmlf_paths[i],
             htmlf_fullpath = path.join(approot, "html", htmlf_path),
