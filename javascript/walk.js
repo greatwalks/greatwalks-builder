@@ -16,11 +16,9 @@
                 }
                 $shadow.removeClass("shadow-visible");
             },
-            $html = $("html").bind("popover-click", disable_all_dont_miss);
+            $html = $("html").bind("popover-click close-modal", disable_all_dont_miss);
         
-        $(".modal").click(function(){
-            $(this).modal("hide");
-        });
+
 
         $('#carousel').carousel();
 

@@ -42,11 +42,13 @@
                     }
                     map_transform = 'translate3d(' + drag_offset.x + 'px, ' + drag_offset.y + 'px, 0) scale3d(' + scale + ', ' + scale + ', 1)';
                     css = {'-webkit-transform': map_transform};
-                    if(touch_position.cssOrigin) {
-                        css['-webkit-transform-origin'] = touch_position.cssOrigin;
-                        console.log(touch_position.cssOrigin)
-                    }
+
+                    //if(touch_position.cssOrigin) {
+                    //    css['-webkit-transform-origin'] = touch_position.cssOrigin;
+                    //    console.log(touch_position.cssOrigin)
+                    //}
                     $image.css(css);
+
                     // Want to scale icons independently of the map? Enable this.
                     // icon_scale = (1 / scale) * 30;
                     // if(icon_scale > 50) {
@@ -144,9 +146,9 @@
                 scale = prevScale * event.scale;
                 
 
-                touch_position.width = event.position.width / scale;
-                touch_position.height = event.position.height / scale;
-                touch_position.cssOrigin = event.position.x + "px " + event.position.y +"px";
+                //touch_position.width = event.position.width / scale;
+                //touch_position.height = event.position.height / scale;
+                //touch_position.cssOrigin = event.position.x + "px " + event.position.y +"px";
 
                 newWidth = $image.width() * scale;
                 newHeight = $image.height() * scale;

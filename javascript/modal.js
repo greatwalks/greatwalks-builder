@@ -8,6 +8,10 @@
         AND also be aware that on the Samsung Galaxy Note tablet (GT-N8000) it also occurs with position:absolute;
         */
         $(".modal").appendTo("body");
+        $("body").on("click", ".modal", function(){
+            $(this).modal("hide");
+            $("html").trigger("close-modal");
+        });
 
     };
     window.pageload(modal_init);
