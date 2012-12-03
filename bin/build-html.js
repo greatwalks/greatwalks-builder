@@ -784,8 +784,17 @@ function process_page(htmlf_path, page_title, mustache_data, page_id){
                         .replace(/&ouml;/g, "\u014D")  //macronised o
                         .replace(/&Uuml;/g, "\u016A")  //macronised U
                         .replace(/&uuml;/g, "\u016B") //macronised u
-                        .replace(/Maori/gi, function(match, offset){
-                            var is_a_text_node = (html_page.lastIndexOf("<", offset) < html_page.lastIndexOf(">", offset));
+                        .replace(/Maori/gi, function(match, offset, the_string){
+                            var maori_length = "Maori".length,
+                                less_than_offset = the_string.lastIndexOf("<", offset + maori_length - 1),
+                                greater_than_offset = the_string.lastIndexOf(">", offset + maori_length - 1),
+                                debug_less_than_extract = the_string.substring(less_than_offset, offset + maori_length).replace(/[\n\r]/g, " "),
+                                debug_greater_than_extract = the_string.substring(greater_than_offset, offset + maori_length).replace(/[\n\r]/g, " ");
+                            
+                            var is_a_text_node = greater_than_offset > less_than_offset;
+                            //if(htmlf_path.match(/Rakiura Track/)) {
+                            //    console.log((is_a_text_node ? "IS A TEXT NODE" : "IS NOT A TEXT NODE") +  "\n" + greater_than_offset + " / " + less_than_offset + "\nGREATER (" + debug_greater_than_extract.length + "): " + debug_greater_than_extract + "\nLESS (" + debug_less_than_extract.length + "): " + debug_less_than_extract + "\n\n");
+                            // }
                             if(is_a_text_node) {
                                 return "M&#257;ori";
                             } else {
