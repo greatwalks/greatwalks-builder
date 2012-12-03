@@ -45,7 +45,6 @@
 
                     if(touch_position.cssOrigin) {
                         css['-webkit-transform-origin'] = touch_position.cssOrigin;
-                        console.log(touch_position.cssOrigin)
                     }
                     $image.css(css);
 
@@ -152,7 +151,7 @@
                 touch_position.y = event.position.y;
                 touch_position.cssOrigin = touch_position.x + "px " + touch_position.y +"px";
                 $image.find("#transform-origin").css({top: touch_position.x + "px", "left": touch_position.y +"px"});
-
+                console.log(event.touches);
                 newWidth = $image.width() * scale;
                 newHeight = $image.height() * scale;
 
