@@ -13,8 +13,8 @@ git commit -m "Automated commit"
 git push
 git checkout gh-pages
 git merge origin
-REM cp ../greatwalks-android/bin/greatwalks-android.apk .
-REM git add -A
+copy ../greatwalks-android/bin/greatwalks-android.apk .
+git add -A
 git commit -m "Automated commit"
 git push origin gh-pages
 git checkout master
