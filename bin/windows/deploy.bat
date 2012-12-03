@@ -13,7 +13,7 @@ git commit -m "Automated commit"
 git push
 git checkout gh-pages
 git merge origin
-copy ../greatwalks-android/bin/greatwalks-android.apk .
+copy ..\greatwalks-android\bin\greatwalks-android.apk .
 git add -A
 git commit -m "Automated commit"
 git push origin gh-pages
