@@ -51,6 +51,10 @@ copyFileSync(
   path.join(approot, "misc", "fonts", "copse.woff"),
   path.join(greatwalks_repo, "fonts", "copse.woff")
 );
+copyFileSync(
+  path.join(approot, "misc", "fonts", "copse.ttf"),
+  path.join(greatwalks_repo, "fonts", "copse.ttf")
+);
 process.stdout.write(" - Copied static font files\n");
 
 process.stdout.write("Success\n\n");
