@@ -10,11 +10,10 @@
         fastPress_hyperlink = function(event){
             var $this = $(this),
                 this_href = $this.attr("href");
-            //because #internal links aren't accelerated. check up to http: or https: incase there's a file named "http".
-            if(this_href.substr(0, 1) === "#" || this_href.substr(0, 5) === "http:" || this_href.substr(0, 5) === "https:") {
+            //because #internal links aren't done 'fast' and neither are protocol links e.g. tel: http:// https://
+            if(this_href.substr(0, 1) === "#" || this_href.indexOf(":") !== -1) {
                 return true;
             }
-            console.log("FAST");
             window.location = window.location.toString()
                 .substr(
                     0,
