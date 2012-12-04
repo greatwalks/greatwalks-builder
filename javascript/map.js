@@ -1,13 +1,4 @@
 /*globals map_details maps_details difference_between_positions_in_kilometers format_distance geolocation position_expires_after_milliseconds Modernizr Camera alert*/
-/* ===========================================================
- * map.js v1
- * Developed at Department of Conservation by Matthew Holloway
- * <matth@catalyst.net.nz>
- * -----------------------------------------------------------
- *
- * Provides maps with pinchzoom, drag scrolling etc with popups.
- *
- * ========================================================== */
 (function($){
     "use strict";
     

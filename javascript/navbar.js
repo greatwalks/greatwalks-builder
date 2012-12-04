@@ -5,24 +5,15 @@
 	"use strict";
 	var navbar_init = function(){
 		var $navbar_social = $("#share-social a"),
-			navbar_timer,
+			$page1 = $("#page1"),
 			hide_social_popout = function(event){
-				window.hide_popover.bind($navbar_social)(event);
-			};
-		$navbar_social.click(function(event){
-			if(navbar_timer !== undefined) {
-				clearTimeout(navbar_timer);
-				navbar_timer = undefined;
-			}
-			window.toggle_popover.bind($navbar_social)(event);
+				$page1.find(".social-links").hide();
+			},
+			$html = $("html").bind("doc:page-change", hide_social_popout);
+
+		$navbar_social.fastPress(function(){
+			$page1.find(".social-links").toggle(); // don't cache jQuery selector because it's loaded in/out all the time
 			return false;
-		});
-		$(window).scroll(function(){
-			if(navbar_timer !== undefined) {
-				window.clearTimeout(navbar_timer);
-				navbar_timer = undefined;
-			}
-			navbar_timer = window.setTimeout(hide_social_popout, 100);
 		});
 		$("#show_slideout_navigation").change(function(event){
 			// When on a very small screen AND when the slideout navigation is exposed hide the logo because it will mess up the display
@@ -35,10 +26,7 @@
 			} else {
 				$logo.show();
 			}
-			
-			
 		});
 	};
-
     window.pageload(navbar_init);
 }(jQuery));

@@ -9,6 +9,7 @@
         $carousel_items,
         $navbar_bottom,
         $navbar_top,
+        run_init_once_already = false,
         hammer_defaults = {
             prevent_default: true,
             scale_treshold: 0,
@@ -58,6 +59,12 @@
             }
             $carousel_items.hammer(hammer_defaults).bind('drag', drag_carousel);
             $carousel_items.hammer(hammer_defaults).bind('dragend', dragend_carousel);
+
+            if(!run_init_once_already) {
+                $("html").bind("doc:page-change", function(){
+                    $("#wrapper").css({"width": "auto", "height": "auto"});
+                });
+            }
         };
     window.pageload(index_init, "/index.html");
 }(jQuery));
