@@ -115,7 +115,7 @@ process.stdout.write("Generating JavaScript\n");
   for(i = 0; i < app_javascripts.length; i++){
       app_javascript_path = path.join(approot, "javascript", app_javascripts[i]);
       if(ignore_names.indexOf(app_javascript_path) !== -1) continue;
-      if(!fs.statSync(app_javascript_path).isDirectory()) {
+      if(app_javascript_path.substr(-3) === ".js" && !fs.statSync(app_javascript_path).isDirectory()) {
           fs.writeSync(file_handle, "/* BEGINNING OF " + path.basename(app_javascript_path) + " */\n" + fs.readFileSync(app_javascript_path, 'utf8').toString() + "/* END OF " + path.basename(app_javascript_path) + " */\n\n");
       }
   }
