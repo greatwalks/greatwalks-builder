@@ -15,6 +15,8 @@
         map__zoom_init = function(event){
             //based on code from http://eightmedia.github.com/hammer.js/zoom/index2.html
             var $window = $(window),
+                map_id = $("#map_id").text(),
+                map_details = window.maps_details[map_id],
                 window_width = $window.width(),
                 window_height = $window.height(),
                 $image = $("#map"),
@@ -71,6 +73,8 @@
                     });
                     $("#no-touch-zoom").show();
                 };
+            
+            window.map_details = map_details;
 
             if(window.Modernizr && !window.Modernizr.touch) {
                 no_touch_zoom_init();

@@ -1,4 +1,4 @@
-/*globals map_details difference_between_positions_in_kilometers format_distance geolocation position_expires_after_milliseconds Modernizr Camera alert*/
+/*globals map_details maps_details difference_between_positions_in_kilometers format_distance geolocation position_expires_after_milliseconds Modernizr Camera alert*/
 /* ===========================================================
  * map.js v1
  * Developed at Department of Conservation by Matthew Holloway
@@ -51,10 +51,9 @@
     }());
 
     var map_init = function(){
-        if(window.map_details === undefined) { //are we on a map page? If not, there's nothing to do so just return
-            return;
-        }
-        var open_tooltip,
+        var map_id = $("#map_id").text(),
+            map_details = maps_details[map_id],
+            open_tooltip,
             hammer_defaults = {
                 prevent_default: true,
                 scale_treshold: 0,
@@ -157,7 +156,6 @@
                     $("#no_gps").attr("title", msg.message).show();
                 }
             },
-
             current_time_in_epoch_milliseconds,
             user_actions = {
                 $user_actions_panel: $("#user_actions"),
@@ -286,6 +284,7 @@
                 $map_key.toggle();
                 return false;
             };
+        window.map_details = map_details;
 
         if(last_known_position !== undefined) {
             last_known_position = JSON.parse(last_known_position);
@@ -298,8 +297,6 @@
         } else {
             geolocationError();
         }
-        
-        
         
         $("#weta").fastPress(window.toggle_popover);
         $("#map .location").fastPress(window.toggle_popover);

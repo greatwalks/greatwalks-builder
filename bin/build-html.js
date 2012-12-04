@@ -36,7 +36,9 @@ var fs = require('fs'),
     kilograms_to_pounds = 2.20462,
     one_hour_in_milliseconds = 60 * 60 * 1000,
     points_of_interest = {},
-    maori_speech = {};
+    maori_speech = {},
+    mustache_data = {maps_details:{}},
+    process_pages = [];
 
 String.prototype.removeNonStandardCharacters = function(){
     var current_string = this;
@@ -148,6 +150,10 @@ String.prototype.toCased = function() {
     return concatenated.trim();
 };
 
+function clone(obj){
+    return JSON.parse(JSON.stringify(obj)); // slow but simple/reliable
+}
+
 function get_image_dimensions(path) {
     var dimensions_command = "identify -format {\\\"width\\\":%w,\\\"height\\\":%h} \"" + path + "\"",
         json_string;
@@ -246,7 +252,7 @@ function check_for_nearby_locations(location){
 var share_social_details = {
     "default":
         {
-        "social_text": "I'm going on a Great Walk in New Zealand",
+        "social_text": "I'm goingn a Great Walk in New Zealand",
         "facebook_url": "http://greatwalks.co.nz/",
         "facebook_image": "http://www.greatwalks.co.nz/sites/all/themes/sparks_responsive/logo.png",
         "twitter_url": "http://bit.ly/SLFPlX"
@@ -344,6 +350,46 @@ process.stdout.write("Generating HTML\n");
 }());
 
 (function(){
+    var nz_map_path = path.join(approot, "images", "new-zealand-map.png"),
+        nz_map_dimensions = get_image_dimensions(nz_map_path),
+        visitor_centers_path = path.join(approot, "misc", "VisitorCentres.csv"),
+        visitor_centres_original_csv = fs.readFileSync(visitor_centers_path, 'utf8').toString().CSVMap(),
+        visitor_centres = [],
+        i;
+    for(i = 0; i < visitor_centres_original_csv.length; i++){
+        if(visitor_centres_original_csv[i].PHONE !== undefined){
+            visitor_centres_original_csv[i].PHONE_SANITISED = visitor_centres_original_csv[i].PHONE.toString().replace(/ /g, "");
+            visitor_centres.push(visitor_centres_original_csv[i]);
+        }
+    }
+    nz_map_dimensions.ratio = nz_map_dimensions.width / nz_map_dimensions.height;
+    mustache_data.visitor_centres = visitor_centres;
+    mustache_data.nz_map_dimensions = JSON.stringify(nz_map_dimensions);
+    for(i = 0; i < htmlf_paths.length; i++){
+        var htmlf_path = htmlf_paths[i],
+            htmlf_fullpath = path.join(approot, "html", htmlf_path),
+            htmlf_path_extension = htmlf_path.substr(htmlf_path.lastIndexOf(".") + 1),
+            new_path = path.resolve(greatwalks_repo, htmlf_path.replace("." + htmlf_path_extension, ".html")),
+            basename = path.basename(htmlf_path),
+            filename_extension = path.extname(htmlf_path),
+            basename_without_extension = path.basename(htmlf_path, filename_extension),
+            htmlf_mustache_data;
+        
+        htmlf_mustache_data = clone(mustache_data);
+        htmlf_mustache_data.page_id = basename_without_extension;
+        if(!fs.statSync(htmlf_fullpath).isDirectory()){
+            process_pages.push({
+                page_path: htmlf_fullpath,
+                page_title: "",
+                mustache_data: htmlf_mustache_data,
+                page_id: basename_without_extension,
+                destination_path: new_path
+            });
+        }
+    }
+}());
+
+(function(){
     // Delete any per-walk CSVs while leaving source file(s)
     // Also build up a list of walks (each walk has a directory under 'walks')
     var walks_in_order = [
@@ -389,23 +435,23 @@ process.stdout.write("Generating HTML\n");
 }());
 
 (function(){
+    var location_id_mapping = {
+        "LakeWaikaremoana":"Lake Waikaremoana",
+        "Wellington":"Wellington",
+        "TongariroNorthernCircuit":"Tongariro Northern Circuit",
+        "TongariroNationalPark":"Tongariro Northern Circuit",
+        "WhanganuiJourney":"Whanganui Journey",
+        "AbelTasmanCoastTrack":"Abel Tasman Coast Track",
+        "AbelTasman CoastTrack":"Abel Tasman Coast Track",
+        "HeaphyTrack":"Heaphy Track",
+        "RouteburnTrack":"Routeburn Track",
+        "MilfordTrack":"Milford Track",
+        "KeplerTrack":"Kepler Track",
+        "RakiuraTrack":"Rakiura Track - Stewart Island"
+    };
     for(var i = 0; i < walks_paths.length; i++){
         var walk_name = walks_paths[i],
             walk_fullpath = path.join(approot, "walks", walk_name),
-            location_id_mapping = {
-                "LakeWaikaremoana":"Lake Waikaremoana",
-                "Wellington":"Wellington",
-                "TongariroNorthernCircuit":"Tongariro Northern Circuit",
-                "TongariroNationalPark":"Tongariro Northern Circuit",
-                "WhanganuiJourney":"Whanganui Journey",
-                "AbelTasmanCoastTrack":"Abel Tasman Coast Track",
-                "AbelTasman CoastTrack":"Abel Tasman Coast Track",
-                "HeaphyTrack":"Heaphy Track",
-                "RouteburnTrack":"Routeburn Track",
-                "MilfordTrack":"Milford Track",
-                "KeplerTrack":"Kepler Track",
-                "RakiuraTrack":"Rakiura Track - Stewart Island"
-            },
             walk_csv_path,
             row,
             locations_data,
@@ -460,46 +506,45 @@ process.stdout.write("Generating HTML\n");
 
 //  Generate Maps
 (function(){
-    for(var i = 0; i < walks_paths.length; i++){
-        var walk_name = walks_paths[i],
-            walk_sanitised_name = walk_name.toLowerCase().replace(/ /g, "-"),
-            walk_fullpath = path.join(approot, "walks", walk_name),
-            map_path = path.join(approot, "walks", walk_name, "map.png"),
-            locations_path = path.join(approot, "walks", walk_name, "locations.csv"),
-            locations_data,
-            location,
-            pgw_path = path.join(walk_fullpath, "map.pgw"),
-            map_data,
-            map_data_array,
-            map_details,
-            html_page,
-            mustache_data = {},
-            new_path,
-            new_filename,
-            map_dimensions_json_string,
-            dimensions_command,
-            locations,
-            recoverable_errors = "",
-            too_close_message;
+    var walk_name,
+        walk_sanitised_name,
+        walk_fullpath,
+        map_path,
+        locations_path,
+        locations_data,
+        location,
+        pgw_path,
+        map_data,
+        map_data_array,
+        map_details,
+        html_page,
+        new_path,
+        new_filename,
+        locations,
+        recoverable_errors,
+        too_close_message,
+        map_dimensions,
+        map_mustache_data,
+        i;
+
+    for(i = 0; i < walks_paths.length; i++){
+        walk_name = walks_paths[i];
+        walk_sanitised_name = walk_name.toLowerCase().replace(/ /g, "-");
+        walk_fullpath = path.join(approot, "walks", walk_name);
+        map_path = path.join(approot, "walks", walk_name, "map.png");
+        locations_path = path.join(approot, "walks", walk_name, "locations.csv");
+        pgw_path = path.join(walk_fullpath, "map.pgw");
+        recoverable_errors = "";
+        html_page = "";
 
         if(ignore_names.indexOf(walk_name) !== -1) continue;
 
         if(fs.statSync(walk_fullpath).isDirectory()) {
-            mustache_data = {
-                map_id: walk_sanitised_name,
-                map_pixel_width: 100,
-                map_pixel_height: 100
-            },
-            dimensions_command = "identify -format {\\\"width\\\":%w,\\\"height\\\":%h} \"" + map_path + "\"";
-            //map
-            
-            map_dimensions_json_string = execSync(dimensions_command);
-            //process.stdout.write("/map dimensions");
-            if(map_dimensions_json_string.indexOf("{\"width") >= 0) {
-                var map_dimensions_json = JSON.parse(map_dimensions_json_string);
-                mustache_data.map_pixel_width = Math.floor(map_dimensions_json.width * scale_by);
-                mustache_data.map_pixel_height = Math.floor(map_dimensions_json.height * scale_by);
-            }
+            map_mustache_data = clone(mustache_data);
+            map_dimensions = get_image_dimensions(map_path);
+            map_mustache_data.map_id = walk_sanitised_name;
+            map_mustache_data.map_pixel_width = Math.floor(map_dimensions.width * scale_by);
+            map_mustache_data.map_pixel_height = Math.floor(map_dimensions.height * scale_by);
 
             //offset
             try {
@@ -507,39 +552,41 @@ process.stdout.write("Generating HTML\n");
             } catch(exception) {
                 throw "Unable to find a pgw file. Unable to proceed";
             }
-            if(map_data !== undefined) {
-                map_data_array = map_data.split("\n");
-                map_details = {};
-                map_details.latitude = parseFloat(extract_value_between(map_data_array, -60, -30));
-                map_details.longitude = parseFloat(extract_value_between(map_data_array, 150, 180));
-                map_details.map_pixel_width = mustache_data.map_pixel_width;
-                map_details.map_pixel_height = mustache_data.map_pixel_height;
-                map_details.degrees_per_pixel = parseFloat(extract_value_between(map_data_array, 0, 2) / scale_by);
-                map_details.extent_latitude = map_details.latitude - (mustache_data.map_pixel_height * map_details.degrees_per_pixel);
-                map_details.extent_longitude = map_details.longitude + (mustache_data.map_pixel_width * map_details.degrees_per_pixel);
-                map_details.map_id = walk_sanitised_name;
-                map_details.map_initial_scale = 0.1;
-                mustache_data.map_initial_scale = map_details.map_initial_scale;
-                mustache_data.map_details = JSON.stringify(map_details);
-                mustache_data.half_map_pixel_width = map_details.map_pixel_width / 2;
-                mustache_data.quarter_map_pixel_width = map_details.map_pixel_width / 4;
-            }
+            
+            map_data_array = map_data.split("\n");
+            map_details = {};
+            map_details.map_id = walk_sanitised_name;
+
+            map_details.latitude = parseFloat(extract_value_between(map_data_array, -60, -30));
+            map_details.longitude = parseFloat(extract_value_between(map_data_array, 150, 180));
+            map_details.map_pixel_width = map_mustache_data.map_pixel_width;
+            map_details.map_pixel_height = map_mustache_data.map_pixel_height;
+            map_details.degrees_per_pixel = parseFloat(extract_value_between(map_data_array, 0, 2) / scale_by);
+            map_details.extent_latitude = map_details.latitude - (map_mustache_data.map_pixel_height * map_details.degrees_per_pixel);
+            map_details.extent_longitude = map_details.longitude + (map_mustache_data.map_pixel_width * map_details.degrees_per_pixel);
+            map_details.map_initial_scale = 0.1;
+            mustache_data.maps_details[walk_sanitised_name] = map_details;
+            map_mustache_data.map_initial_scale = map_details.map_initial_scale;
+                        
+            map_mustache_data.half_map_pixel_width = map_details.map_pixel_width / 2;
+            map_mustache_data.quarter_map_pixel_width = map_details.map_pixel_width / 4;
+            
             try {
                 locations_data = fs.readFileSync(locations_path, 'utf8').toString();
             } catch(exception) {
             }
-            mustache_data.locations = [];
-            if(locations_data !== undefined){
+
+            map_mustache_data.locations = [];
+
+            if(locations_data !== undefined) {
                 //process.stdout.write("Reading CSV from " + locations_path + "\n");
                 locations = locations_data.CSVMap(",");
-                mustache_data.locations = [];
+                map_mustache_data.locations = [];
                 for(var location_index = 0; location_index < locations.length; location_index++){
                     location = locations[location_index];
                     if(location.Long !== undefined) {  //'Long' (longitude) is arbitrary field chosen to see if it's present in the data, to test whether this this infact a row of data or a blank line
                         try {
-                            
                             location.pixel = pixel_location(map_details.latitude, map_details.longitude, mustache_data.map_pixel_width, mustache_data.map_pixel_height, map_details.degrees_per_pixel, location.Lat, location.Long, walk_name, location.Name);
-                            
                             if(location.PixelOffsetLeft !== undefined && location.PixelOffsetLeft !== " "){
                                 location.pixel.left += parseInt(location.PixelOffsetLeft, 10);
                             }
@@ -555,7 +602,7 @@ process.stdout.write("Generating HTML\n");
                                 some_locations_were_too_close = true;
                             }
                             //recoverable_errors += too_close_message;
-                            mustache_data.locations.push(location);
+                            map_mustache_data.locations.push(location);
                         } catch(exception) {
                             if(exception.name === "OutOfBounds") {
                                 fs.appendFileSync(out_of_bounds_path, JSON.stringify(location) + "\n");
@@ -570,22 +617,23 @@ process.stdout.write("Generating HTML\n");
                     }
                 }
             }
-            //generate page
-            html_page = process_page(walks_template_path, walk_name, mustache_data, "map");
-        }
 
-        if(html_page !== undefined) {
             new_filename = "map-" + walk_sanitised_name + ".html";
             new_path = path.join(greatwalks_repo, new_filename);
             great_walks.walks.push({"id": walk_sanitised_name, "name": walk_name, "map_filename":new_filename, "walk_filename": "walk-" + walk_sanitised_name + ".html"});
-            fs.writeFileSync(new_path, html_page);
-            process.stdout.write(" - Building map: " + new_filename + "\n" + recoverable_errors);
-            recoverable_errors = "";
+            process_pages.push({
+                page_path: walks_template_path,
+                page_title: walk_name,
+                mustache_data: map_mustache_data,
+                page_id: "map",
+                destination_path: new_path
+            });
+
         }
-        html_page = undefined;
         map_data = undefined;
         locations_data = undefined;
     }
+    
     if(some_locations_were_out_of_bounds){
         process.stdout.write(" - WARNING: Some map locations were out of bounds.\n            See walks/" + path.basename(out_of_bounds_path) + " for more details.\n");
     }
@@ -593,6 +641,7 @@ process.stdout.write("Generating HTML\n");
         process.stdout.write(" - WARNING: Some map locations were too close to one another.\n            See walks/" + path.basename(too_close_locations_path) + " for more details.\n");
     }
 }());
+
 
 (function(){
     // Generate Walk Info Page
@@ -603,21 +652,19 @@ process.stdout.write("Generating HTML\n");
             elevation_profile_image = "img/walks/" + walk_sanitised_name + "/profile.jpg",
             elevation_profile_image_fullpath = path.join(greatwalks_repo, elevation_profile_image),
             elevation_profile_image_dimensions,
-            dimensions_command = "identify -format {\\\"width\\\":%w,\\\"height\\\":%h} \"" + elevation_profile_image_fullpath + "\"",
-            elevation_dimensions_json_string,
             elevation_dimensions_json,
             content_path,
             youtube_path,
             content_data,
             new_path = path.join(greatwalks_repo, "walk-" + walk_sanitised_name + ".html"),
             map_filename = "map-" + walk_sanitised_name + ".html",
-            mustache_data,
             carousel_path = path.join(walk_path, "Carousel"),
             carousel_files,
             carousel_deck_index,
             carousel_web_path,
             y,
-            thumbnails_per_slide = 3;
+            thumbnails_per_slide = 3,
+            walk_mustache_data;
 
         if(ignore_names.indexOf(walk_name) !== -1) continue;
 
@@ -625,93 +672,76 @@ process.stdout.write("Generating HTML\n");
         youtube_path = path.join(walk_path, "youtube.txt");
 
         if(fs.statSync(walk_path).isDirectory()) {
-            mustache_data = {"walk-id":walk_sanitised_name};
-            //process.stdout.write("\n" + dimensions_command + "\n");
-            elevation_dimensions_json_string = execSync(dimensions_command);
-            
-            if(elevation_dimensions_json_string.indexOf("{\"width") >= 0) {
-                elevation_dimensions_json = JSON.parse(elevation_dimensions_json_string);
-                //console.log(elevation_dimensions_json);
-                mustache_data["elevation-profile-image-width"] = elevation_dimensions_json.width;
-                mustache_data["elevation-profile-image-halfwidth"] = elevation_dimensions_json.width / 2;
-                mustache_data["elevation-profile-image-height"] = elevation_dimensions_json.height;
-                mustache_data["elevation-profile-modal-height"] = elevation_dimensions_json.height + 20;
+            walk_mustache_data = clone(mustache_data);
+            walk_mustache_data['walk-id'] = walk_sanitised_name;
+            if(fs.existsSync(elevation_profile_image)){
+                elevation_dimensions_json = get_image_dimensions(elevation_profile_image);
+                walk_mustache_data["elevation-profile-image-width"] = elevation_dimensions_json.width;
+                walk_mustache_data["elevation-profile-image-halfwidth"] = elevation_dimensions_json.width / 2;
+                walk_mustache_data["elevation-profile-image-height"] = elevation_dimensions_json.height;
+                walk_mustache_data["elevation-profile-modal-height"] = elevation_dimensions_json.height + 20;
             }
-            mustache_data["walk-image-directory"] = path.join("img/walks/", walk_sanitised_name) + "/";
-            mustache_data["youtube-id"] = fs.readFileSync(youtube_path, 'utf8');
-            mustache_data["map_filename"] = map_filename;
-            mustache_data["elevation-profile-image"] = elevation_profile_image;
-            mustache_data.carousel = [];
-            mustache_data.carousel_thumbnails = [];
+            walk_mustache_data["walk-image-directory"] = path.join("img/walks/", walk_sanitised_name) + "/";
+            walk_mustache_data["youtube-id"] = fs.readFileSync(youtube_path, 'utf8');
+            walk_mustache_data["map_filename"] = map_filename;
+            walk_mustache_data["elevation-profile-image"] = elevation_profile_image;
+            walk_mustache_data.carousel = [];
+            walk_mustache_data.carousel_thumbnails = [];
             if(fs.statSync(carousel_path).isDirectory()){
                 carousel_files = fs.readdirSync(carousel_path);
                 for(y = 0; y < carousel_files.length; y++){
                     carousel_web_path = "img/walks/" + walk_sanitised_name + "/carousel-" + carousel_files[y].toNormalizedFilename();
-                   
-                    mustache_data.carousel.push({
+                    walk_mustache_data.carousel.push({
                         "path": carousel_web_path,
                         "id": carousel_files[y].toId()
                     });
                     carousel_deck_index = Math.floor(y / thumbnails_per_slide);
-                    if(mustache_data.carousel_thumbnails[carousel_deck_index] === undefined){
-                        mustache_data.carousel_thumbnails[carousel_deck_index] = {
+                    if(walk_mustache_data.carousel_thumbnails[carousel_deck_index] === undefined){
+                        walk_mustache_data.carousel_thumbnails[carousel_deck_index] = {
                             "thumbnails":[],
                             "active": carousel_deck_index === 0 ? "active":""
                         };
                     }
                     //process.stdout.write(carousel_files[y] + "\n" + carousel_files[y].toNormalizedFilename() + "\n" + carousel_web_path + "\n\n");
-                    
-                    mustache_data.carousel_thumbnails[carousel_deck_index].thumbnails.push({
+                    walk_mustache_data.carousel_thumbnails[carousel_deck_index].thumbnails.push({
                         "path": carousel_web_path,
                         "id": carousel_files[y].toId()
                     });
                 }
             }
-            content_data = process_page(content_path, walk_name, mustache_data, "walk");
-            fs.writeFileSync(new_path, content_data);
+
+            process_pages.push({
+                page_path: content_path,
+                page_title: walk_name,
+                mustache_data: walk_mustache_data,
+                page_id: "walk",
+                destination_path: new_path
+            });
         }
     }
 }());
+
 
 (function(){
-    var nz_map_path = path.join(approot, "images", "new-zealand-map.png"),
-        nz_map_dimensions = get_image_dimensions(nz_map_path),
-        visitor_centers_path = path.join(approot, "misc", "VisitorCentres.csv"),
-        visitor_centres_original_csv = fs.readFileSync(visitor_centers_path, 'utf8').toString().CSVMap(),
-        visitor_centres = [],
-        i;
-    for(i = 0; i < visitor_centres_original_csv.length; i++){
-        if(visitor_centres_original_csv[i].PHONE !== undefined){
-            visitor_centres_original_csv[i].PHONE_SANITISED = visitor_centres_original_csv[i].PHONE.toString().replace(/ /g, "");
-            visitor_centres.push(visitor_centres_original_csv[i]);
-        }
-    }
-    nz_map_dimensions.ratio = nz_map_dimensions.width / nz_map_dimensions.height;
-    for(i = 0; i < htmlf_paths.length; i++){
-        var htmlf_path = htmlf_paths[i],
-            htmlf_fullpath = path.join(approot, "html", htmlf_path),
-            htmlf_path_extension = htmlf_path.substr(htmlf_path.lastIndexOf(".") + 1),
-            new_path = path.resolve(greatwalks_repo, htmlf_path.replace("." + htmlf_path_extension, ".html")),
-            html_page,
-            basename = path.basename(htmlf_path),
-            filename_extension = path.extname(htmlf_path),
-            basename_without_extension = path.basename(htmlf_path, filename_extension),
-            mustache_data = {
-                "nz_map_dimensions": JSON.stringify(nz_map_dimensions),
-                "visitor_centres": visitor_centres
-            };
-        if(!fs.statSync(htmlf_fullpath).isDirectory()){
-            html_page = process_page(htmlf_fullpath, "", mustache_data, basename_without_extension);
-        }
-        if(html_page !== undefined) {
-            process.stdout.write(" - Building Page: " + htmlf_path + "\n");
-            fs.writeFileSync(new_path, html_page);
-        }
-        html_page = undefined;
+    var process_page_arguments,
+        i,
+        html_page,
+        maps_details = JSON.stringify(mustache_data.maps_details);
+    for(i = 0; i < process_pages.length; i++){
+        process_page_arguments = process_pages[i];
+        process_page_arguments.mustache_data.maps_details = maps_details;
+        html_page = process_page(
+            process_page_arguments.page_path,
+            process_page_arguments.page_title,
+            process_page_arguments.mustache_data,
+            process_page_arguments.page_id);
+        fs.writeFileSync(process_page_arguments.destination_path, html_page);
+        process.stdout.write(" - Building Page: " + path.basename(process_page_arguments.destination_path) + "\n");
     }
 }());
 
-function process_page(htmlf_path, page_title, mustache_data, page_id){
+
+function process_page(htmlf_path, page_title, page_mustache_data, page_id){
     var raw_htmlf_data = fs.readFileSync(htmlf_path, 'utf8').toString(),
         htmlf_data = resolve_includes(raw_htmlf_data, path.dirname(htmlf_path), htmlf_path),
         htmlf_path_extension = htmlf_path.substr(htmlf_path.lastIndexOf(".") + 1),
@@ -722,10 +752,9 @@ function process_page(htmlf_path, page_title, mustache_data, page_id){
         chosen_share_social_key,
         social_item_key,
         page_key = htmlf_path;
-       
 
-    if(mustache_data && mustache_data.map_id !== undefined) {
-        page_key = mustache_data.map_id;
+    if(page_mustache_data && page_mustache_data.map_id !== undefined) {
+        page_key = page_mustache_data.map_id;
     }
 
     for(share_social_detail_key in share_social_details){
@@ -744,29 +773,12 @@ function process_page(htmlf_path, page_title, mustache_data, page_id){
         }
     }
 
-    page_title = page_title || path.basename(htmlf_path);
+    page_mustache_data.title = page_title || path.basename(htmlf_path);
+    page_mustache_data.page_id = page_id;
+    page_mustache_data.body = mustache.to_html(htmlf_data, page_mustache_data);
+    html_page = mustache.to_html(template, page_mustache_data);
 
-    switch(htmlf_path_extension){
-        case "html":
-        case "htmlf": //straight copy
-            html_page = template
-                .replace(/\{\{body\}\}/, htmlf_data)
-                .replace(/\{\{title\}\}/, page_title)
-                .replace(/\{\{pageid\}\}/, page_id);
-            break;
-        case "mustache": //mustache template - see http://mustache.github.com/
-            var json_data = mustache_data || {},
-                json_path = path.join("html", htmlf_path.replace("." + htmlf_path_extension, ".json"));
-            if(htmlf_filename === "walks.mustache"){
-                json_data = great_walks;
-            }
-            html_page = template
-                .replace(/\{\{body\}\}/, mustache.to_html(htmlf_data, json_data))
-                .replace(/\{\{title\}\}/, page_title)
-                .replace(/\{\{pageid\}\}/, page_id);
-            json_data = {};
-            break;
-    }
+    
 
     if(html_page !== undefined){
         html_page = html_page

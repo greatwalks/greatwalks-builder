@@ -46,12 +46,10 @@
             $wrapper = $("#wrapper");
             $new_zealand_map_wrapper = $wrapper.find("#new-zealand-map");
             $new_zealand_map_img = $new_zealand_map_wrapper.find("img");
-            
             $window.bind("resize orientationchange", adjust_maps_height);
             adjust_maps_height();
             setTimeout(adjust_maps_height, 200);
         };
-
 
     window.pageload(maps_init, "/maps.html");
 }(jQuery));

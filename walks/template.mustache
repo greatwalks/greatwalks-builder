@@ -1,13 +1,7 @@
-<script type="text/javascript">
-	var map_details = {{{map_details}}};
-</script>
-
 <a id="weta" rel="popover" data-placement="right" data-content="<h3>Weta</h3><b class='distance_away'>Distance: really close!</b>Seriously big nocturnal creatures that live in a variety of habitats including: pasture, shrub, forests, and caves. Weta excavate holes under stones, rotting logs, or in trees. They sometimes occupy pre-formed burrows.">Weta</a>
 
 <div style="background-image: url(img/walks/{{map_id}}/map.jpg); background-size: {{map_pixel_width}}px {{map_pixel_height}}px; width:{{map_pixel_width}}px; height:{{map_pixel_height}}px; position:relative; display:none" id="map" class="have-transition">
-
 	<div id="youarehere">
-
 		<div class="dot"></div>
 		<div class="offmap">offmap</div>
 	</div>
@@ -28,6 +22,8 @@
 <div id="camera_error">
 	No camera available
 </div>
+
+<div id="map_id">{{map_id}}</div>
  
 <img src="img/camera-placeholder.jpg" id="photo-preview">
 

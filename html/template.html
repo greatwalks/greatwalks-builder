@@ -1,15 +1,13 @@
 <!DOCTYPE html>
-<!--[if IEMobile 7 ]>    <html class="no-js iem7"> <![endif]-->
-<!--[if (gt IEMobile 7)|!(IEMobile)]><!--> <html class="no-js"> <!--<![endif]-->
+<html class="no-js">
     <head>
-        
         <meta charset="utf-8">
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
         <title>Great Walks - {{title}}</title>
         <meta name="description" content="">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=0"">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=0">
         <meta http-equiv="cleartype" content="on">
         <meta name="format-detection" content="telephone=no">
         <meta http-equiv="x-rim-auto-match" content="none">
@@ -24,8 +22,12 @@
         <link rel="stylesheet" href="css/main.css">
         <script src="js/vendor/modernizr-2.6.1.min.js"></script>
         <script src="cordova.js"></script>
+        <script>
+            var nz_map_dimensions = {{{nz_map_dimensions}}};
+            var maps_details = {{{maps_details}}};
+        </script>
     </head>
-    <body class="{{pageid}}">
+    <body class="{{page_id}}">
         <input type="checkbox" id="show_slideout_navigation">
         <div id="wrapper">
             <div class="navbar navbar-fixed-top navbar-inverse">
@@ -42,7 +44,7 @@
                                 <a href="info.html"><span class="header-sprite header-info">Info</span></a>
                             </li>
                             <li id="share-social">
-                                <a href="#" data-popover-class="social" data-content="<a href='mailto:enquiries@doc.govt.nz?subject={{social_text}}&amp;body={{social_text}}%20{{facebook_url}}' class='email'>Email</a> <a href='http://www.facebook.com/sharer.php?s=100&amp;p[url]={{facebook_url}}&amp;p[title]={{social_text}}&amp;p[images][0]={{facebook_image}}&amp;p[summary]=.' class='facebook'>Facebook</a> <a href='http://twitter.com/share?url={{twitter_url}}&amp;text={{social_text}}%20@NZGreatWalks' class='twitter'>Twitter</a>" data-placement="bottom"><span class="header-sprite header-share">Share</span></a>
+                                <a href="#" data-popover-class="social" data-content="&lt;a href='mailto:enquiries@doc.govt.nz?subject={{social_text}}&amp;body={{social_text}}%20{{facebook_url}}' class='email'&gt;Email&lt;/a&gt; &lt;a href='http://www.facebook.com/sharer.php?s=100&amp;p[url]={{facebook_url}}&amp;p[title]={{social_text}}&amp;p[images][0]={{facebook_image}}&amp;p[summary]=.' class='facebook'&gt;Facebook&lt;/a&gt; &lt;a href='http://twitter.com/share?url={{twitter_url}}&amp;text={{social_text}}%20@NZGreatWalks' class='twitter'&gt;Twitter&lt;/a&gt;" data-placement="bottom"><span class="header-sprite header-share">Share</span></a>
                             </li>
                         </ul>
                         
@@ -63,7 +65,11 @@
                     <li><a href="maps.html">Maps</a></li>
                 </ul>
             </div>
-    	    {{body}}
+            <div id="page1">
+    	       {{{body}}}
+            </div>
+            <div id="page2">
+            </div>
         </div>
         <!-- Why jQuery and not Zepto? Well there's not much difference http://www.codefessions.com/2012/08/performance-of-jquery-compatible-mobile.html -->
         <script src="js/vendor/jquery.min.js"></script>
