@@ -50,14 +50,6 @@
                 scale_treshold: 0,
                 drag_min_distance: 0
             },
-            last_known_position = localStorage["geolocation-last-known-position"],
-            one_second_in_milliseconds = 1000,
-            geolocationWatchId,
-            geolocationSettings = {
-                maximumAge:600000,
-                enableHighAccuracy: true,
-                timeout: one_second_in_milliseconds * 15
-            },
             pixels_to_longitude_latitude = function(map_x, map_y){
                 return {
                     longitude: map_details.longitude + (map_x / map_details.degrees_per_pixel),
@@ -70,7 +62,7 @@
                     top: Math.abs((latitude - map_details.latitude) / map_details.degrees_per_pixel) + "px"
                 };
             },
-            geolocationSuccess = function(position){
+            geolocation_success = function(event, position){
                 /*
                 Latitude:          position.coords.latitude
                 Longitude:         position.coords.longitude
@@ -121,31 +113,16 @@
                 youarehere_offmap_css.left += "px";
                 youarehere_offmap_css.top += "px";
                 if(!offmap){
-                    if(geolocationSettings.enableHighAccuracy === true) {
-                        $youarehere.removeClass("badAccuracy").addClass("goodAccuracy");
-                    } else {
-                        $youarehere.removeClass("goodAccuracy").addClass("badAccuracy");
-                    }
+                    $youarehere.css("webkit-box-shadow", "0px 0px 5px " + (position.coords.accuracy / 5000) + "px rgba(0, 0, 255, 0.3)");
                     $youarehere_offmap.hide();
                 } else {
-                    $youarehere.removeClass("badAccuracy goodAccuracy");
+                    $youarehere.css("webkit-box-shadow", "none");
                     $youarehere_offmap.css(youarehere_offmap_css).show();
                 }
                 $youarehere.css(youarehere_css).show();
-                last_known_position = position;
-                localStorage["geolocation-last-known-position"] = JSON.stringify(position);
             },
-            geolocationError = function(msg) {
-                try{
-                    geolocation.clearWatch(geolocationWatchId);
-                } catch(exception){
-                }
-                if(geolocationSettings.enableHighAccuracy === true) { //high accuracy failed so retry with low accuracy
-                    geolocationSettings.enableHighAccuracy = false;
-                    geolocationWatchId = navigator.geolocation.watchPosition(geolocationSuccess, geolocationError, geolocationSettings);
-                } else {
-                    $("#no_gps").attr("title", msg.message).show();
-                }
+            geolocation_failure = function(event, msg){
+                $("#no_gps").attr("title", msg.message).show();
             },
             current_time_in_epoch_milliseconds,
             user_actions = {
@@ -246,11 +223,9 @@
                 },
                 take_photo: function(){
                     var camera_success = function(imageURI) {
-                            var $photo_preview = $("#photo-preview");
-                            $photo_preview.attr("src", imageURI);
-                            last_known_position = localStorage["geolocation-last-known-position"];
+                            var $photo_preview = $("#photo-preview").attr("src", imageURI),
+                                last_known_position = window.geolocation_get_last_position();
                             if(last_known_position !== undefined) {
-                                last_known_position = JSON.parse(last_known_position);
                                 user_actions.add_photo_to_map(imageURI, last_known_position.coords.latitude, last_known_position.coords.longitude, true, true);
                             } else {
                                 user_actions.add_photo_to_map(imageURI, undefined, undefined, true, true);
@@ -274,20 +249,12 @@
                 var $map_key = $("#map-key");
                 $map_key.toggle();
                 return false;
-            };
+            },
+            $html = $("html");
+
+        $html.bind("doc:geolocation:failure", geolocation_failure);
+        $html.bind("doc:geolocation:success", geolocation_success);
         window.map_details = map_details;
-
-        if(last_known_position !== undefined) {
-            last_known_position = JSON.parse(last_known_position);
-            current_time_in_epoch_milliseconds = (new Date()).getTime();
-            geolocationSuccess(last_known_position);
-        }
-
-        if (navigator.geolocation) {
-            geolocationWatchId = navigator.geolocation.watchPosition(geolocationSuccess, geolocationError, geolocationSettings);
-        } else {
-            geolocationError();
-        }
         
         $("#weta").fastPress(window.toggle_popover);
         $("#map .location").fastPress(window.toggle_popover);

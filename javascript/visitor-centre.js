@@ -12,7 +12,7 @@
         },
         $locations,
         $visitor_centres_list,
-        geolocationSuccess = function(position){
+        geolocation_success = function(event, position){
             var locations;
             /*
             Latitude:          position.coords.latitude
@@ -44,35 +44,16 @@
                 if(a_distance_away < b_distance_away) return -1;
                 return 0;
             });
-            $.each(locations, function(index, item){ 
+            $.each(locations, function(index, item){
                 $visitor_centres_list.append(item);
             });
-
-            
-            window.localStorage[geolocation_key] = JSON.stringify(position);
-        },
-        geolocationError = function(msg) {
-            try{
-                geolocation.clearWatch(geolocation_watchId);
-            } catch(exception){
-            }
-            if(geolocationSettings.enableHighAccuracy === true) { //high accuracy failed so retry with low accuracy
-                geolocationSettings.enableHighAccuracy = false;
-                geolocation_watchId = navigator.geolocation.watchPosition(geolocationSuccess, geolocationError, geolocationSettings);
-            } else {
-                // No GPS available, silently ignore
-            }
         },
         visitor_centre_init = function(){
             $locations = $(".visitor-centre-location");
             $visitor_centres_list = $("#visitor-centres-list");
-            if(last_known_position_json) {
-                 geolocationSuccess(JSON.parse(last_known_position_json));
-            }
-            geolocation_watchId = navigator.geolocation.watchPosition(geolocationSuccess, geolocationError, geolocationSettings);
+            
+            $("html").bind("doc:geolocation:success", geolocation_success);
         };
-        
     
-
     window.pageload(visitor_centre_init, "visitor-centre.html");
 }(jQuery));
