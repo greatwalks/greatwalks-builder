@@ -7,11 +7,14 @@
 		var $navbar_social = $("#share-social a"),
 			$page1 = $("#page1"),
 			$show_slideout_navigation = $("#show_slideout_navigation"),
-			navbar_page_change = function(event){
+			$wrapper = $("#wrapper"),
+			reset_width_height = {"width": "auto", "height": "auto"},
+			page_change = function(event){
 				$page1.find(".social-links").hide();
 				$show_slideout_navigation.attr("checked", false);
+				$wrapper.css(reset_width_height);
 			},
-			$html = $("html").bind("doc:page-change", navbar_page_change);
+			$html = $("html").bind("doc:page-change", page_change);
 
 		$navbar_social.fastPress(function(){
 			$page1.find(".social-links").toggle(); // don't cache jQuery selector because it's loaded in/out all the time

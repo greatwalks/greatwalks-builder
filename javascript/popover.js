@@ -13,6 +13,8 @@
     var existing_popovers = [],
         $window = $(window),
         $body,
+        loaded_init_once = false,
+        hide_popovers_timeout,
         too_small_for_popovers = function(){
             if ($window.width() > 600) return false;
             if($("body.walk").length === 1) return true;
@@ -28,11 +30,23 @@
                     window.hide_all_popovers_no_bubbling(event);
                 }
             });
-            $body = $("body"); //note: defining $body from parent function
-            $body.on("click", ".popover", function(event){
-                window.hide_all_popovers_no_bubbling(event);
-                $html.trigger("popover-click");
-            });
+            if(!loaded_init_once){
+                $("body").on("click", ".popover", function(event){
+                    window.hide_all_popovers_no_bubbling(event);
+                    $html.trigger("popover-click");
+
+                    //there can be detached popovers (e.g. after a page change)
+                    //where the source link is now missing.
+                    //these need to be removed.
+                    if(hide_popovers_timeout){
+                        clearTimeout(hide_popovers_timeout);
+                    }
+                    hide_popovers_timeout = setTimeout(function(){
+                        $(".popover").remove();
+                        //console.log("removing all popovers");
+                    }, 100);
+                });
+            }
         },
         get_distance = function(latitude, longitude, include_description){
             var last_known_position = localStorage["geolocation-last-known-position"],

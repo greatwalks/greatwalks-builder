@@ -21,6 +21,8 @@
             if(!this_href || this_href.substr(0, 1) === "#" || this_href.indexOf(":") !== -1) {
                 return true;
             }
+            window.hide_all_popovers();
+            
             $.get(this_href, function(new_page, textStatus, jqXHR){
                 var title = new_page.replace(/^[\s\S]*<title(.*?)>|<\/title>[\s\S]*$/g, ''),
                     $new_page,
