@@ -782,10 +782,10 @@ function process_page(htmlf_path, page_title, page_mustache_data, page_id){
 
     if(html_page !== undefined){
         html_page = html_page
-                        .replace(/\{\{social_text\}\}/g, encodeURIComponent(chosen_share_social.social_text).replace(/'/g, "%27"))
-                        .replace(/\{\{twitter_url\}\}/g, encodeURIComponent(chosen_share_social.twitter_url).replace(/'/g, "%27"))
-                        .replace(/\{\{facebook_image\}\}/g, encodeURIComponent(chosen_share_social.facebook_image).replace(/'/g, "%27"))
-                        .replace(/\{\{facebook_url\}\}/g, encodeURIComponent(chosen_share_social.facebook_url).replace(/'/g, "%27"))
+                        .replace(/replace_social_text/g, encodeURIComponent(chosen_share_social.social_text).replace(/'/g, "%27"))
+                        .replace(/replace_twitter_url/g, encodeURIComponent(chosen_share_social.twitter_url).replace(/'/g, "%27"))
+                        .replace(/replace_facebook_image/g, encodeURIComponent(chosen_share_social.facebook_image).replace(/'/g, "%27"))
+                        .replace(/replace_facebook_url/g, encodeURIComponent(chosen_share_social.facebook_url).replace(/'/g, "%27"))
                         .replace(/&Auml;/g, "\u0100")  //macronised A
                         .replace(/&auml;/g, "\u0101")  //macronised a
                         .replace(/&Euml;/g, "\u0112")  //macronised E

@@ -14,7 +14,7 @@
 
             for(pathname_contains in callback_pathname){
                 if(pathname.indexOf(pathname_contains) !== -1 ) {
-                    console.log("calling " + pathname_contains);
+                    //console.log("calling " + pathname_contains);
                     for(i = 0; i < callback_pathname[pathname_contains].length; i++){
                         callback_pathname[pathname_contains][i](event);
                     }
