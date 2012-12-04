@@ -18,8 +18,6 @@
             },
             $html = $("html").bind("popover-click close-modal", disable_all_dont_miss);
         
-
-
         $('#carousel').carousel();
 
         $("body").on("click", ".audio", function(event){
