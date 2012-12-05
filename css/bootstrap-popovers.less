@@ -1,3 +1,14 @@
+.vertical-gradient(@top, @bottom) {
+    background: @top; /* Old browsers */
+    background: -webkit-linear-gradient(top, @top 0%,@bottom 100%); /* Chrome10+,Safari5.1+ */
+    background: linear-gradient(to bottom,  @top 0%,@bottom 100%); /* W3C */
+}
+
+.popover-modal {
+    padding: 10px;
+    .vertical-gradient(#80c1dd, #e3eef4);
+}
+
 .popover {
     /* Looking for popovers on the walk info pages? See walk.less */
 
@@ -37,3 +48,4 @@
     }
 
 }
+
