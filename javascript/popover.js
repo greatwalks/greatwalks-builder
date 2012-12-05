@@ -44,6 +44,7 @@
                         //console.log("removing all popovers");
                     }, 100);
                 });
+                loaded_init_once = true;
             }
         },
         get_distance = function(latitude, longitude, include_description){
