@@ -14,5 +14,5 @@
             $report_error = $(".report_error");
             $("html").bind("doc:geolocation:success", geolocation_success);
         };
-    window.pageload(info_init, "info.html");
+    window.pageload(info_init, "/info.html");
 }(jQuery));
