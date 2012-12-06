@@ -264,11 +264,18 @@ body.walk {
         }
 
         .walk-detail {
-            display:none;
             background:white;
-            
-            padding: 0.5em 1em;
             margin-top: -10px;
+            height:0px;
+            overflow:hidden;
+            padding: 0em 1em;
+            transition: 0.2s ease-in;
+            -webkit-transition: 0.2s ease-in;
+
+            &.expanded {
+                padding: 0.5em 1em;
+                height: auto;
+            }
 
             &.dont-miss {
                 background: transparent;

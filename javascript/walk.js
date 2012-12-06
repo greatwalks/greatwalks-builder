@@ -51,7 +51,7 @@
             }
         });
         $(".walk-detail-header a").fastPress(function(){
-            $(this).parent().toggleClass("open").next(".walk-detail").slideToggle();
+            $(this).parent().toggleClass("open").next(".walk-detail").toggleClass('expanded');
             return false;
         });
         $(".dont-miss a").fastPress();
