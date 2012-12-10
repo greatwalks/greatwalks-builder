@@ -21,6 +21,11 @@
             if(!this_href || this_href.substr(0, 1) === "#" || this_href.indexOf(":") !== -1) {
                 return true;
             }
+
+            if(navigator.userAgent.match(/Android/i)) {
+               return true;
+            }
+
             window.hide_all_popovers();
             
             $.get(this_href, function(new_page, textStatus, jqXHR){
