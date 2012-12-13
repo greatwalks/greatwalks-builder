@@ -124,6 +124,10 @@
                                            }),
             modal_id = "modal_" + this_id,
             $modal = $("#" + modal_id);
+
+        // Disable back button in Android
+        document.addEventListener("backbutton", window.back_key_override, false);
+
         if($modal.length === 0) {
             $modal = $("<div/>").addClass("modal hide fade popover-modal").attr("id", modal_id);
             $body.append($modal);
@@ -186,6 +190,10 @@
         }
     };
 
+    window.back_key_override = function() {
+        $(".modal-backdrop").trigger('click');
+        document.removeEventListener("backbutton", window.back_key_override, false);
+    }
 
     window.pageload(popover_init);
 }(jQuery));
