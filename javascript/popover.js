@@ -201,7 +201,6 @@
     window.bypass_back_button = function() {
         // if modal present, close modal only
         if( $(".modal-backdrop").length ) {
-            alert('close modal');
             $(".modal-backdrop").trigger('click');
             return;
         }
