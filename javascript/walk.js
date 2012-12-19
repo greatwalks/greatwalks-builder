@@ -20,11 +20,6 @@
 
         $('#carousel').carousel();
 
-        // Disable back button in Android - window.onBackKey defined in popover.js
-        $('#carousel').on('click', 'a', function() {
-            document.addEventListener("backbutton", window.back_key_override, false);
-        });
-
         $("body").on("click", ".audio", function(event){
             var $this = $(this),
                 audio_path,

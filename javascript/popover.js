@@ -125,9 +125,6 @@
             modal_id = "modal_" + this_id,
             $modal = $("#" + modal_id);
 
-        // Disable back button in Android
-        document.addEventListener("backbutton", window.back_key_override, false);
-
         if($modal.length === 0) {
             $modal = $("<div/>").addClass("modal hide fade popover-modal").attr("id", modal_id);
             $body.append($modal);
@@ -190,11 +187,6 @@
         }
     };
 
-    window.back_key_override = function() {
-        $(".modal-backdrop").trigger('click');
-        document.removeEventListener("backbutton", window.back_key_override, false);
-    }
-
     window.pageload(popover_init);
 
     // override back button behaviour for app
@@ -202,6 +194,11 @@
         // if modal present, close modal only
         if( $(".modal-backdrop").length ) {
             $(".modal-backdrop").trigger('click');
+            return;
+        }
+
+        if ( $('#show_slideout_navigation').length && $('#show_slideout_navigation').attr("checked") === 'checked' ) {
+            $('#show_slideout_navigation').attr("checked", false);
             return;
         }
 
