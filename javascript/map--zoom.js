@@ -42,13 +42,26 @@
                     } else if(scale > 3) {
                         scale = 3;
                     }
-                    map_transform = 'translate3d(' + drag_offset.x + 'px, ' + drag_offset.y + 'px, 0) scale3d(' + scale + ', ' + scale + ', 1)';
+
+                    // we apply a transform for android devices that support pinchzoom - > 2.3
+                    // default - catches iPhones
+                    var version = 3.0;
+
+                    if ( navigator.appVersion.match(/Android (\d+\.\d+)/) ) {
+                        version = parseFloat(navigator.appVersion.match(/Android (\d+\.\d+)/)[1]);
+                        map_transform = 'translate(' + drag_offset.x + 'px, ' + drag_offset.y + 'px)';
+                    }
+
+                    if ( version > 2.3 ) {
+                        map_transform = 'translate3d(' + drag_offset.x + 'px, ' + drag_offset.y + 'px, 0) scale3d(' + scale + ', ' + scale + ', 1)';
+                    }
+
                     css = {'-webkit-transform': map_transform};
+                    $image.css(css);
 
                     //if(touch_position.cssOrigin) {
                     //    css['-webkit-transform-origin'] = touch_position.cssOrigin;
                     //}
-                    $image.css(css);
 
                     // Want to scale icons independently of the map? Enable this.
                     // icon_scale = (1 / scale) * 30;
