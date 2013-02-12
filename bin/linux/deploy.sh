@@ -1,6 +1,6 @@
 #!/bin/sh
 echo "This assumes that you have 3 repos named "greatwalks-builder", "greatwalks", and "greatwalks-android" in directories side-by-side."
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DIR="`basename $0`"
 cd DIR
 git checkout master
 git pull
