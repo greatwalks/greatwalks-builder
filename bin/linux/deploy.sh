@@ -1,6 +1,7 @@
 #!/bin/sh
 echo "This assumes that you have 3 repos named "greatwalks-builder", "greatwalks", and "greatwalks-android" in directories side-by-side."
-cd %0\..\..\..\
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd DIR
 git checkout master
 git pull
 git add -A
@@ -14,7 +15,7 @@ git commit -m "Automated commit"
 git push
 git checkout gh-pages
 git merge origin
-copy ..\greatwalks-android\bin\greatwalks-android.apk .
+cp ../greatwalks-android/bin/greatwalks-android.apk .
 git add -A
 git commit -m "Automated commit"
 git push origin gh-pages
