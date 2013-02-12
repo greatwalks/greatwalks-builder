@@ -1,7 +1,7 @@
 #!/bin/sh
 echo "This assumes that you have 3 repos named "greatwalks-builder", "greatwalks", and "greatwalks-android" in directories side-by-side."
 DIR="`basename $0`"
-cd DIR
+cd "${DIR}"
 git checkout master
 git pull
 git add -A
