@@ -53,8 +53,9 @@ String.prototype.toNormalizedFilename = function(){
 process.stdout.write("Generating Images\n");
 
 (function(){
-    fs.mkdir(path.join(greatwalks_repo, "img")); //probably already exists
-    fs.mkdir(path.join(greatwalks_repo, "img/walks"));//probably already exists
+    process.stdout.write("Generating inside " + greatwalks_repo + "\n");
+    fs.mkdir(path.join(greatwalks_repo, "img"), '0777'); //probably already exists
+    fs.mkdir(path.join(greatwalks_repo, "img/walks"), '0777');//probably already exists
 }());
 
 (function(){
