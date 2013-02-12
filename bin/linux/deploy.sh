@@ -2,7 +2,8 @@
 echo "This assumes that you have 3 repos named "greatwalks-builder", "greatwalks", and "greatwalks-android" in directories side-by-side."
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 cd $DIR
-echo $DIR
+cd ../..
+echo "{pwd}"
 git checkout master
 git pull
 git add -A
