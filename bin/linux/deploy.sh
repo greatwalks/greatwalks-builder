@@ -3,7 +3,6 @@ echo "This assumes that you have 3 repos named "greatwalks-builder", "greatwalks
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 cd $DIR
 cd ../..
-echo "{pwd}"
 git checkout master
 git pull
 git add -A
