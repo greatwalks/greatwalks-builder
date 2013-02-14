@@ -122,7 +122,8 @@
                 user_actions.update_last_updated();
             },
             geolocation_failure = function(event, msg){
-                $("#no_gps").attr("title", msg.message).show();
+                user_actions.$user_actions_panel.find("#refresh-geolocation").addClass("disabled").text("No GeoLocation Available");
+                user_actions.$user_actions_panel.find(".last-updated").hide();
             },
             current_time_in_epoch_milliseconds,
             user_actions = {
@@ -162,7 +163,7 @@
                             error_html = "No camera available";
                         }
                         hyperlink = $("<a/>").html(error_html).addClass("btn disabled");
-                        user_actions.$user_actions_panel.removeClass("hidden");
+                        user_actions.$user_actions_panel.toggleClass("hidden");
                         user_actions.$camera_error.html(hyperlink);
                         user_actions.update_last_updated();
                     }
@@ -173,9 +174,12 @@
                         difference_in_minutes,
                         text;
 
+                    if(user_actions.$user_actions_panel.is(".hidden")){
+                        return;
+                    }
+
                     if(last_updated_at !== undefined) {
-                        difference_in_seconds = Math.round(
-                            ((new Date()).getTime() - last_updated_at.getTime()) / 1000);
+                        difference_in_seconds = Math.round(((new Date()).getTime() - last_updated_at.getTime()) / 1000);
                         if(difference_in_seconds < 10) {
                             text = "Last updated a few seconds ago.";
                         } else if(difference_in_seconds < 120) {
@@ -184,10 +188,9 @@
                             difference_in_minutes = Math.round(difference_in_seconds / 60);
                             text = "Last updated " + difference_in_minutes + " minutes ago.";
                         }
-                        user_actions.$last_updated.text(text).hide().fadeIn();
+                        user_actions.$last_updated.attr("title", difference_in_seconds + " seconds").text(text).hide().fadeIn();
                     } else {
-                        text = "(no location known yet)";
-                        user_actions.$last_updated.text(text).show();
+                        user_actions.$last_updated.hide();
                     }
                 },
                 data_photo_uri_key: "content-image-uri",
@@ -260,6 +263,8 @@
                 $camera_error: $("#user_actions").find(".take-photo"),
                 $refresh_geolocation: $("#user_actions").find(".refresh-geolocation"),
                 refresh_geolocation: function(event){
+                    user_actions.$user_actions_panel.find("#refresh-geolocation").removeClass("disabled");
+                    user_actions.$user_actions_panel.find(".last-updated").show();
                     window.geolocation_refresh();
                     return false;
                 },

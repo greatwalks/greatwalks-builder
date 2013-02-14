@@ -18,7 +18,10 @@
                 this_href = $this.attr("href");
             
             //because #internal links aren't done 'fast' and neither are protocol links e.g. tel: http:// https://
-            if(!this_href || this_href.substr(0, 1) === "#" || this_href.indexOf(":") !== -1) {
+            if(!this_href || this_href.substr(0, 1) === "#" || this_href.substr(0, 4) === "tel:") {
+                return true;
+            } else if(this_href.indexOf(":") !== -1){
+                var ref = window.open(this_href, '_blank');
                 return true;
             }
 

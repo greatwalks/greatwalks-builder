@@ -17,30 +17,22 @@
             trigger_frequency_milliseconds: 2000,
             trigger_update: function(){
                 if(geo.last_known_position === undefined) return;
-                geo.last_updated = new Date();
                 $html.trigger("doc:geolocation:success", geo.last_known_position);
                 geo.timer = setTimeout(geo.trigger_update, geo.trigger_frequency_milliseconds);
             },
             init: function(){
                 $html = $("html");
-                var last_known_position_json = localStorage[geo.localStorage_position_cache_key];
                     
-                if(last_known_position_json !== undefined) {
-                    geo.last_known_position = JSON.parse(last_known_position_json);
-                    current_time_in_epoch_milliseconds = (new Date()).getTime();
-                    $html.trigger("doc:geolocation:success", geo.last_known_position);
-                }
-
                 if (navigator.geolocation) {
-                    geo.watch_id = navigator.geolocation.watchPosition(geo.success, geo.failure, geo.settings);
+                    geo.watch_id = navigator.geolocation.watchPosition(geo.success, geo.error, geo.settings);
                 } else {
                     geo.error();
                 }
 
-                if(geo.timer){
-                    clearTimeout(geo.timer);
-                }
-                geo.timer = setTimeout(geo.trigger_update, geo.trigger_frequency_milliseconds);
+                //if(geo.timer){
+                //    clearTimeout(geo.timer);
+                //}
+                //geo.timer = setTimeout(geo.trigger_update, geo.trigger_frequency_milliseconds);
             },
             refresh: function(){
                 try{
@@ -51,9 +43,9 @@
                 geo.watch_id = navigator.geolocation.watchPosition(geo.success, geo.error, geo.settings);
             },
             success: function(position){
-                $html.trigger("doc:geolocation:success", position);
+                geo.last_updated = new Date();
                 geo.last_known_position = position;
-                localStorage[geo.localStorage_position_cache_key] = JSON.stringify(position);
+                $html.trigger("doc:geolocation:success", position);
             },
             error: function(msg){
                 try{
