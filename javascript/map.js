@@ -122,7 +122,7 @@
                 user_actions.update_last_updated();
             },
             geolocation_failure = function(event, msg){
-                user_actions.$user_actions_panel.find("#refresh-geolocation").addClass("disabled").text("No GeoLocation Available");
+                user_actions.$user_actions_panel.find("#refresh-geolocation").addClass("disabled").html("GeoLocation failure,<br>try again?").attr("title", msg);
                 user_actions.$user_actions_panel.find(".last-updated").hide();
             },
             current_time_in_epoch_milliseconds,
@@ -263,8 +263,9 @@
                 $camera_error: $("#user_actions").find(".take-photo"),
                 $refresh_geolocation: $("#user_actions").find(".refresh-geolocation"),
                 refresh_geolocation: function(event){
-                    user_actions.$user_actions_panel.find("#refresh-geolocation").removeClass("disabled");
+                    user_actions.$user_actions_panel.find("#refresh-geolocation").removeClass("disabled").text("Refresh GeoLocation");
                     user_actions.$user_actions_panel.find(".last-updated").show();
+
                     window.geolocation_refresh();
                     return false;
                 },

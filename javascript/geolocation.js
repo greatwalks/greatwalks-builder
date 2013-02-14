@@ -8,7 +8,7 @@
             settings: {
                 maximumAge:600000,
                 enableHighAccuracy: true,
-                timeout: one_second_in_milliseconds * 15
+                timeout: one_second_in_milliseconds * 300
             },
             last_updated: undefined,
             timer: undefined,
@@ -48,10 +48,12 @@
                 $html.trigger("doc:geolocation:success", position);
             },
             error: function(msg){
+                if(msg.toString().match(/timeout/)) return; //Not an error we're concerned with.
                 try{
                     geolocation.clearWatch(geo.watch_id);
                 } catch(exception){
                 }
+                console.log("error", msg);
                 if(geo.settings.enableHighAccuracy === true) { //high accuracy failed so retry with low accuracy
                     geo.settings.enableHighAccuracy = false;
                     geo.watch_id = navigator.geolocation.watchPosition(geo.success, geo.error, geo.settings);
