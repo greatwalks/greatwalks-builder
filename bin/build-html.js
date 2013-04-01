@@ -46,7 +46,7 @@ String.prototype.removeNonStandardCharacters = function(){
     // but I can't seem to when Node.js is running on Windows.
     // Not sure why (loading file as Windows-1252 or something I'd guess but parsing as Windows-1252 doesn't
     // fix it, and hence the following code...
-    return this.replace(/([^a-zA-Z.,'":<>_\@\s0-9&\-()!\/\?])/g, function(match, contents, offset, s){
+    return this.replace(/([^a-zA-Z.,'":<>_\@\s0-9&\-()!\/\?*])/g, function(match, contents, offset, s){
         var line_number = current_string.substr(0, offset).split("\n").length;
         throw "At offset " + offset + " (approx line #" + line_number + ") found a non-standard character (unicode:" + current_string.charCodeAt(offset) + "): " + match.toString() + "\nSurrounding text: " + current_string.substr(offset - 10, 20) + " \nThis is probably a problem with MS SmartQuotes or emdash/endashes in your CSV file so replace them with conventional ASCII or UTF-8 characters.";
     });
@@ -73,6 +73,7 @@ String.prototype.CSV = function(overrideStrDelimiter) {
         strMatchedValue,
         csv_string = this.replace(/,,/g, ", ,").removeNonStandardCharacters(),
         arrMatches = null;
+
      while (arrMatches = objPattern.exec(csv_string)) { /*JSLINT IGNORE*/
          strMatchedDelimiter = arrMatches[1];
          if(strMatchedDelimiter.length && (strMatchedDelimiter != strDelimiter)) {
@@ -233,7 +234,7 @@ function check_for_nearby_locations(location){
         point_of_interest,
         within_kilometers = 0.1,
         distance_between_points;
-    
+
     if(points_of_interest[location.WalkName] === undefined) {
         points_of_interest[location.WalkName] = [];
     }
@@ -474,10 +475,10 @@ process.stdout.write("Generating HTML\n");
                     if(location_data_by_location[row.GreatWalk] === undefined) {
                         location_data_by_location[row.GreatWalk] = [];
                     }
-                    if(row.PixelOffsetLeft === undefined) {
+                    if(row.PixelOffsetLeft === undefined || isNaN(parseInt(row.PixelOffsetLeft, 10)) ){
                         row.PixelOffsetLeft = " ";
                     }
-                    if(row.PixelOffsetTop === undefined) {
+                    if(row.PixelOffsetTop === undefined || isNaN(parseInt(row.PixelOffsetTop, 10))) {
                         row.PixelOffsetTop = " ";
                     }
                     row.GreatWalkId = location_id_mapping[row.GreatWalk];
@@ -884,12 +885,16 @@ function pixel_location(map_latitude, map_longitude, map_pixel_width, map_pixel_
         offmap = true;
     }
     if(offmap){
+        console.log("Offmap " + JSON.stringify(pixel));
         throw {
             name: "OutOfBounds",
             message: offmap_message
         };
     }
     //process.stdout.write("[" + pixel.left.toString() + "]");
+    if(JSON.stringify(pixel).toLowerCase().indexOf("nan") !== -1){
+        console.log(JSON.stringify(pixel));
+    }
     return pixel;
 }
 
